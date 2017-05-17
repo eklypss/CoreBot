@@ -31,6 +31,7 @@ namespace CoreBot
             else
             {
                 Log.Error("Bot token is ínvalid, cannot connect.");
+                Log.Error($"Change your bot token in the following .config file: {BotSettings.Instance.SettingsFile}.");
             }
 
             await Task.Delay(-1);
