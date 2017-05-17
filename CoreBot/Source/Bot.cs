@@ -69,10 +69,6 @@ namespace CoreBot
                         await message.Channel.SendMessageAsync(command.Action);
                     }
                 }
-                if (message.Content.StartsWith($"{BotSettings.Instance.BotPrefix}ew"))
-                {
-                    await message.Channel.SendMessageAsync("Yeah, fuck off buddy we absolutely need more <:ew:230406264385961986> duos. Fuckin every time this kid steps in the battleground someone dies. kids fuckin dirt nasty man. Does fuckin jone have 14 kills this season I dont fuckin think so bud. I'm fuckin tellin ya Evil 'Military Man' Walrus is pottin 50 in '17 fuckin callin it right now. Clap bombs, fuck moms, wheel, snipe, and fuckin celly boys fuck");
-                }
             }
         }
     }
