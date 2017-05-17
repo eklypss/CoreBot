@@ -77,7 +77,11 @@ namespace CoreBot
                 {
                     if (commandName == command.Name)
                     {
-                        await message.Channel.SendMessageAsync(command.Action);
+                        if (command.IsEnabled)
+                        {
+                            await message.Channel.SendMessageAsync(command.Action);
+                        }
+                        else Log.Warning($"Disabled command was used: {command.Name}.");
                         break;
                     }
                 }

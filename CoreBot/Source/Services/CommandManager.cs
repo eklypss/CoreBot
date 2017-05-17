@@ -62,5 +62,13 @@ namespace CoreBot.Services
                 Log.Warning($"Could not add command: {BotSettings.Instance.BotPrefix}{command.Name} since it already exists.");
             }
         }
+
+        public async Task ToggleCommand(bool toggle, string user, Command command)
+        {
+            command.IsEnabled = toggle;
+            command.DateEdited = DateTime.Now;
+            command.EditedBy = user;
+            await SaveCommands();
+        }
     }
 }
