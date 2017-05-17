@@ -1,4 +1,5 @@
 ﻿using CoreBot.Collections;
+using CoreBot.Models;
 using CoreBot.Services;
 using CoreBot.Settings;
 using Discord;
@@ -10,11 +11,14 @@ namespace CoreBot
 {
     internal class Bot
     {
+        private CommandManager commandManager;
+
         public static void Main(string[] args) => new Bot().MainAsync().GetAwaiter().GetResult();
 
         private Bot()
         {
             LogManager.CreateLogger(BotSettings.Instance.LogToFile);
+            commandManager = new CommandManager();
         }
 
         private async Task MainAsync()
@@ -67,13 +71,30 @@ namespace CoreBot
             Log.Information($"[{message.Channel}] {message.Author.Username}: {message.Content}");
             if (message.Content.StartsWith(BotSettings.Instance.BotPrefix) && !message.Author.IsBot)
             {
+                var commandParameters = message.Content.Split(' ');
+                string commandName = commandParameters[0].Replace(BotSettings.Instance.BotPrefix, string.Empty);
                 foreach (var command in Commands.Instance.CommandsList)
                 {
-                    if (message.Content.StartsWith($"{BotSettings.Instance.BotPrefix}{command.Name}"))
+                    if (commandName == command.Name)
                     {
                         await message.Channel.SendMessageAsync(command.Action);
+                        break;
                     }
                 }
+            }
+
+            // Temporary !addcom for debugging purposes.
+            if (message.Content.StartsWith($"{BotSettings.Instance.BotPrefix}addcom "))
+            {
+                var commandParameters = message.Content.Split(' ');
+                if (commandParameters.Length >= 2)
+                {
+                    string commandName = commandParameters[1].Replace(BotSettings.Instance.BotPrefix, string.Empty);
+                    string commandAction = message.Content.Substring(message.Content.LastIndexOf(commandParameters[1]) + commandParameters[1].Length + 1);
+                    Log.Debug($"Name: {commandName}, action: {commandAction}");
+                    await commandManager.AddCommand(new Command(commandName, commandAction, message.Author.Username));
+                }
+                else await message.Channel.SendMessageAsync($"Usage: !test {BotSettings.Instance.BotPrefix}[command] [action]");
             }
         }
     }
