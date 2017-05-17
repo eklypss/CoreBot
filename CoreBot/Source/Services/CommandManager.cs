@@ -7,7 +7,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace CoreBot.Source.Services
+namespace CoreBot.Services
 {
     public class CommandManager
     {
