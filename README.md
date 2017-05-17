@@ -1,2 +1,2 @@
 # CoreBot
-WIP Discord bot for .NET Core
+Work-in-progress, cross-platform Discord bot built with .NET Core
