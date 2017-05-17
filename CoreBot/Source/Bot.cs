@@ -37,6 +37,10 @@ namespace CoreBot
             await Task.Delay(-1);
         }
 
+        /// <summary>
+        /// Output messages by the main <see cref="IDiscordClient"/>. Separated from all other log
+        /// messages on purpose.
+        /// </summary>
         private async Task MessageLogger(LogMessage message)
         {
             switch (message.Severity)
