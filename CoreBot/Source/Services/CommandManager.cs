@@ -15,7 +15,7 @@ namespace CoreBot.Services
         {
             try
             {
-                var json = JsonConvert.SerializeObject(Commands.Instance.CommandsList);
+                var json = JsonConvert.SerializeObject(Commands.Instance.CommandsList, Formatting.Indented);
                 if (File.Exists(BotSettings.Instance.CommandsFile))
                 {
                     File.Delete(BotSettings.Instance.CommandsFile);
