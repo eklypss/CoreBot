@@ -1,4 +1,5 @@
 ﻿using CoreBot.Collections;
+using CoreBot.Models;
 using CoreBot.Settings;
 using Newtonsoft.Json;
 using Serilog;
@@ -34,6 +35,31 @@ namespace CoreBot.Source.Services
             finally
             {
                 Log.Information($"Successfully saved commands to {BotSettings.Instance.CommandsFile}.");
+            }
+        }
+
+        public async Task AddCommand(Command command)
+        {
+            Log.Information($"Trying to add command: {BotSettings.Instance.BotPrefix}{command.Name}, action: {command.Action}.");
+            bool commandExists = false;
+            foreach (Command cmd in Commands.Instance.CommandsList)
+            {
+                if (cmd.Action == command.Action)
+                {
+                    commandExists = true;
+                    break;
+                }
+            }
+
+            if (!commandExists)
+            {
+                Log.Information($"Command added: {BotSettings.Instance.BotPrefix}{command.Name}, action: {command.Action}, added by: {command.AddedBy} on {command.DateAdded}.");
+                Commands.Instance.CommandsList.Add(command);
+                await SaveCommands();
+            }
+            else
+            {
+                Log.Warning($"Could not add command: {BotSettings.Instance.BotPrefix}{command.Name} since it already exists.");
             }
         }
     }
