@@ -24,11 +24,15 @@ namespace CoreBot.Settings
         public bool LogToFile { get; set; } = true;
         public string SettingsFolder { get; set; }
         public string SettingsFile { get; set; }
+        public string CommandsFolder { get; set; }
+        public string CommandsFile { get; set; }
 
         private BotSettings()
         {
             SettingsFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Settings");
+            CommandsFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Commands");
             SettingsFile = Path.Combine(SettingsFolder, "BotSettings.config");
+            CommandsFile = Path.Combine(SettingsFolder, "Commands.json");
         }
     }
 }
