@@ -15,11 +15,11 @@ namespace CoreBot
         private Bot()
         {
             LogManager.CreateLogger(BotSettings.Instance.LogToFile);
-            FileManager.CheckFiles();
         }
 
         private async Task MainAsync()
         {
+            await FileManager.CheckFiles();
             if (!string.IsNullOrWhiteSpace(BotSettings.Instance.BotToken))
             {
                 await Clients.Instance.MainClient.LoginAsync(TokenType.Bot, BotSettings.Instance.BotToken);

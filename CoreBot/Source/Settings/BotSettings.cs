@@ -17,6 +17,10 @@ namespace CoreBot.Settings
                 }
                 return instance;
             }
+            set
+            {
+                instance = value;
+            }
         }
 
         public string BotToken { get; set; }
@@ -31,8 +35,8 @@ namespace CoreBot.Settings
         {
             SettingsFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Settings");
             CommandsFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Commands");
-            SettingsFile = Path.Combine(SettingsFolder, "BotSettings.config");
-            CommandsFile = Path.Combine(SettingsFolder, "Commands.json");
+            SettingsFile = Path.Combine(SettingsFolder, "BotSettings.json");
+            CommandsFile = Path.Combine(CommandsFolder, "Commands.json");
         }
     }
 }

@@ -5,14 +5,14 @@ using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace CoreBot.Services
 {
     public static class FileManager
     {
-        public static void CheckFiles()
+        public async static Task CheckFiles()
         {
             Log.Information("Trying to load configuration files.");
             if (!Directory.Exists(BotSettings.Instance.SettingsFolder))
@@ -28,41 +28,30 @@ namespace CoreBot.Services
                 try
                 {
                     Log.Warning("Settings file does not exist. Trying to create it.");
-                    File.Create(BotSettings.Instance.SettingsFile);
-                    Configuration config = ConfigurationManager.OpenExeConfiguration(BotSettings.Instance.SettingsFile);
-                    config.AppSettings.Settings.Add("Prefix", "!");
-                    config.AppSettings.Settings.Add("Token", "Insert bot token here.");
-                    config.Save();
-                    Log.Information($"Settings file created at: {BotSettings.Instance.SettingsFile}.");
+                    using (StreamWriter writer = File.CreateText(BotSettings.Instance.SettingsFile))
+                    {
+                        await writer.WriteAsync(JsonConvert.SerializeObject(BotSettings.Instance, Formatting.Indented));
+                        Log.Information($"Settings file created at: {BotSettings.Instance.SettingsFile}.");
+                    }
                     Log.Error($"Change your bot token in the configuration file at {BotSettings.Instance.SettingsFile} and restart the program.");
                 }
-                catch (TypeLoadException ex)
+                catch (Exception)
                 {
-                    Log.Error(ex.Message);
+                    Log.Error("Failed to create the configuration file.");
                     throw;
-                }
-                finally
-                {
-                    Log.Information("Successfully created bot settings file.");
                 }
             }
             else
             {
                 try
                 {
-                    Configuration config = ConfigurationManager.OpenExeConfiguration(BotSettings.Instance.SettingsFile);
-                    BotSettings.Instance.BotPrefix = config.AppSettings.Settings["Prefix"].Value;
-                    BotSettings.Instance.BotToken = config.AppSettings.Settings["Token"].Value;
-                    Log.Information("Configuration file loaded successfully.");
+                    BotSettings.Instance = JsonConvert.DeserializeObject<BotSettings>(File.ReadAllText(BotSettings.Instance.SettingsFile));
+                    Log.Information("Successfully loaded the configuration file.");
                 }
-                catch (TypeLoadException ex)
+                catch (Exception)
                 {
-                    Log.Error(ex.Message);
+                    Log.Error("Failed to load the configuration file.");
                     throw;
-                }
-                finally
-                {
-                    Log.Information("Successfully loaded bot settings.");
                 }
             }
 
@@ -70,7 +59,7 @@ namespace CoreBot.Services
             if (!Directory.Exists(BotSettings.Instance.CommandsFolder))
             {
                 Log.Warning("Commands folder does not exist. Trying to create it.");
-                Directory.CreateDirectory(BotSettings.Instance.SettingsFolder);
+                Directory.CreateDirectory(BotSettings.Instance.CommandsFolder);
                 Log.Information($"Commands folder created at: {BotSettings.Instance.CommandsFolder}.");
             }
             if (File.Exists(BotSettings.Instance.CommandsFile))
