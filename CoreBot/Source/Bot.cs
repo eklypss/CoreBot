@@ -91,7 +91,8 @@ namespace CoreBot
             if (message.Content.StartsWith($"{BotSettings.Instance.BotPrefix}addcom "))
             {
                 var commandParameters = message.Content.Split(' ');
-                if (commandParameters.Length >= 2)
+                Log.Debug($"Parameters given: {commandParameters.Length}.");
+                if (commandParameters.Length >= 3)
                 {
                     string commandName = commandParameters[1].Replace(BotSettings.Instance.BotPrefix, string.Empty);
                     string commandAction = message.Content.Substring(message.Content.LastIndexOf(commandParameters[1]) + commandParameters[1].Length + 1);
