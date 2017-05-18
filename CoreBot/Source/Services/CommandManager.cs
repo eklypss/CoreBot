@@ -19,22 +19,19 @@ namespace CoreBot.Services
                 if (File.Exists(BotSettings.Instance.CommandsFile))
                 {
                     File.Delete(BotSettings.Instance.CommandsFile);
-                    Log.Information("Deleted old CommandsFile.");
+                    Log.Information("Deleted old commands file.");
                 }
 
                 using (StreamWriter writer = File.CreateText(BotSettings.Instance.CommandsFile))
                 {
                     await writer.WriteAsync(json);
+                    Log.Information($"Successfully saved commands to {BotSettings.Instance.CommandsFile}.");
                 }
             }
             catch (Exception)
             {
                 Log.Error("Error occured while trying to save commands.");
                 throw;
-            }
-            finally
-            {
-                Log.Information($"Successfully saved commands to {BotSettings.Instance.CommandsFile}.");
             }
         }
 
