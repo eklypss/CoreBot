@@ -1,6 +1,6 @@
-﻿using Serilog;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
+using Serilog;
 
 namespace CoreBot.Services
 {

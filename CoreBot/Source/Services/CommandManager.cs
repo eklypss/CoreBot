@@ -1,11 +1,11 @@
-﻿using CoreBot.Collections;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using CoreBot.Collections;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Newtonsoft.Json;
 using Serilog;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace CoreBot.Services
 {
