@@ -30,7 +30,7 @@ namespace CoreBot.Services
             }
             catch (Exception)
             {
-                Log.Error("Error occured while trying to save commands.");
+                Log.Error("Error occurred while trying to save commands.");
                 throw;
             }
         }

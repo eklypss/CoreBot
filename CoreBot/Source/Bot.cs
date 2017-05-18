@@ -34,7 +34,7 @@ namespace CoreBot
             }
             else
             {
-                Log.Error("Bot token is ínvalid, cannot connect.");
+                Log.Error("Bot token is invalid, cannot connect.");
                 Log.Error($"Change your bot token in the following .config file: {BotSettings.Instance.SettingsFile}.");
             }
 
