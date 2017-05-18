@@ -87,7 +87,7 @@ namespace CoreBot
                 }
             }
 
-            // Temporary !addcom for debugging purposes.
+            // Temporary addcom command for debugging purposes.
             if (message.Content.StartsWith($"{BotSettings.Instance.BotPrefix}addcom "))
             {
                 var commandParameters = message.Content.Split(' ');
@@ -98,7 +98,7 @@ namespace CoreBot
                     Log.Debug($"Name: {commandName}, action: {commandAction}");
                     await commandManager.AddCommand(new Command(commandName, commandAction, message.Author.Username));
                 }
-                else await message.Channel.SendMessageAsync($"Usage: !test {BotSettings.Instance.BotPrefix}[command] [action]");
+                else await message.Channel.SendMessageAsync($"Usage: {BotSettings.Instance.BotPrefix}addcom {BotSettings.Instance.BotPrefix}[command] [action]");
             }
         }
     }
