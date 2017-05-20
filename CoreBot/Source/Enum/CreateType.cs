@@ -1,5 +1,8 @@
-﻿namespace CoreBot.Enum
+﻿using System;
+
+namespace CoreBot.Enum
 {
+    [Flags]
     public enum CreateType
     {
         CommandsFolder,
