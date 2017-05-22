@@ -1,3 +1,3 @@
 install:
-  - ps: (new-object net.webclient).DownloadFile('https://dotnetcli.blob.core.windows.net/dotnet/Sdk/master/dotnet-dev-win-x64.latest.exe', 'dotnet-dev-win-x64.latest.exe')
-  - ps: msiexec /i dotnet-dev-win-x64.latest.exe /quiet /qn /norestart /log install.log PROPERTY1=value1 PROPERTY2=value2
+  - choco install dotnetcore-runtime.install --pre --params="Quiet"
+
