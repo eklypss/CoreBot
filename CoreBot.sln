@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreBot", "CoreBot\CoreBot.csproj", "{7C57DF40-E0DF-44E1-9B28-7F71473F06E2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreBot.Tests", "CoreBot.Tests\CoreBot.Tests.csproj", "{2AAE45C1-F189-409E-AD52-6EF7B426D017}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7C57DF40-E0DF-44E1-9B28-7F71473F06E2} = {7C57DF40-E0DF-44E1-9B28-7F71473F06E2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
