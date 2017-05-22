@@ -1,4 +1,0 @@
-install:
-  - choco install dotnetcore-runtime.install --pre --params="Quiet"
-  - cmd dotnet restore
-  - cmd dotnet build
