@@ -63,7 +63,7 @@ namespace CoreBot.Services
                     Log.Information($"Commands folder created at: {BotSettings.Instance.CommandsFolder}.");
                     break;
                 }
-                case CreateType.SettingsFolder:
+                case CreateType.SettingsFile:
                 {
                     try
                     {
@@ -82,11 +82,11 @@ namespace CoreBot.Services
                         throw;
                     }
                 }
-                case CreateType.SettingsFile:
+                case CreateType.SettingsFolder:
                 {
                     Log.Warning("Settings folder does not exist. Trying to create it.");
                     Directory.CreateDirectory(BotSettings.Instance.SettingsFolder);
-                    BotSettings.Instance.SettingsFile = Path.Combine(BotSettings.Instance.SettingsFolder, "/BotSettings.config");
+                    BotSettings.Instance.SettingsFile = Path.Combine(BotSettings.Instance.SettingsFolder, "BotSettings.json");
                     Log.Information($"Settings folder created at: {BotSettings.Instance.SettingsFolder}.");
                     break;
                 }
