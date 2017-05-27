@@ -5,6 +5,9 @@ using CoreBot.Settings;
 using Discord.Commands;
 using Discord.WebSocket;
 using Serilog;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using CoreBot.Services;
 
 namespace CoreBot.Handlers
 {
@@ -12,11 +15,16 @@ namespace CoreBot.Handlers
     {
         private DiscordSocketClient client;
         private CommandService commandService;
+        private IServiceCollection services;
+        private IServiceProvider serviceProvider;
 
         public async Task InstallCommands(DiscordSocketClient discordClient)
         {
             client = discordClient;
             commandService = new CommandService();
+            services = new ServiceCollection();
+            services.AddSingleton(new CommandManager());
+            serviceProvider = services.BuildServiceProvider();
             await commandService.AddModulesAsync(Assembly.GetEntryAssembly());
             client.MessageReceived += HandleCommandAsync;
         }
@@ -36,7 +44,7 @@ namespace CoreBot.Handlers
                 int argPos = 0;
                 if (userMessage.HasCharPrefix(BotSettings.Instance.BotPrefix, ref argPos))
                 {
-                    var result = await commandService.ExecuteAsync(context, argPos);
+                    var result = await commandService.ExecuteAsync(context, argPos, serviceProvider);
                     if (!result.IsSuccess) // Module was not found, check for dynamic commands.
                     {
                         Log.Information(result.ToString());
