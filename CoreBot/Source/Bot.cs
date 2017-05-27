@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
-using CoreBot.Collections;
 using CoreBot.Handlers;
-using CoreBot.Models;
 using CoreBot.Services;
 using CoreBot.Settings;
 using Discord;
@@ -67,6 +65,7 @@ namespace CoreBot
                     break;
                 }
             }
+            await Task.CompletedTask;
         }
     }
 }
