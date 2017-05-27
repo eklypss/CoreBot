@@ -9,10 +9,9 @@ using System.Linq;
 
 namespace CoreBot.Modules
 {
-    [Group("command"), Summary("Module for adding, deleting and listing dynamic commands.")]
+    [Group("command"), Summary("Module for adding, deleting and listing commands.")]
     public class CommandModule : ModuleBase
     {
-
         private CommandManager commandManager;
         private CommandService comService;
 
@@ -21,6 +20,7 @@ namespace CoreBot.Modules
             this.commandManager = cm;
             this.comService = commands;
         }
+
         [Command("add"), Summary("Adds a new dynamic command.")]
         public async Task AddCommand(string commandName, [Remainder] string commandAction)
         {
@@ -34,17 +34,19 @@ namespace CoreBot.Modules
             await commandManager.DeleteCommand(command);
         }
 
-        [Command("list"), Summary("Lists all available dynamic commands.")]
+        [Command("list"), Summary("Lists all available commands, both dynamic and module based.")]
         public async Task ListCommands()
         {
-            var commandNames = new List<string>();
+            var dynamicCommandNames = new List<string>();
+            var staticCommandNames = new List<string>();
             foreach (var module in comService.Modules)
             {
                 var moduleCommands = from c in module.Commands select c.Name;
-                commandNames.Add($"{module.Name}({string.Join(", ", moduleCommands)})");
+                staticCommandNames.Add($"{module.Name}({string.Join(", ", moduleCommands)})");
             }
-            Commands.Instance.CommandsList.ForEach(x => commandNames.Add(x.Name));
-            await ReplyAsync($"Available dynamic commands: {string.Join(", ", commandNames)}");
+            Commands.Instance.CommandsList.ForEach(x => dynamicCommandNames.Add(x.Name));
+            await ReplyAsync($"Available static commands: {string.Join(", ", staticCommandNames)}");
+            await ReplyAsync($"Available dynamic commands: {string.Join(", ", dynamicCommandNames)}");
         }
     }
 }
