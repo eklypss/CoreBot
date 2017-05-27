@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Models;
 using CoreBot.Services;
 using CoreBot.Settings;
 using Discord.Commands;
-using System.Linq;
 
 namespace CoreBot.Modules
 {
@@ -13,12 +13,12 @@ namespace CoreBot.Modules
     public class CommandModule : ModuleBase
     {
         private CommandManager commandManager;
-        private CommandService comService;
+        private CommandService commandService;
 
         public CommandModule(CommandManager cm, CommandService commands)
         {
-            this.commandManager = cm;
-            this.comService = commands;
+            commandManager = cm;
+            commandService = commands;
         }
 
         [Command("add"), Summary("Adds a new dynamic command.")]
@@ -39,7 +39,7 @@ namespace CoreBot.Modules
         {
             var dynamicCommandNames = new List<string>();
             var staticCommandNames = new List<string>();
-            foreach (var module in comService.Modules)
+            foreach (var module in commandService.Modules)
             {
                 var moduleCommands = from c in module.Commands select c.Name;
                 staticCommandNames.Add($"{module.Name}({string.Join(", ", moduleCommands)})");
