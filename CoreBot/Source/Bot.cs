@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using CoreBot.Collections;
+using CoreBot.Handlers;
 using CoreBot.Models;
 using CoreBot.Services;
 using CoreBot.Settings;
@@ -11,14 +12,15 @@ namespace CoreBot
 {
     internal class Bot
     {
-        private CommandManager commandManager;
+        private CommandHandler commandHandler;
+        private DiscordSocketClient client;
 
         public static void Main(string[] args) => new Bot().MainAsync().GetAwaiter().GetResult();
 
         private Bot()
         {
             LogManager.CreateLogger(BotSettings.Instance.LogToFile);
-            commandManager = new CommandManager();
+            commandHandler = new CommandHandler();
         }
 
         private async Task MainAsync()
@@ -26,11 +28,12 @@ namespace CoreBot
             await FileManager.CheckFiles();
             if (!string.IsNullOrWhiteSpace(BotSettings.Instance.BotToken))
             {
-                await Clients.Instance.MainClient.LoginAsync(TokenType.Bot, BotSettings.Instance.BotToken);
-                await Clients.Instance.MainClient.StartAsync();
+                client = new DiscordSocketClient();
+                await client.LoginAsync(TokenType.Bot, BotSettings.Instance.BotToken);
+                await client.StartAsync();
 
-                Clients.Instance.MainClient.MessageReceived += MessageReceived;
-                Clients.Instance.MainClient.Log += MessageLogger;
+                client.Log += MessageLogger;
+                await commandHandler.InstallCommands(client);
             }
             else
             {
@@ -63,43 +66,6 @@ namespace CoreBot
                     Log.Error($"[Discord] [{message.Severity}] {message.Message} {message.Exception} {message.Source}");
                     break;
                 }
-            }
-        }
-
-        private async Task MessageReceived(SocketMessage message)
-        {
-            Log.Information($"[{message.Channel}] {message.Author.Username}: {message.Content}");
-            if (message.Content.StartsWith(BotSettings.Instance.BotPrefix) && !message.Author.IsBot)
-            {
-                var commandParameters = message.Content.Split(' ');
-                string commandName = commandParameters[0].Replace(BotSettings.Instance.BotPrefix, string.Empty);
-                foreach (var command in Commands.Instance.CommandsList)
-                {
-                    if (commandName == command.Name)
-                    {
-                        if (command.IsEnabled)
-                        {
-                            await message.Channel.SendMessageAsync(command.Action);
-                        }
-                        else Log.Warning($"Disabled command was used: {command.Name}.");
-                        break;
-                    }
-                }
-            }
-
-            // Temporary addcom command for debugging purposes.
-            if (message.Content.StartsWith($"{BotSettings.Instance.BotPrefix}addcom "))
-            {
-                var commandParameters = message.Content.Split(' ');
-                Log.Debug($"Parameters given: {commandParameters.Length}.");
-                if (commandParameters.Length >= 3)
-                {
-                    string commandName = commandParameters[1].Replace(BotSettings.Instance.BotPrefix, string.Empty);
-                    string commandAction = message.Content.Substring(message.Content.LastIndexOf(commandParameters[1]) + commandParameters[1].Length + 1);
-                    Log.Debug($"Name: {commandName}, action: {commandAction}");
-                    await commandManager.AddCommand(new Command(commandName, commandAction, message.Author.Username));
-                }
-                else await message.Channel.SendMessageAsync($"Usage: {BotSettings.Instance.BotPrefix}addcom {BotSettings.Instance.BotPrefix}[command] [action]");
             }
         }
     }

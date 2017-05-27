@@ -9,6 +9,9 @@ using Serilog;
 
 namespace CoreBot.Services
 {
+    /// <summary>
+    /// Class for managing dynamic commands.
+    /// </summary>
     public class CommandManager
     {
         public async Task SaveCommands()
@@ -50,7 +53,7 @@ namespace CoreBot.Services
 
             if (!commandExists)
             {
-                Log.Information($"Command added: {BotSettings.Instance.BotPrefix}{command.Name}, action: {command.Action}, added by: {command.AddedBy} on {command.DateAdded}.");
+                Log.Information($"Command added: {BotSettings.Instance.BotPrefix}{command.Name}, action: {command.Action}");
                 Commands.Instance.CommandsList.Add(command);
                 await SaveCommands();
             }
@@ -60,12 +63,15 @@ namespace CoreBot.Services
             }
         }
 
-        public async Task ToggleCommand(bool toggle, string user, Command command)
+        public async Task DeleteCommand(Command command)
         {
-            command.IsEnabled = toggle;
-            command.DateEdited = DateTime.Now;
-            command.EditedBy = user;
-            await SaveCommands();
+            if (Commands.Instance.CommandsList.Contains(command))
+            {
+                Commands.Instance.CommandsList.Remove(command);
+                await SaveCommands();
+                Log.Information($"Command {command.Name} was deleted.");
+            }
+            else Log.Warning($"Command does not exist: {command.Name}");
         }
     }
 }
