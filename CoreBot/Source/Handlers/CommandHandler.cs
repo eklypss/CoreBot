@@ -1,13 +1,13 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using CoreBot.Collections;
+using CoreBot.Services;
 using CoreBot.Settings;
 using Discord.Commands;
 using Discord.WebSocket;
-using Serilog;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using CoreBot.Services;
+using Serilog;
 
 namespace CoreBot.Handlers
 {
