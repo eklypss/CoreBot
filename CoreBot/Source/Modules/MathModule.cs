@@ -1,27 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿using System.Data;
+using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace CoreBot.Modules
 {
-    [Group("math"), Summary("Basic math commands.")]
     public class MathModule : ModuleBase
     {
-        [Command("add")]
-        public async Task Add(int i, int i2)
+        [Command("math"), Summary("Calculates basic math operations.")]
+        public async Task Calculate(string input)
         {
-            await ReplyAsync($"{i} + {i2} = {i + i2}");
-        }
-
-        [Command("sub")]
-        public async Task Substract(int i, int i2)
-        {
-            await ReplyAsync($"{i} - {i2} = {i - i2}");
-        }
-
-        [Command("multiply")]
-        public async Task Multiply(int i, int i2)
-        {
-            await ReplyAsync($"{i} * {i2} = {i * i2}");
+            DataTable dataTable = new DataTable();
+            var result = dataTable.Compute(input, string.Empty);
+            await ReplyAsync($"{result}");
         }
     }
 }
