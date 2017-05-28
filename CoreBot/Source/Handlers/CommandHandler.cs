@@ -58,7 +58,12 @@ namespace CoreBot.Handlers
                                 break;
                             }
                         }
-                        if (!matchFound) await userMessage.Channel.SendMessageAsync(result.ToString());
+                        if (!matchFound)
+                        {
+                            Log.Information(result.ToString());
+                            // If command was found but failed to execute, send error message.
+                            if (result.Error != CommandError.UnknownCommand) await userMessage.Channel.SendMessageAsync(result.ToString());
+                        }
                     }
                 }
             }
