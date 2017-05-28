@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Discord.Commands;
 
-namespace CoreBot.Source.Modules
+namespace CoreBot.Modules
 {
     public class RandomModule : ModuleBase
     {
