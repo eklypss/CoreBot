@@ -41,12 +41,13 @@ namespace CoreBot.Modules
             var staticCommandNames = new List<string>();
             foreach (var module in commandService.Modules)
             {
-                var moduleCommands = from c in module.Commands select c.Name;
-                staticCommandNames.Add($"{module.Name}({string.Join(", ", moduleCommands)})");
+                var moduleCommandNames = new List<string>();
+                module.Commands.ToList().ForEach(x => moduleCommandNames.Add(x.Name));
+                staticCommandNames.Add($"{module.Name} *({string.Join(", ", moduleCommandNames)})*");
             }
             Commands.Instance.CommandsList.ForEach(x => dynamicCommandNames.Add(x.Name));
-            await ReplyAsync($"Available static commands: {string.Join(", ", staticCommandNames)}");
-            await ReplyAsync($"Available dynamic commands: {string.Join(", ", dynamicCommandNames)}");
+            await ReplyAsync($"**Available static commands:** {string.Join(", ", staticCommandNames)}");
+            await ReplyAsync($"**Available dynamic commands:** {string.Join(", ", dynamicCommandNames)}");
         }
     }
 }
