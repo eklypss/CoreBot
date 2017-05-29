@@ -7,7 +7,7 @@ using Discord.WebSocket;
 
 namespace CoreBot.Handlers
 {
-    internal class MessageHandler
+    public class MessageHandler
     {
         private DiscordSocketClient client;
 
