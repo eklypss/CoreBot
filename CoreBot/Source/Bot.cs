@@ -12,6 +12,7 @@ namespace CoreBot
     {
         private CommandHandler commandHandler;
         private MessageHandler messageHandler;
+        private LogHandler logHandler;
         private DiscordSocketClient client;
 
         public static void Main(string[] args) => new Bot().MainAsync().GetAwaiter().GetResult();
@@ -21,6 +22,7 @@ namespace CoreBot
             LogHelper.CreateLogger(BotSettings.Instance.LogToFile);
             commandHandler = new CommandHandler();
             messageHandler = new MessageHandler();
+            logHandler = new LogHandler();
         }
 
         private async Task MainAsync()
@@ -32,7 +34,7 @@ namespace CoreBot
                 await client.LoginAsync(TokenType.Bot, BotSettings.Instance.BotToken);
                 await client.StartAsync();
 
-                client.Log += MessageLogger;
+                await logHandler.Install(client);
                 await commandHandler.InstallCommands(client);
                 await messageHandler.Install(client);
             }
@@ -43,32 +45,6 @@ namespace CoreBot
             }
 
             await Task.Delay(-1);
-        }
-
-        /// <summary>
-        /// Output messages by the main <see cref="IDiscordClient"/>. Separated from all other log
-        /// messages on purpose.
-        /// </summary>
-        private async Task MessageLogger(LogMessage message)
-        {
-            switch (message.Severity)
-            {
-                case LogSeverity.Debug:
-                case LogSeverity.Info:
-                case LogSeverity.Verbose:
-                {
-                    Log.Information($"[Discord] {message.Message}");
-                    break;
-                }
-                case LogSeverity.Critical:
-                case LogSeverity.Error:
-                case LogSeverity.Warning:
-                {
-                    Log.Error($"[Discord] [{message.Severity}] {message.Message} {message.Exception} {message.Source}");
-                    break;
-                }
-            }
-            await Task.CompletedTask;
         }
     }
 }
