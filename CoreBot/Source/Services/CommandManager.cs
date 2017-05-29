@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using CoreBot.Collections;
+using CoreBot.Enum;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Newtonsoft.Json;
@@ -16,26 +17,7 @@ namespace CoreBot.Services
     {
         public async Task SaveCommands()
         {
-            try
-            {
-                var json = JsonConvert.SerializeObject(Commands.Instance.CommandsList, Formatting.Indented);
-                if (File.Exists(BotSettings.Instance.CommandsFile))
-                {
-                    File.Delete(BotSettings.Instance.CommandsFile);
-                    Log.Information("Deleted old commands file.");
-                }
-
-                using (StreamWriter writer = File.CreateText(BotSettings.Instance.CommandsFile))
-                {
-                    await writer.WriteAsync(json);
-                    Log.Information($"Successfully saved commands to {BotSettings.Instance.CommandsFile}.");
-                }
-            }
-            catch (Exception)
-            {
-                Log.Error("Error occurred while trying to save commands.");
-                throw;
-            }
+            await FileManager.SaveFile(FileType.CommandsFile);
         }
 
         public async Task AddCommand(Command command)

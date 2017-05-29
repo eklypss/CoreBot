@@ -15,52 +15,22 @@ namespace CoreBot.Services
     {
         public async static Task CheckFiles()
         {
-            Log.Information("Trying to load configuration files.");
-            if (!Directory.Exists(BotSettings.Instance.SettingsFolder))
-            {
-                await CreateFile(FileType.SettingsFolder);
-            }
+            if (!Directory.Exists(BotSettings.Instance.SettingsFolder)) await CreateFile(FileType.SettingsFolder);
 
-            if (!File.Exists(BotSettings.Instance.SettingsFile))
-            {
-                await CreateFile(FileType.SettingsFile);
-            }
-            else
-            {
-                try
-                {
-                    BotSettings.Instance = JsonConvert.DeserializeObject<BotSettings>(File.ReadAllText(BotSettings.Instance.SettingsFile));
-                    Log.Information("Successfully loaded the configuration file.");
-                }
-                catch (Exception)
-                {
-                    Log.Error("Failed to load the configuration file.");
-                    throw;
-                }
-            }
+            if (!File.Exists(BotSettings.Instance.SettingsFile)) await CreateFile(FileType.SettingsFile);
+            else await LoadFile(FileType.SettingsFile);
 
-            if (File.Exists(BotSettings.Instance.MessagesFile))
-            {
-                UserMessages.Instance.Messages = JsonConvert.DeserializeObject<List<UserMessage>>(await File.ReadAllTextAsync(BotSettings.Instance.MessagesFile));
-                Log.Information($"Loaded {UserMessages.Instance.Messages.Count} messages from {BotSettings.Instance.MessagesFile}.");
-            }
+            if (File.Exists(BotSettings.Instance.MessagesFile)) await LoadFile(FileType.MessagesFile);
 
-            Log.Information("Trying to load dynamic commands.");
-            if (!Directory.Exists(BotSettings.Instance.CommandsFolder))
-            {
-                await CreateFile(FileType.CommandsFolder);
-            }
-            if (File.Exists(BotSettings.Instance.CommandsFile))
-            {
-                Commands.Instance.CommandsList = JsonConvert.DeserializeObject<List<Command>>(await File.ReadAllTextAsync(BotSettings.Instance.CommandsFile));
-                Log.Information($"Loaded {Commands.Instance.CommandsList.Count} commands from {BotSettings.Instance.CommandsFile}.");
-            }
+            if (!Directory.Exists(BotSettings.Instance.CommandsFolder)) await CreateFile(FileType.CommandsFolder);
+
+            if (File.Exists(BotSettings.Instance.CommandsFile)) await LoadFile(FileType.CommandsFile);
             else Log.Information("Commands file does not exist. No dynamic commands were loaded.");
         }
 
-        public async static Task CreateFile(FileType createType)
+        public async static Task CreateFile(FileType fileType)
         {
-            switch (createType)
+            switch (fileType)
             {
                 case FileType.CommandsFolder:
                 {
@@ -107,22 +77,83 @@ namespace CoreBot.Services
                 {
                     try
                     {
-                        var json = JsonConvert.SerializeObject(UserMessages.Instance.Messages, Formatting.Indented);
-                        if (File.Exists(BotSettings.Instance.MessagesFile))
-                        {
-                            File.Delete(BotSettings.Instance.MessagesFile);
-                            Log.Information("Deleted old messages file.");
-                        }
-
                         using (StreamWriter writer = File.CreateText(BotSettings.Instance.MessagesFile))
                         {
-                            await writer.WriteAsync(json);
-                            Log.Information($"Successfully saved messages to {BotSettings.Instance.MessagesFile}.");
+                            await writer.WriteAsync(JsonConvert.SerializeObject(UserMessages.Instance.Messages, Formatting.Indented));
                         }
                     }
                     catch (Exception)
                     {
                         Log.Error("Error occurred while trying to save messages.");
+                        throw;
+                    }
+                    break;
+                }
+                case FileType.CommandsFile:
+                {
+                    try
+                    {
+                        using (StreamWriter writer = File.CreateText(BotSettings.Instance.CommandsFile))
+                        {
+                            await writer.WriteAsync(JsonConvert.SerializeObject(Commands.Instance.CommandsList, Formatting.Indented));
+                            Log.Information($"Successfully saved commands to {BotSettings.Instance.CommandsFile}.");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        Log.Error("Error occurred while trying to save commands.");
+                        throw;
+                    }
+                    break;
+                }
+            }
+        }
+
+        public async static Task LoadFile(FileType fileType)
+        {
+            switch (fileType)
+            {
+                case FileType.SettingsFile:
+                {
+                    try
+                    {
+                        Log.Information("Trying to load configuration files.");
+                        BotSettings.Instance = JsonConvert.DeserializeObject<BotSettings>(File.ReadAllText(BotSettings.Instance.SettingsFile));
+                        Log.Information("Successfully loaded the configuration file.");
+                    }
+                    catch (Exception)
+                    {
+                        Log.Error("Failed to load the configuration file.");
+                        throw;
+                    }
+                    break;
+                }
+                case FileType.MessagesFile:
+                {
+                    try
+                    {
+                        Log.Information("Trying to load messages.");
+                        UserMessages.Instance.Messages = JsonConvert.DeserializeObject<List<UserMessage>>(await File.ReadAllTextAsync(BotSettings.Instance.MessagesFile));
+                        Log.Information($"Loaded {UserMessages.Instance.Messages.Count} messages from {BotSettings.Instance.MessagesFile}.");
+                    }
+                    catch (Exception)
+                    {
+                        Log.Error("Failed to load the messages file.");
+                        throw;
+                    }
+                    break;
+                }
+                case FileType.CommandsFile:
+                {
+                    try
+                    {
+                        Log.Information("Trying to load dynamic commands.");
+                        Commands.Instance.CommandsList = JsonConvert.DeserializeObject<List<Command>>(await File.ReadAllTextAsync(BotSettings.Instance.CommandsFile));
+                        Log.Information($"Loaded {Commands.Instance.CommandsList.Count} commands from {BotSettings.Instance.CommandsFile}.");
+                    }
+                    catch (Exception)
+                    {
+                        Log.Error("Failed to load the commands file.");
                         throw;
                     }
                     break;
