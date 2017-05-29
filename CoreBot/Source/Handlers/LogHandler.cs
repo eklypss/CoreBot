@@ -9,11 +9,11 @@ namespace CoreBot.Handlers
     {
         private DiscordSocketClient client;
 
-        public Task Install(DiscordSocketClient discordClient)
+        public async Task Install(DiscordSocketClient discordClient)
         {
             client = discordClient;
             client.Log += HandleLoggingAsync;
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         /// <summary>

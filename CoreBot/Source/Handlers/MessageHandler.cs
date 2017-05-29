@@ -11,11 +11,11 @@ namespace CoreBot.Handlers
     {
         private DiscordSocketClient client;
 
-        public Task Install(DiscordSocketClient discordClient)
+        public async Task Install(DiscordSocketClient discordClient)
         {
             client = discordClient;
             client.MessageReceived += HandleMessageAsync;
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         private async Task HandleMessageAsync(SocketMessage message)
