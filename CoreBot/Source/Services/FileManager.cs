@@ -106,6 +106,23 @@ namespace CoreBot.Services
                     }
                     break;
                 }
+                case FileType.SettingsFile:
+                {
+                    try
+                    {
+                        using (StreamWriter writer = File.CreateText(BotSettings.Instance.SettingsFile))
+                        {
+                            await writer.WriteAsync(JsonConvert.SerializeObject(BotSettings.Instance, Formatting.Indented));
+                            Log.Information($"Successfully saved settings to {BotSettings.Instance.CommandsFile}.");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        Log.Error("Error occurred while trying to save settings.");
+                        throw;
+                    }
+                    break;
+                }
             }
         }
 
@@ -120,6 +137,8 @@ namespace CoreBot.Services
                         Log.Information("Trying to load configuration files.");
                         BotSettings.Instance = JsonConvert.DeserializeObject<BotSettings>(File.ReadAllText(BotSettings.Instance.SettingsFile));
                         Log.Information("Successfully loaded the configuration file.");
+                        // Used to sync new settings to old settings file without having to re-create it.
+                        await SaveFile(FileType.SettingsFile);
                     }
                     catch (Exception)
                     {
