@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using CoreBot.Handlers;
 
-namespace CoreBot.Interface
+namespace CoreBot.Interfaces
 {
     public interface IHandlerService
     {

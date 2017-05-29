@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using CoreBot.Handlers;
-using CoreBot.Interface;
+using CoreBot.Interfaces;
 
 namespace CoreBot.Service
 {
