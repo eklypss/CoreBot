@@ -15,7 +15,7 @@ namespace CoreBot.Modules
             {
                 BotSettings.Instance.BotPrefix = prefix;
                 await FileManager.SaveFile(FileType.SettingsFile);
-                await ReplyAsync($"Prefix was changed to: **{prefix}*'");
+                await ReplyAsync($"Prefix was changed to: **{prefix}**");
             }
         }
     }
