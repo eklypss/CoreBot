@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Collections;
+using CoreBot.Managers;
 using CoreBot.Models;
-using CoreBot.Services;
 using CoreBot.Settings;
 using Discord.Commands;
 

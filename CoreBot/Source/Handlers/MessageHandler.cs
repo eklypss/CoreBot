@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Enum;
+using CoreBot.Helpers;
 using CoreBot.Models;
-using CoreBot.Services;
 using Discord.WebSocket;
 
 namespace CoreBot.Handlers
@@ -28,14 +28,14 @@ namespace CoreBot.Handlers
                     msg.Message = message.Content;
                     msg.DateTime = message.CreatedAt.DateTime;
                     matchFound = true;
-                    await FileManager.SaveFile(FileType.MessagesFile);
+                    await FileHelper.SaveFile(FileType.MessagesFile);
                     break;
                 }
             }
             if (!matchFound)
             {
                 UserMessages.Instance.Messages.Add(new UserMessage(message.Author.Username, message.Content));
-                await FileManager.SaveFile(FileType.MessagesFile);
+                await FileHelper.SaveFile(FileType.MessagesFile);
             }
         }
     }

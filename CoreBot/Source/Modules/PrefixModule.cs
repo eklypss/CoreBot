@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using CoreBot.Enum;
-using CoreBot.Services;
+using CoreBot.Helpers;
 using CoreBot.Settings;
 using Discord.Commands;
 
@@ -14,7 +14,7 @@ namespace CoreBot.Modules
             public async Task SetPrefix(char prefix)
             {
                 BotSettings.Instance.BotPrefix = prefix;
-                await FileManager.SaveFile(FileType.SettingsFile);
+                await FileHelper.SaveFile(FileType.SettingsFile);
                 await ReplyAsync($"Prefix was changed to: **{prefix}**");
             }
         }

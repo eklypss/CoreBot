@@ -3,12 +3,13 @@ using System.IO;
 using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Enum;
+using CoreBot.Helpers;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace CoreBot.Services
+namespace CoreBot.Managers
 {
     /// <summary>
     /// Class for managing dynamic commands.
@@ -17,7 +18,7 @@ namespace CoreBot.Services
     {
         public async Task SaveCommands()
         {
-            await FileManager.SaveFile(FileType.CommandsFile);
+            await FileHelper.SaveFile(FileType.CommandsFile);
         }
 
         public async Task AddCommand(Command command)

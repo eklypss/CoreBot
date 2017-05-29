@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using CoreBot.Handlers;
-using CoreBot.Services;
+using CoreBot.Helpers;
 using CoreBot.Settings;
 using Discord;
 using Discord.WebSocket;
@@ -18,14 +18,14 @@ namespace CoreBot
 
         private Bot()
         {
-            LogManager.CreateLogger(BotSettings.Instance.LogToFile);
+            LogHelper.CreateLogger(BotSettings.Instance.LogToFile);
             commandHandler = new CommandHandler();
             messageHandler = new MessageHandler();
         }
 
         private async Task MainAsync()
         {
-            await FileManager.CheckFiles();
+            await FileHelper.CheckFiles();
             if (!string.IsNullOrWhiteSpace(BotSettings.Instance.BotToken))
             {
                 client = new DiscordSocketClient();

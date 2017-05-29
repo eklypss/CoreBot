@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using CoreBot.Collections;
-using CoreBot.Services;
+using CoreBot.Managers;
 using CoreBot.Settings;
 using Discord.Commands;
 using Discord.WebSocket;

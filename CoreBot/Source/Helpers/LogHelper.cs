@@ -2,9 +2,9 @@
 using System.Reflection;
 using Serilog;
 
-namespace CoreBot.Services
+namespace CoreBot.Helpers
 {
-    public static class LogManager
+    public static class LogHelper
     {
         public static void CreateLogger(bool logToFile)
         {

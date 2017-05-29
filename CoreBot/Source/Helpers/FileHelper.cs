@@ -9,9 +9,9 @@ using CoreBot.Settings;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace CoreBot.Services
+namespace CoreBot.Helpers
 {
-    public static class FileManager
+    public static class FileHelper
     {
         public async static Task CheckFiles()
         {
