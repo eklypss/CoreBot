@@ -1,5 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using CoreBot.Collections;
+using CoreBot.Enum;
 using CoreBot.Handlers;
+using CoreBot.Models;
 using CoreBot.Services;
 using CoreBot.Settings;
 using Discord;
@@ -31,6 +35,7 @@ namespace CoreBot
                 await client.StartAsync();
 
                 client.Log += MessageLogger;
+                client.MessageReceived += MessageReceived;
                 await commandHandler.InstallCommands(client);
             }
             else
@@ -40,6 +45,27 @@ namespace CoreBot
             }
 
             await Task.Delay(-1);
+        }
+
+        private async Task MessageReceived(SocketMessage message)
+        {
+            bool matchFound = false;
+            foreach (var msg in UserMessages.Instance.Messages)
+            {
+                if (msg.User == message.Author.Username)
+                {
+                    msg.Message = message.Content;
+                    msg.DateTime = message.CreatedAt.DateTime;
+                    matchFound = true;
+                    await FileManager.SaveFile(FileType.MessagesFile);
+                    break;
+                }
+            }
+            if (!matchFound)
+            {
+                UserMessages.Instance.Messages.Add(new UserMessage(message.Author.Username, message.Content));
+                await FileManager.SaveFile(FileType.MessagesFile);
+            }
         }
 
         /// <summary>

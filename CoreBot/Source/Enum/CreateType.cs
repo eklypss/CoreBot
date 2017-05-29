@@ -3,11 +3,12 @@
 namespace CoreBot.Enum
 {
     [Flags]
-    public enum CreateType
+    public enum FileType
     {
         CommandsFolder,
         CommandsFile,
         SettingsFolder,
-        SettingsFile
+        SettingsFile,
+        MessagesFile
     }
 }

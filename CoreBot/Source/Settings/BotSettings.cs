@@ -30,6 +30,7 @@ namespace CoreBot.Settings
         public string SettingsFile { get; set; }
         public string CommandsFolder { get; set; }
         public string CommandsFile { get; set; }
+        public string MessagesFile { get; set; }
 
         private BotSettings()
         {
@@ -37,6 +38,7 @@ namespace CoreBot.Settings
             CommandsFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Commands");
             SettingsFile = Path.Combine(SettingsFolder, "BotSettings.json");
             CommandsFile = Path.Combine(CommandsFolder, "Commands.json");
+            MessagesFile = Path.Combine(SettingsFolder, "Messages.json");
         }
     }
 }

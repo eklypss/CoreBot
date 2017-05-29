@@ -18,12 +18,12 @@ namespace CoreBot.Services
             Log.Information("Trying to load configuration files.");
             if (!Directory.Exists(BotSettings.Instance.SettingsFolder))
             {
-                await CreateFile(CreateType.SettingsFolder);
+                await CreateFile(FileType.SettingsFolder);
             }
 
             if (!File.Exists(BotSettings.Instance.SettingsFile))
             {
-                await CreateFile(CreateType.SettingsFile);
+                await CreateFile(FileType.SettingsFile);
             }
             else
             {
@@ -39,31 +39,37 @@ namespace CoreBot.Services
                 }
             }
 
+            if (File.Exists(BotSettings.Instance.MessagesFile))
+            {
+                UserMessages.Instance.Messages = JsonConvert.DeserializeObject<List<UserMessage>>(await File.ReadAllTextAsync(BotSettings.Instance.MessagesFile));
+                Log.Information($"Loaded {UserMessages.Instance.Messages.Count} messages from {BotSettings.Instance.MessagesFile}.");
+            }
+
             Log.Information("Trying to load dynamic commands.");
             if (!Directory.Exists(BotSettings.Instance.CommandsFolder))
             {
-                await CreateFile(CreateType.CommandsFolder);
+                await CreateFile(FileType.CommandsFolder);
             }
             if (File.Exists(BotSettings.Instance.CommandsFile))
             {
-                Commands.Instance.CommandsList = JsonConvert.DeserializeObject<List<Command>>(File.ReadAllText(BotSettings.Instance.CommandsFile));
+                Commands.Instance.CommandsList = JsonConvert.DeserializeObject<List<Command>>(await File.ReadAllTextAsync(BotSettings.Instance.CommandsFile));
                 Log.Information($"Loaded {Commands.Instance.CommandsList.Count} commands from {BotSettings.Instance.CommandsFile}.");
             }
             else Log.Information("Commands file does not exist. No dynamic commands were loaded.");
         }
 
-        public async static Task CreateFile(CreateType createType)
+        public async static Task CreateFile(FileType createType)
         {
             switch (createType)
             {
-                case CreateType.CommandsFolder:
+                case FileType.CommandsFolder:
                 {
                     Log.Warning("Commands folder does not exist. Trying to create it.");
                     Directory.CreateDirectory(BotSettings.Instance.CommandsFolder);
                     Log.Information($"Commands folder created at: {BotSettings.Instance.CommandsFolder}.");
                     break;
                 }
-                case CreateType.SettingsFile:
+                case FileType.SettingsFile:
                 {
                     try
                     {
@@ -82,12 +88,43 @@ namespace CoreBot.Services
                         throw;
                     }
                 }
-                case CreateType.SettingsFolder:
+                case FileType.SettingsFolder:
                 {
                     Log.Warning("Settings folder does not exist. Trying to create it.");
                     Directory.CreateDirectory(BotSettings.Instance.SettingsFolder);
                     BotSettings.Instance.SettingsFile = Path.Combine(BotSettings.Instance.SettingsFolder, "BotSettings.json");
                     Log.Information($"Settings folder created at: {BotSettings.Instance.SettingsFolder}.");
+                    break;
+                }
+            }
+        }
+
+        public async static Task SaveFile(FileType fileType)
+        {
+            switch (fileType)
+            {
+                case FileType.MessagesFile:
+                {
+                    try
+                    {
+                        var json = JsonConvert.SerializeObject(UserMessages.Instance.Messages, Formatting.Indented);
+                        if (File.Exists(BotSettings.Instance.MessagesFile))
+                        {
+                            File.Delete(BotSettings.Instance.MessagesFile);
+                            Log.Information("Deleted old messages file.");
+                        }
+
+                        using (StreamWriter writer = File.CreateText(BotSettings.Instance.MessagesFile))
+                        {
+                            await writer.WriteAsync(json);
+                            Log.Information($"Successfully saved messages to {BotSettings.Instance.MessagesFile}.");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        Log.Error("Error occurred while trying to save messages.");
+                        throw;
+                    }
                     break;
                 }
             }
