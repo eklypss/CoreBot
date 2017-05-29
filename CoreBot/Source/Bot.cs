@@ -17,17 +17,18 @@ namespace CoreBot
 
         private Bot()
         {
-            LogHelper.CreateLogger(BotSettings.Instance.LogToFile);
             handler = new HandlerService();
         }
 
         private async Task MainAsync()
         {
-            await handler.CreateHandlers();
+            await LogHelper.CreateLogger(BotSettings.Instance.LogToFile);
             await FileHelper.CheckFiles();
+
             if (!string.IsNullOrWhiteSpace(BotSettings.Instance.BotToken))
             {
                 client = new DiscordSocketClient();
+                await handler.CreateHandlers();
                 await client.LoginAsync(TokenType.Bot, BotSettings.Instance.BotToken);
                 await client.StartAsync();
 
