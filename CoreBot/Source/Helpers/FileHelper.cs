@@ -21,6 +21,7 @@ namespace CoreBot.Helpers
             else await LoadFile(FileType.SettingsFile);
 
             if (File.Exists(BotSettings.Instance.MessagesFile)) await LoadFile(FileType.MessagesFile);
+            else Log.Information("Messages file does not exist. No messages were loaded.");
 
             if (!Directory.Exists(BotSettings.Instance.CommandsFolder)) await CreateFile(FileType.CommandsFolder);
 
