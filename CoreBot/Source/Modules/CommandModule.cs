@@ -21,16 +21,16 @@ namespace CoreBot.Modules
         }
 
         [Command("add"), Summary("Adds a new dynamic command.")]
-        public async Task AddCommand(string commandName, [Remainder] string commandAction)
+        public void AddCommand(string commandName, [Remainder] string commandAction)
         {
-            await commandManager.AddCommand(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
+            commandManager.AddCommand(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
         }
 
         [Command("delete"), Summary("Deletes a dynamic command.")]
-        public async Task DeleteCommand(string commandName)
+        public void DeleteCommand(string commandName)
         {
             var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
-            await commandManager.DeleteCommand(command);
+            commandManager.DeleteCommand(command);
         }
 
         [Command("list"), Summary("Lists all available commands, both dynamic and module based.")]

@@ -7,7 +7,6 @@ namespace CoreBot.Interfaces
     {
         CommandHandler CommandHandler { get; set; }
         LogHandler LogHandler { get; set; }
-        MessageHandler MessageHandler { get; set; }
 
         Task CreateHandlers();
     }

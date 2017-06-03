@@ -5,7 +5,6 @@ using CoreBot.Settings;
 using Discord;
 using Discord.WebSocket;
 using Serilog;
-using CoreBot.Source.Helpers;
 
 namespace CoreBot
 {
@@ -36,7 +35,6 @@ namespace CoreBot
                 // Install handlers
                 await handler.LogHandler.Install(client);
                 await handler.CommandHandler.InstallCommands(client);
-                await handler.MessageHandler.Install(client);
             }
             else
             {

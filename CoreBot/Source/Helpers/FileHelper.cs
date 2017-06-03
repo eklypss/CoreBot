@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using CoreBot.Collections;
 using CoreBot.Enum;
-using CoreBot.Models;
 using CoreBot.Settings;
 using Newtonsoft.Json;
 using Serilog;
-using ServiceStack.OrmLite;
 using CoreBot.Source.Helpers;
 
 namespace CoreBot.Helpers
@@ -23,27 +19,12 @@ namespace CoreBot.Helpers
 
             if (!File.Exists(BotSettings.Instance.SettingsFile)) await CreateFile(FileType.SettingsFile);
             else await LoadFile(FileType.SettingsFile);
-
-            if (File.Exists(BotSettings.Instance.MessagesFile)) await LoadFile(FileType.MessagesFile);
-            else Log.Information("Messages file does not exist. No messages were loaded.");
-
-            if (!Directory.Exists(BotSettings.Instance.CommandsFolder)) await CreateFile(FileType.CommandsFolder);
-
-            if (File.Exists(BotSettings.Instance.CommandsFile)) await LoadFile(FileType.CommandsFile);
-            else Log.Information("Commands file does not exist. No dynamic commands were loaded.");
         }
 
         public async static Task CreateFile(FileType fileType)
         {
             switch (fileType)
             {
-                case FileType.CommandsFolder:
-                {
-                    Log.Warning("Commands folder does not exist. Trying to create it.");
-                    Directory.CreateDirectory(BotSettings.Instance.CommandsFolder);
-                    Log.Information($"Commands folder created at: {BotSettings.Instance.CommandsFolder}.");
-                    break;
-                }
                 case FileType.SettingsFile:
                 {
                     try
@@ -78,39 +59,6 @@ namespace CoreBot.Helpers
         {
             switch (fileType)
             {
-                case FileType.MessagesFile:
-                {
-                    try
-                    {
-                        using (StreamWriter writer = File.CreateText(BotSettings.Instance.MessagesFile))
-                        {
-                            await writer.WriteAsync(JsonConvert.SerializeObject(UserMessages.Instance.Messages, Formatting.Indented));
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        Log.Error("Error occurred while trying to save messages.");
-                        throw;
-                    }
-                    break;
-                }
-                case FileType.CommandsFile:
-                {
-                    try
-                    {
-                        using (StreamWriter writer = File.CreateText(BotSettings.Instance.CommandsFile))
-                        {
-                            await writer.WriteAsync(JsonConvert.SerializeObject(Commands.Instance.CommandsList, Formatting.Indented));
-                            Log.Information($"Successfully saved commands to {BotSettings.Instance.CommandsFile}.");
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        Log.Error("Error occurred while trying to save commands.");
-                        throw;
-                    }
-                    break;
-                }
                 case FileType.SettingsFile:
                 {
                     try
@@ -118,7 +66,7 @@ namespace CoreBot.Helpers
                         using (StreamWriter writer = File.CreateText(BotSettings.Instance.SettingsFile))
                         {
                             await writer.WriteAsync(JsonConvert.SerializeObject(BotSettings.Instance, Formatting.Indented));
-                            Log.Information($"Successfully saved settings to {BotSettings.Instance.CommandsFile}.");
+                            Log.Information($"Successfully saved settings to {BotSettings.Instance.SettingsFile}.");
                         }
                     }
                     catch (Exception)
@@ -148,36 +96,6 @@ namespace CoreBot.Helpers
                     catch (Exception)
                     {
                         Log.Error("Failed to load the configuration file.");
-                        throw;
-                    }
-                    break;
-                }
-                case FileType.MessagesFile:
-                {
-                    try
-                    {
-                        Log.Information("Trying to load messages.");
-                        UserMessages.Instance.Messages = JsonConvert.DeserializeObject<List<UserMessage>>(await File.ReadAllTextAsync(BotSettings.Instance.MessagesFile));
-                        Log.Information($"Loaded {UserMessages.Instance.Messages.Count} messages from {BotSettings.Instance.MessagesFile}.");
-                    }
-                    catch (Exception)
-                    {
-                        Log.Error("Failed to load the messages file.");
-                        throw;
-                    }
-                    break;
-                }
-                case FileType.CommandsFile:
-                {
-                    try
-                    {
-                        Log.Information("Trying to load dynamic commands.");
-                        Commands.Instance.CommandsList = Database.Run().Select<Command>();
-                        Log.Information($"Loaded {Commands.Instance.CommandsList.Count} commands from {BotSettings.Instance.CommandsFile}.");
-                    }
-                    catch (Exception)
-                    {
-                        Log.Error("Failed to load the commands file.");
                         throw;
                     }
                     break;

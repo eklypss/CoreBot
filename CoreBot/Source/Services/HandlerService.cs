@@ -8,13 +8,11 @@ namespace CoreBot.Service
     {
         public CommandHandler CommandHandler { get; set; }
         public LogHandler LogHandler { get; set; }
-        public MessageHandler MessageHandler { get; set; }
 
         public async Task CreateHandlers()
         {
             CommandHandler = new CommandHandler();
             LogHandler = new LogHandler();
-            MessageHandler = new MessageHandler();
             await Task.CompletedTask;
         }
     }
