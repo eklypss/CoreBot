@@ -26,7 +26,7 @@ namespace CoreBot.Handlers
                 if (msg.User == message.Author.Username)
                 {
                     msg.Message = message.Content;
-                    msg.DateTime = message.CreatedAt.DateTime;
+                    msg.CreatedAt = message.CreatedAt.DateTime;
                     matchFound = true;
                     await FileHelper.SaveFile(FileType.MessagesFile);
                     break;

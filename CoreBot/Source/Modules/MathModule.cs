@@ -7,7 +7,7 @@ namespace CoreBot.Modules
     public class MathModule : ModuleBase
     {
         [Command("math"), Summary("Calculates basic math operations.")]
-        public async Task Calculate(string input)
+        public async Task Calculate([Remainder] string input)
         {
             DataTable dataTable = new DataTable();
             var result = dataTable.Compute(input, string.Empty);

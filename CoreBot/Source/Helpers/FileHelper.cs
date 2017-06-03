@@ -8,13 +8,17 @@ using CoreBot.Models;
 using CoreBot.Settings;
 using Newtonsoft.Json;
 using Serilog;
+using ServiceStack.OrmLite;
+using CoreBot.Source.Helpers;
 
 namespace CoreBot.Helpers
 {
     public static class FileHelper
     {
+
         public async static Task CheckFiles()
         {
+            Database.Init();
             if (!Directory.Exists(BotSettings.Instance.SettingsFolder)) await CreateFile(FileType.SettingsFolder);
 
             if (!File.Exists(BotSettings.Instance.SettingsFile)) await CreateFile(FileType.SettingsFile);
@@ -168,7 +172,7 @@ namespace CoreBot.Helpers
                     try
                     {
                         Log.Information("Trying to load dynamic commands.");
-                        Commands.Instance.CommandsList = JsonConvert.DeserializeObject<List<Command>>(await File.ReadAllTextAsync(BotSettings.Instance.CommandsFile));
+                        Commands.Instance.CommandsList = Database.Run().Select<Command>();
                         Log.Information($"Loaded {Commands.Instance.CommandsList.Count} commands from {BotSettings.Instance.CommandsFile}.");
                     }
                     catch (Exception)

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using CoreBot.Collections;
 using CoreBot.Managers;
 using CoreBot.Settings;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using CoreBot.Collections;
 
 namespace CoreBot.Handlers
 {
@@ -60,7 +60,6 @@ namespace CoreBot.Handlers
                         }
                         if (!matchFound)
                         {
-                            Log.Information(result.ToString());
                             // If command was found but failed to execute, send error message.
                             if (result.Error != CommandError.UnknownCommand) await userMessage.Channel.SendMessageAsync(result.ToString());
                         }

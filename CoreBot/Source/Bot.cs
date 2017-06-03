@@ -5,6 +5,7 @@ using CoreBot.Settings;
 using Discord;
 using Discord.WebSocket;
 using Serilog;
+using CoreBot.Source.Helpers;
 
 namespace CoreBot
 {

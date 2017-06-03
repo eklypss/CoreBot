@@ -5,6 +5,8 @@ using CoreBot.Helpers;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Serilog;
+using ServiceStack.OrmLite;
+using CoreBot.Source.Helpers;
 
 namespace CoreBot.Managers
 {
@@ -24,7 +26,7 @@ namespace CoreBot.Managers
             bool commandExists = false;
             foreach (Command cmd in Commands.Instance.CommandsList)
             {
-                if (cmd.Action == command.Action)
+                if (cmd.Name == command.Name)
                 {
                     commandExists = true;
                     break;
@@ -35,6 +37,7 @@ namespace CoreBot.Managers
             {
                 Log.Information($"Command added: {BotSettings.Instance.BotPrefix}{command.Name}, action: {command.Action}");
                 Commands.Instance.CommandsList.Add(command);
+                Database.Run().Insert(command);
                 await SaveCommands();
             }
             else
@@ -48,6 +51,7 @@ namespace CoreBot.Managers
             if (Commands.Instance.CommandsList.Contains(command))
             {
                 Commands.Instance.CommandsList.Remove(command);
+                Database.Run().Delete(command);
                 await SaveCommands();
                 Log.Information($"Command {command.Name} was deleted.");
             }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Managers;
@@ -37,15 +36,12 @@ namespace CoreBot.Modules
         [Command("list"), Summary("Lists all available commands, both dynamic and module based.")]
         public async Task ListCommands()
         {
-            var dynamicCommandNames = new List<string>();
-            var staticCommandNames = new List<string>();
-            foreach (var module in commandService.Modules)
+            var staticCommandNames = commandService.Modules.Select(module =>
             {
-                var moduleCommandNames = new List<string>();
-                module.Commands.ToList().ForEach(x => moduleCommandNames.Add(x.Name));
-                staticCommandNames.Add($"{module.Name} *({string.Join(", ", moduleCommandNames)})*");
-            }
-            Commands.Instance.CommandsList.ForEach(x => dynamicCommandNames.Add(x.Name));
+                var moduleCommandNames = module.Commands.Select(c => c.Name);
+                return $"{module.Name} *({string.Join(", ", moduleCommandNames)})*";
+            });
+            var dynamicCommandNames = Commands.Instance.CommandsList.Select(x => x.Name);
             await ReplyAsync($"**Available static commands:** {string.Join(", ", staticCommandNames)}");
             await ReplyAsync($"**Available dynamic commands:** {string.Join(", ", dynamicCommandNames)}");
         }

@@ -1,9 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using CoreBot.Collections;
 using Discord.Commands;
-using Serilog;
-
 namespace CoreBot.Modules
 {
     public class SeenModule : ModuleBase
@@ -11,15 +8,18 @@ namespace CoreBot.Modules
         [Command("seen"), Summary("Shows latest activity of the specified user.")]
         public async Task Seen(string userName)
         {
-            var message = UserMessages.Instance.Messages.Where(x => x.User == userName).FirstOrDefault();
-            if (message == null)
+            userName = userName.ToLower();
+            var found = await Context.Channel.GetMessagesAsync(2000)
+                .FirstOrDefault(batch => batch
+                .Any(message => message.Author.Username.ToLower() == userName));
+            if (found != null)
             {
-                Log.Warning($"No actiivty was found for the user: {userName}.");
-                await ReplyAsync($"I haven't seen {userName} here.");
+                var msg = found.First(m => m.Author.Username.ToLower() == userName);
+                await ReplyAsync($"{msg.Author.Username} was last seen on {msg.Timestamp.ToLocalTime()}");
             }
             else
             {
-                await ReplyAsync($"{message.User} was last seen on {message.DateTime.ToString()} saying: {message.Message}");
+                await ReplyAsync($"No messages from \"{userName}\"");
             }
         }
     }
