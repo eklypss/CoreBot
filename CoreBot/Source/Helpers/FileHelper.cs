@@ -13,11 +13,11 @@ namespace CoreBot.Helpers
     {
         public async static Task CheckFiles()
         {
-            Database.Init();
             if (!Directory.Exists(BotSettings.Instance.SettingsFolder)) await CreateFile(FileType.SettingsFolder);
 
             if (!File.Exists(BotSettings.Instance.SettingsFile)) await CreateFile(FileType.SettingsFile);
             else await LoadFile(FileType.SettingsFile);
+            await Database.Init();
         }
 
         public async static Task CreateFile(FileType fileType)
@@ -89,6 +89,8 @@ namespace CoreBot.Helpers
                         Log.Information("Trying to load configuration files.");
                         BotSettings.Instance = JsonConvert.DeserializeObject<BotSettings>(File.ReadAllText(BotSettings.Instance.SettingsFile));
                         Log.Information("Successfully loaded the configuration file.");
+                        if (BotSettings.Instance.DatabaseString == null) BotSettings.Instance.DatabaseString = DefaultValues.DEFAULT_DATABASE_STRING;
+                        if (BotSettings.Instance.BotPrefix == '\0') BotSettings.Instance.BotPrefix = DefaultValues.DEFAULT_PREFIX;
                         // Used to sync new settings to old settings file without having to re-create it.
                         await SaveFile(FileType.SettingsFile);
                     }

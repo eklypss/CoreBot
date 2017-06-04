@@ -1,4 +1,5 @@
-﻿using CoreBot.Collections;
+﻿using System.Threading.Tasks;
+using CoreBot.Collections;
 using CoreBot.Models;
 using CoreBot.Settings;
 using CoreBot.Source.Helpers;
@@ -12,7 +13,7 @@ namespace CoreBot.Managers
     /// </summary>
     public class CommandManager
     {
-        public void AddCommand(Command command)
+        public async Task AddCommand(Command command)
         {
             Log.Information($"Trying to add command: {BotSettings.Instance.BotPrefix}{command.Name}, action: {command.Action}.");
             bool commandExists = false;
@@ -29,7 +30,7 @@ namespace CoreBot.Managers
             {
                 Log.Information($"Command added: {BotSettings.Instance.BotPrefix}{command.Name}, action: {command.Action}");
                 Commands.Instance.CommandsList.Add(command);
-                Database.Run().Insert(command);
+                await Database.Run().InsertAsync(command);
             }
             else
             {
@@ -37,15 +38,26 @@ namespace CoreBot.Managers
             }
         }
 
-        public void DeleteCommand(Command command)
+        public async Task DeleteCommand(Command command)
         {
             if (Commands.Instance.CommandsList.Contains(command))
             {
                 Commands.Instance.CommandsList.Remove(command);
-                Database.Run().Delete(command);
+                await Database.Run().DeleteAsync(command);
                 Log.Information($"Command {command.Name} was deleted.");
             }
             else Log.Warning($"Command does not exist: {command.Name}");
+        }
+
+        /// <summary>
+        /// Updates the Action property of the command.
+        /// </summary>
+        public async Task UpdateCommand(Command command, string newAction)
+        {
+            command.Action = newAction;
+            // TODO: Test this.
+            await Database.Run().UpdateAsync(new Command(command.Name, command.Action));
+            Log.Information($"Command {command.Name} was updated. New action: {newAction}");
         }
     }
 }

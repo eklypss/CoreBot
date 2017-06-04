@@ -5,10 +5,11 @@ using CoreBot.Managers;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Discord.Commands;
+using Serilog;
 
 namespace CoreBot.Modules
 {
-    [Group("command"), Summary("Module for adding, deleting and listing commands.")]
+    [Group("command"), Summary("Module for modifying and listing commands.")]
     public class CommandModule : ModuleBase
     {
         private CommandManager commandManager;
@@ -21,16 +22,26 @@ namespace CoreBot.Modules
         }
 
         [Command("add"), Summary("Adds a new dynamic command.")]
-        public void AddCommand(string commandName, [Remainder] string commandAction)
+        public async void AddCommand(string commandName, [Remainder] string commandAction)
         {
-            commandManager.AddCommand(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
+            if (commandAction.Length > 0 || !string.IsNullOrEmpty(commandAction)) await commandManager.AddCommand(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
+            else Log.Warning($"Could not add command {commandName} because the action was invalid.");
         }
 
         [Command("delete"), Summary("Deletes a dynamic command.")]
-        public void DeleteCommand(string commandName)
+        public async void DeleteCommand(string commandName)
         {
             var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
-            commandManager.DeleteCommand(command);
+            if (command != null) await commandManager.DeleteCommand(command);
+            else Log.Warning($"Failed to delete command {commandName} as it doesn't exist.");
+        }
+
+        [Command("update"), Summary("Updates the action of a dynamic command.")]
+        public async void UpdateCommand(string commandName, string newAction)
+        {
+            var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
+            if (command != null) await commandManager.UpdateCommand(command, newAction);
+            else Log.Warning($"Failed to update command {commandName} as it doesn't exist.");
         }
 
         [Command("list"), Summary("Lists all available commands, both dynamic and module based.")]

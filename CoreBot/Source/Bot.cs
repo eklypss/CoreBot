@@ -22,7 +22,7 @@ namespace CoreBot
 
         private async Task MainAsync()
         {
-            await LogHelper.CreateLogger(BotSettings.Instance.LogToFile);
+            await LogHelper.CreateLogger((bool)BotSettings.Instance.LogToFile);
             await FileHelper.CheckFiles();
 
             if (!string.IsNullOrWhiteSpace(BotSettings.Instance.BotToken))
@@ -39,7 +39,7 @@ namespace CoreBot
             else
             {
                 Log.Error("Bot token is invalid, cannot connect.");
-                Log.Error($"Change your bot token in the following .config file: {BotSettings.Instance.SettingsFile}.");
+                Log.Error($"Change your bot token in the following .json file: {BotSettings.Instance.SettingsFile}.");
             }
             await Task.Delay(-1);
         }

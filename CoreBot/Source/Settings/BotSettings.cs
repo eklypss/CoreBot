@@ -24,7 +24,7 @@ namespace CoreBot.Settings
         }
 
         public string BotToken { get; set; } = string.Empty;
-        public char BotPrefix { get; set; } = '!';
+        public char BotPrefix { get; set; }
         public string DatabaseString { get; set; }
         public bool LogToFile { get; set; } = true;
         public string SettingsFolder { get; set; }

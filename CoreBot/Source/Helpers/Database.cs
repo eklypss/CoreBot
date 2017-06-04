@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Models;
 using CoreBot.Settings;
@@ -11,12 +12,12 @@ namespace CoreBot.Source.Helpers
     {
         private static IDbConnection connection;
 
-        public static void Init()
+        public async static Task Init()
         {
             var connectionFactory = new OrmLiteConnectionFactory(BotSettings.Instance.DatabaseString, SqliteDialect.Provider);
             connection = connectionFactory.Open();
             connection.CreateTableIfNotExists<Command>();
-            Commands.Instance.CommandsList = connection.Select<Command>();
+            Commands.Instance.CommandsList = await connection.SelectAsync<Command>();
             Log.Information($"Loaded {Commands.Instance.CommandsList.Count} commands from {BotSettings.Instance.DatabaseString}.");
         }
 
