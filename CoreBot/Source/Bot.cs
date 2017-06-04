@@ -22,7 +22,7 @@ namespace CoreBot
 
         private async Task MainAsync()
         {
-            await LogHelper.CreateLogger((bool)BotSettings.Instance.LogToFile);
+            await LogHelper.CreateLogger(BotSettings.Instance.LogToFile);
             await FileHelper.CheckFiles();
 
             if (!string.IsNullOrWhiteSpace(BotSettings.Instance.BotToken))
