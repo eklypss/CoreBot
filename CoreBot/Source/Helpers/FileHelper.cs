@@ -3,15 +3,14 @@ using System.IO;
 using System.Threading.Tasks;
 using CoreBot.Enum;
 using CoreBot.Settings;
+using CoreBot.Source.Helpers;
 using Newtonsoft.Json;
 using Serilog;
-using CoreBot.Source.Helpers;
 
 namespace CoreBot.Helpers
 {
     public static class FileHelper
     {
-
         public async static Task CheckFiles()
         {
             Database.Init();

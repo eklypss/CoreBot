@@ -1,26 +1,25 @@
-﻿using CoreBot.Collections;
+﻿using System.Data;
+using CoreBot.Collections;
 using CoreBot.Models;
+using CoreBot.Settings;
 using Serilog;
 using ServiceStack.OrmLite;
-using System.Data;
 
 namespace CoreBot.Source.Helpers
 {
-    static class Database
+    internal static class Database
     {
-        private static string dbString = "kanta.db";
-
         private static IDbConnection connection;
 
         public static void Init()
         {
-            var connectionFactory = new OrmLiteConnectionFactory(dbString, SqliteDialect.Provider);
+            var connectionFactory = new OrmLiteConnectionFactory(BotSettings.Instance.DatabaseString, SqliteDialect.Provider);
             connection = connectionFactory.Open();
             connection.CreateTableIfNotExists<Command>();
             Commands.Instance.CommandsList = connection.Select<Command>();
-            Log.Information($"Loaded {Commands.Instance.CommandsList.Count} commands from {dbString}.");
+            Log.Information($"Loaded {Commands.Instance.CommandsList.Count} commands from {BotSettings.Instance.DatabaseString}.");
         }
-        
+
         public static IDbConnection Run()
         {
             return connection;

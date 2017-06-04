@@ -1,9 +1,9 @@
 ﻿using CoreBot.Collections;
 using CoreBot.Models;
 using CoreBot.Settings;
+using CoreBot.Source.Helpers;
 using Serilog;
 using ServiceStack.OrmLite;
-using CoreBot.Source.Helpers;
 
 namespace CoreBot.Managers
 {

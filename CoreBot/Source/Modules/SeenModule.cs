@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
+
 namespace CoreBot.Modules
 {
     public class SeenModule : ModuleBase

@@ -10,7 +10,6 @@ namespace CoreBot.Modules
     {
         public class PrefixModule : ModuleBase
         {
-
             [Command("prefix"), Summary("Sets the command prefix used by the bot.")]
             public async Task SetPrefix(char prefix)
             {
