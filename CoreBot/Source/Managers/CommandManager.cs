@@ -56,7 +56,7 @@ namespace CoreBot.Managers
         {
             command.Action = newAction;
             // TODO: Test this.
-            await Database.Run().UpdateAsync(new Command(command.Name, command.Action));
+            await Database.Run().UpdateAsync(command);
             Log.Information($"Command {command.Name} was updated. New action: {newAction}");
         }
     }
