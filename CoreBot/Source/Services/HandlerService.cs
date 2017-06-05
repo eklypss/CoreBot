@@ -13,7 +13,6 @@ namespace CoreBot.Service
         {
             CommandHandler = new CommandHandler();
             LogHandler = new LogHandler();
-            await Task.CompletedTask;
         }
     }
 }
