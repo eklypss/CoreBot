@@ -22,26 +22,61 @@ namespace CoreBot.Modules
         }
 
         [Command("add"), Summary("Adds a new dynamic command.")]
-        public async void AddCommand(string commandName, [Remainder] string commandAction)
+        public async Task AddCommand(string commandName, [Remainder] string commandAction)
         {
-            if (commandAction.Length > 0 || !string.IsNullOrEmpty(commandAction)) await commandManager.AddCommand(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
-            else Log.Warning($"Could not add command {commandName} because the action was invalid.");
+            if (commandAction.Length > 0 || !string.IsNullOrEmpty(commandAction))
+            {
+                var found = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
+                if (found == null)
+                {
+                    await commandManager.AddCommand(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
+                    await ReplyAsync($"Command {commandName} added, action: {commandAction}");
+                    Log.Information($"Command {commandName} added, action: {commandAction}");
+                }
+                else
+                {
+                    Log.Warning($"Could not add command {commandName} since it already exists.");
+                    await ReplyAsync($"Command {commandName} already exists. Use {BotSettings.Instance.BotPrefix}command update {commandName} to edit the existing command.");
+                }
+            }
+            else
+            {
+                Log.Warning($"Could not add command {commandName} because the action was invalid.");
+            }
         }
 
         [Command("delete"), Summary("Deletes a dynamic command.")]
-        public async void DeleteCommand(string commandName)
+        public async Task DeleteCommand(string commandName)
         {
             var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
-            if (command != null) await commandManager.DeleteCommand(command);
-            else Log.Warning($"Failed to delete command {commandName} as it doesn't exist.");
+            if (command != null)
+            {
+                await commandManager.DeleteCommand(command);
+                await ReplyAsync($"Command deleted: {commandName}");
+                Log.Information($"Command deleted: {commandName}");
+            }
+            else
+            {
+                Log.Warning($"Failed to delete command {commandName} as it doesn't exist.");
+                await ReplyAsync($"Command {commandName} does not exist.");
+            }
         }
 
         [Command("update"), Summary("Updates the action of a dynamic command.")]
-        public async void UpdateCommand(string commandName, string newAction)
+        public async Task UpdateCommand(string commandName, string newAction)
         {
             var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
-            if (command != null) await commandManager.UpdateCommand(command, newAction);
-            else Log.Warning($"Failed to update command {commandName} as it doesn't exist.");
+            if (command != null)
+            {
+                await commandManager.UpdateCommand(command, newAction);
+                await ReplyAsync($"Command {commandName} updated, new action: {newAction}");
+                Log.Information($"Command {commandName} updated, new action: {newAction}");
+            }
+            else
+            {
+                Log.Warning($"Failed to update command {commandName} as it doesn't exist.");
+                await ReplyAsync($"Command {commandName} does not exist.");
+            }
         }
 
         [Command("list"), Summary("Lists all available commands, both dynamic and module based.")]

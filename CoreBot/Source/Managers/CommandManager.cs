@@ -1,9 +1,7 @@
 ﻿using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Models;
-using CoreBot.Settings;
 using CoreBot.Source.Helpers;
-using Serilog;
 using ServiceStack.OrmLite;
 
 namespace CoreBot.Managers
@@ -13,40 +11,22 @@ namespace CoreBot.Managers
     /// </summary>
     public class CommandManager
     {
+        /// <summary>
+        /// Adds the specified command.
+        /// </summary>
         public async Task AddCommand(Command command)
         {
-            Log.Information($"Trying to add command: {BotSettings.Instance.BotPrefix}{command.Name}, action: {command.Action}.");
-            bool commandExists = false;
-            foreach (Command cmd in Commands.Instance.CommandsList)
-            {
-                if (cmd.Name == command.Name)
-                {
-                    commandExists = true;
-                    break;
-                }
-            }
-
-            if (!commandExists)
-            {
-                Log.Information($"Command added: {BotSettings.Instance.BotPrefix}{command.Name}, action: {command.Action}");
-                Commands.Instance.CommandsList.Add(command);
-                await Database.Run().InsertAsync(command);
-            }
-            else
-            {
-                Log.Warning($"Could not add command: {BotSettings.Instance.BotPrefix}{command.Name} since it already exists.");
-            }
+            await Database.Run().InsertAsync(command);
+            Commands.Instance.CommandsList.Add(command);
         }
 
+        /// <summary>
+        /// Deletes the specified command.
+        /// </summary>
         public async Task DeleteCommand(Command command)
         {
-            if (Commands.Instance.CommandsList.Contains(command))
-            {
-                Commands.Instance.CommandsList.Remove(command);
-                await Database.Run().DeleteAsync(command);
-                Log.Information($"Command {command.Name} was deleted.");
-            }
-            else Log.Warning($"Command does not exist: {command.Name}");
+            await Database.Run().DeleteAsync(command);
+            Commands.Instance.CommandsList.Remove(command);
         }
 
         /// <summary>
@@ -55,9 +35,7 @@ namespace CoreBot.Managers
         public async Task UpdateCommand(Command command, string newAction)
         {
             command.Action = newAction;
-            // TODO: Test this.
             await Database.Run().UpdateAsync(command);
-            Log.Information($"Command {command.Name} was updated. New action: {newAction}");
         }
     }
 }
