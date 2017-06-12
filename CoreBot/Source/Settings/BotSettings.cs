@@ -1,9 +1,10 @@
 ﻿using System.IO;
 using System.Reflection;
+using CoreBot.Interfaces;
 
 namespace CoreBot.Settings
 {
-    public class BotSettings
+    public class BotSettings : IBotSettings
     {
         private static BotSettings instance;
 
