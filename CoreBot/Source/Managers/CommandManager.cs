@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using CoreBot.Collections;
+using CoreBot.Helpers;
 using CoreBot.Models;
-using CoreBot.Source.Helpers;
 using ServiceStack.OrmLite;
 
 namespace CoreBot.Managers

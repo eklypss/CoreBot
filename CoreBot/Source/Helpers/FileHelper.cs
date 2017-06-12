@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using CoreBot.Enum;
 using CoreBot.Settings;
-using CoreBot.Source.Helpers;
 using Newtonsoft.Json;
 using Serilog;
 

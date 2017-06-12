@@ -6,7 +6,7 @@ using CoreBot.Settings;
 using Serilog;
 using ServiceStack.OrmLite;
 
-namespace CoreBot.Source.Helpers
+namespace CoreBot.Helpers
 {
     internal static class Database
     {
