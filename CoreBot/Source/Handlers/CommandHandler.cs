@@ -8,6 +8,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using CoreBot.Source.Modules;
 
 namespace CoreBot.Handlers
 {
@@ -24,6 +25,7 @@ namespace CoreBot.Handlers
             commandService = new CommandService();
             services = new ServiceCollection();
             services.AddSingleton(new CommandManager());
+            services.AddSingleton(await DrinkManager.Create());
             serviceProvider = services.BuildServiceProvider();
             await commandService.AddModulesAsync(Assembly.GetEntryAssembly());
             client.MessageReceived += HandleCommandAsync;
