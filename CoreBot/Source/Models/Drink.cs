@@ -1,4 +1,4 @@
-﻿namespace CoreBot.Source.Models
+﻿namespace CoreBot.Models
 {
     internal class Drink
     {

@@ -1,12 +1,12 @@
-﻿using CoreBot.Helpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using CoreBot.Helpers;
 using CoreBot.Source.Models;
 using ServiceStack.OrmLite;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using System;
 
-namespace CoreBot.Source.Modules
+namespace CoreBot.Modules
 {
     public class DrinkManager
     {
