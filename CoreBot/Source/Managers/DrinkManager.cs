@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Helpers;
-using CoreBot.Source.Models;
+using CoreBot.Models;
+using Microsoft.Data.Sqlite;
+using Serilog;
+using Serilog.Core;
 using ServiceStack.OrmLite;
 
 namespace CoreBot.Modules
@@ -16,9 +19,17 @@ namespace CoreBot.Modules
 
         public static async Task<DrinkManager> Create()
         {
-            var drinks = await Database.Run().SelectAsync<Drink>();
-            var ids = drinks.Select(d => d.Id).ToList();
-            return new DrinkManager(ids);
+            try
+            {
+                var drinks = await Database.Run().SelectAsync<Drink>();
+                var ids = drinks.Select(d => d.Id).ToList();
+                return new DrinkManager(ids);
+            }
+            catch (SqliteException ex)
+            {
+                Log.Error($"Could not retrive drinks from the database: {ex.Source} {ex.Message}.");
+                return null;
+            }
         }
 
         private DrinkManager(List<int> drinkIds)

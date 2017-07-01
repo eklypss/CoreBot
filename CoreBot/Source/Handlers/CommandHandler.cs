@@ -3,12 +3,12 @@ using System.Reflection;
 using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Managers;
+using CoreBot.Modules;
 using CoreBot.Settings;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using CoreBot.Source.Modules;
 
 namespace CoreBot.Handlers
 {
@@ -23,9 +23,10 @@ namespace CoreBot.Handlers
         {
             client = discordClient;
             commandService = new CommandService();
+            var drinkManager = await DrinkManager.Create();
             services = new ServiceCollection();
             services.AddSingleton(new CommandManager());
-            services.AddSingleton(await DrinkManager.Create());
+            if (drinkManager != null) services.AddSingleton(drinkManager);
             serviceProvider = services.BuildServiceProvider();
             await commandService.AddModulesAsync(Assembly.GetEntryAssembly());
             client.MessageReceived += HandleCommandAsync;
