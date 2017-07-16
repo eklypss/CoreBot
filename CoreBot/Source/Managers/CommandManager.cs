@@ -16,8 +16,11 @@ namespace CoreBot.Managers
         /// </summary>
         public async Task AddCommand(Command command)
         {
-            await Database.Run().InsertAsync(command);
-            Commands.Instance.CommandsList.Add(command);
+            using (var connection = Database.Open())
+            {
+                await connection.InsertAsync(command);
+                Commands.Instance.CommandsList.Add(command);
+            }
         }
 
         /// <summary>
@@ -25,8 +28,11 @@ namespace CoreBot.Managers
         /// </summary>
         public async Task DeleteCommand(Command command)
         {
-            await Database.Run().DeleteAsync(command);
-            Commands.Instance.CommandsList.Remove(command);
+            using (var connection = Database.Open())
+            {
+                await connection.DeleteAsync(command);
+                Commands.Instance.CommandsList.Remove(command);
+            }
         }
 
         /// <summary>
@@ -34,8 +40,11 @@ namespace CoreBot.Managers
         /// </summary>
         public async Task UpdateCommand(Command command, string newAction)
         {
-            command.Action = newAction;
-            await Database.Run().UpdateAsync(command);
+            using (var connection = Database.Open())
+            {
+                command.Action = newAction;
+                await connection.UpdateAsync(command);
+            }
         }
     }
 }

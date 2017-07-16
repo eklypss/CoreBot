@@ -6,7 +6,6 @@ using CoreBot.Helpers;
 using CoreBot.Models;
 using Microsoft.Data.Sqlite;
 using Serilog;
-using Serilog.Core;
 using ServiceStack.OrmLite;
 
 namespace CoreBot.Modules
@@ -21,9 +20,13 @@ namespace CoreBot.Modules
         {
             try
             {
-                var drinks = await Database.Run().SelectAsync<Drink>();
-                var ids = drinks.Select(d => d.Id).ToList();
-                return new DrinkManager(ids);
+                using (var connection = Database.Open())
+                {
+                    var drinks = await connection.SelectAsync<Drink>();
+                    var ids = drinks.Select(d => d.Id).ToList();
+                    Log.Information($"Loaded {ids.Count} drinks from database");
+                    return new DrinkManager(ids);
+                }
             }
             catch (SqliteException ex)
             {

@@ -10,12 +10,12 @@ namespace CoreBot.Helpers
 {
     internal static class Database
     {
-        private static IDbConnection connection;
+        private static OrmLiteConnectionFactory factory;
 
         public async static Task Init()
         {
-            var connectionFactory = new OrmLiteConnectionFactory(BotSettings.Instance.DatabaseString, SqliteDialect.Provider);
-            using (var connection = connectionFactory.Open())
+            factory = new OrmLiteConnectionFactory(BotSettings.Instance.DatabaseString, SqliteDialect.Provider);
+            using (var connection = Open())
             {
                 connection.CreateTableIfNotExists<Command>();
                 Commands.Instance.CommandsList = await connection.SelectAsync<Command>();
@@ -23,9 +23,9 @@ namespace CoreBot.Helpers
             }
         }
 
-        public static IDbConnection Run()
+        public static IDbConnection Open()
         {
-            return connection;
+            return factory.Open();
         }
     }
 }
