@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using Serilog;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using Serilog;
 
 namespace CoreBot.Helpers
 {

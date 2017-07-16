@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using CoreBot.Enum;
+﻿using CoreBot.Enum;
 using CoreBot.Settings;
 using Newtonsoft.Json;
 using Serilog;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace CoreBot.Helpers
 {

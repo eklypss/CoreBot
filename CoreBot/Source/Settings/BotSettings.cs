@@ -1,6 +1,6 @@
-﻿using System.IO;
+﻿using CoreBot.Interfaces;
+using System.IO;
 using System.Reflection;
-using CoreBot.Interfaces;
 
 namespace CoreBot.Settings
 {

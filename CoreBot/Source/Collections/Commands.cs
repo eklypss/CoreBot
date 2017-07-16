@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using CoreBot.Models;
+﻿using CoreBot.Models;
+using System.Collections.Generic;
 
 namespace CoreBot.Collections
 {

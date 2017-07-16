@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using CoreBot.Helpers;
+﻿using CoreBot.Helpers;
 using CoreBot.Service;
 using CoreBot.Settings;
 using Discord;
 using Discord.WebSocket;
 using Serilog;
+using System.Threading.Tasks;
 
 namespace CoreBot
 {

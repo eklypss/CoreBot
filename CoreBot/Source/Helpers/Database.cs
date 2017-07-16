@@ -1,10 +1,10 @@
-﻿using System.Data;
-using System.Threading.Tasks;
-using CoreBot.Collections;
+﻿using CoreBot.Collections;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Serilog;
 using ServiceStack.OrmLite;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace CoreBot.Helpers
 {

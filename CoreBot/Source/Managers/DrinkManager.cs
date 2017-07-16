@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CoreBot.Helpers;
+﻿using CoreBot.Helpers;
 using CoreBot.Models;
 using Microsoft.Data.Sqlite;
 using Serilog;
 using ServiceStack.OrmLite;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoreBot.Modules
 {

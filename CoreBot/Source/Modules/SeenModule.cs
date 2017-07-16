@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using Discord.Commands;
+using System.Linq;
 using System.Threading.Tasks;
-using Discord.Commands;
 
 namespace CoreBot.Modules
 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Threading.Tasks;
-using CoreBot.Collections;
+﻿using CoreBot.Collections;
 using CoreBot.Managers;
 using CoreBot.Modules;
 using CoreBot.Settings;
@@ -9,6 +6,9 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace CoreBot.Handlers
 {

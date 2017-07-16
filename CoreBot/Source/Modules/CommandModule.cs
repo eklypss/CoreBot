@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using CoreBot.Collections;
+﻿using CoreBot.Collections;
 using CoreBot.Managers;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Discord.Commands;
 using Serilog;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoreBot.Modules
 {

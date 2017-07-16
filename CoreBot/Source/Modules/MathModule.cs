@@ -1,7 +1,7 @@
-﻿using System.Data;
+﻿using Discord.Commands;
+using System.Data;
 using System.Globalization;
 using System.Threading.Tasks;
-using Discord.Commands;
 
 namespace CoreBot.Modules
 {
