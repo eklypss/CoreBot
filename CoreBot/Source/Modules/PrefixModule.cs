@@ -1,8 +1,8 @@
-﻿using CoreBot.Enum;
+﻿using System.Threading.Tasks;
+using CoreBot.Enum;
 using CoreBot.Helpers;
 using CoreBot.Settings;
 using Discord.Commands;
-using System.Threading.Tasks;
 
 namespace CoreBot.Modules
 {

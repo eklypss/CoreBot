@@ -1,20 +1,20 @@
-﻿using CoreBot.Helpers;
-using CoreBot.Models;
-using Microsoft.Data.Sqlite;
-using Serilog;
-using ServiceStack.OrmLite;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreBot.Helpers;
+using CoreBot.Models;
+using CoreBot.Settings;
+using Microsoft.Data.Sqlite;
+using Serilog;
+using ServiceStack.OrmLite;
 
 namespace CoreBot.Modules
 {
     public class DrinkManager
     {
-        private const string URL = "https://www.alko.fi/tuotteet/{0:D6}/";
-        private List<int> drinkIds;
-        private Random random;
+        private readonly List<int> drinkIds;
+        private readonly Random random;
 
         public static async Task<DrinkManager> Create()
         {
@@ -44,7 +44,7 @@ namespace CoreBot.Modules
         public string RandomLink()
         {
             int randomId = drinkIds[random.Next(drinkIds.Count)];
-            return string.Format(URL, randomId);
+            return string.Format(DefaultValues.ALKO_URL, randomId);
         }
     }
 }

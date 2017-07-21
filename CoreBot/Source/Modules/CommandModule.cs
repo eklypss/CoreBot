@@ -1,19 +1,19 @@
-﻿using CoreBot.Collections;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using CoreBot.Collections;
 using CoreBot.Managers;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Discord.Commands;
 using Serilog;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CoreBot.Modules
 {
     [Group("command"), Summary("Module for modifying and listing commands.")]
     public class CommandModule : ModuleBase
     {
-        private CommandManager commandManager;
-        private CommandService commandService;
+        private readonly CommandManager commandManager;
+        private readonly CommandService commandService;
 
         public CommandModule(CommandManager cm, CommandService commands)
         {

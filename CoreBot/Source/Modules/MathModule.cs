@@ -1,7 +1,7 @@
-﻿using Discord.Commands;
-using System.Data;
+﻿using System.Data;
 using System.Globalization;
 using System.Threading.Tasks;
+using Discord.Commands;
 
 namespace CoreBot.Modules
 {
@@ -13,6 +13,7 @@ namespace CoreBot.Modules
             var dataTable = new DataTable() { CaseSensitive = false, Locale = CultureInfo.CurrentCulture };
             var result = dataTable.Compute(input, string.Empty);
             await ReplyAsync($"`{input} = {result}`");
+            dataTable.Dispose();
         }
     }
 }

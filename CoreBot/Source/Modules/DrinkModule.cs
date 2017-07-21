@@ -1,11 +1,11 @@
-﻿using Discord.Commands;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Discord.Commands;
 
 namespace CoreBot.Modules
 {
     public class DrinkModule : ModuleBase
     {
-        private DrinkManager drinkManager;
+        private readonly DrinkManager drinkManager;
 
         public DrinkModule(DrinkManager drinkManager)
         {

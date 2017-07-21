@@ -1,4 +1,7 @@
-﻿using CoreBot.Collections;
+﻿using System;
+using System.Reflection;
+using System.Threading.Tasks;
+using CoreBot.Collections;
 using CoreBot.Managers;
 using CoreBot.Modules;
 using CoreBot.Settings;
@@ -6,9 +9,6 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using System;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace CoreBot.Handlers
 {
@@ -51,7 +51,7 @@ namespace CoreBot.Handlers
                     if (!result.IsSuccess) // Module was not found, check for dynamic commands.
                     {
                         Log.Information(result.ToString());
-                        bool matchFound = false;
+                        var matchFound = false;
                         foreach (var command in Commands.Instance.CommandsList)
                         {
                             if (userMessage.Content == $"{BotSettings.Instance.BotPrefix}{command.Name}")
@@ -64,7 +64,10 @@ namespace CoreBot.Handlers
                         if (!matchFound)
                         {
                             // If command was found but failed to execute, send error message.
-                            if (result.Error != CommandError.UnknownCommand) await userMessage.Channel.SendMessageAsync(result.ToString());
+                            if (result.Error != CommandError.UnknownCommand)
+                            {
+                                await userMessage.Channel.SendMessageAsync(result.ToString());
+                            }
                         }
                     }
                 }
