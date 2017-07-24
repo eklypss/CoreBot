@@ -29,7 +29,6 @@ namespace CoreBot
             if (!string.IsNullOrWhiteSpace(BotSettings.Instance.BotToken))
             {
                 client = new DiscordSocketClient();
-                await handler.CreateHandlers();
                 await client.LoginAsync(TokenType.Bot, BotSettings.Instance.BotToken);
                 await client.StartAsync();
 

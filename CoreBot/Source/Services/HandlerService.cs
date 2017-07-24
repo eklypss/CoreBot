@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using CoreBot.Handlers;
+﻿using CoreBot.Handlers;
 using CoreBot.Interfaces;
 
 namespace CoreBot.Service
@@ -9,7 +8,7 @@ namespace CoreBot.Service
         public CommandHandler CommandHandler { get; set; }
         public LogHandler LogHandler { get; set; }
 
-        public async Task CreateHandlers()
+        public HandlerService()
         {
             CommandHandler = new CommandHandler();
             LogHandler = new LogHandler();
