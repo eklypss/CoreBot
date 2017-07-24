@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using CoreBot.Handlers;
+﻿using CoreBot.Handlers;
 
 namespace CoreBot.Interfaces
 {
