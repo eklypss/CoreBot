@@ -19,7 +19,7 @@ namespace CoreBot.Handlers
         private IServiceCollection services;
         private IServiceProvider serviceProvider;
 
-        public async Task InstallCommands(DiscordSocketClient discordClient)
+        public async Task Install(DiscordSocketClient discordClient)
         {
             client = discordClient;
             commandService = new CommandService();

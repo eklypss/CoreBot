@@ -34,7 +34,7 @@ namespace CoreBot
 
                 // Install handlers
                 await handler.LogHandler.Install(client);
-                await handler.CommandHandler.InstallCommands(client);
+                await handler.CommandHandler.Install(client);
             }
             else
             {
