@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using CoreBot.Exceptions;
 using CoreBot.Helpers;
 using CoreBot.Service;
 using CoreBot.Settings;
@@ -40,6 +41,7 @@ namespace CoreBot
             {
                 Log.Error("Bot token is invalid, cannot connect.");
                 Log.Error($"Change your bot token in the following .json file: {BotSettings.Instance.SettingsFile}.");
+                throw new CoreBotException("Bot token is null or empty.");
             }
             await Task.Delay(-1);
         }
