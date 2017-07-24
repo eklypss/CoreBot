@@ -23,8 +23,8 @@ namespace CoreBot
 
         private async Task MainAsync()
         {
-            await LogHelper.CreateLogger(BotSettings.Instance.LogToFile);
-            await FileHelper.CheckFiles();
+            await LogHelper.CreateLoggerAsync(BotSettings.Instance.LogToFile);
+            await FileHelper.CheckFilesAsync();
 
             if (!string.IsNullOrWhiteSpace(BotSettings.Instance.BotToken))
             {
@@ -33,8 +33,8 @@ namespace CoreBot
                 await client.StartAsync();
 
                 // Install handlers
-                await handler.LogHandler.Install(client);
-                await handler.CommandHandler.Install(client);
+                await handler.LogHandler.InstallAsync(client);
+                await handler.CommandHandler.InstallAsync(client);
             }
             else
             {

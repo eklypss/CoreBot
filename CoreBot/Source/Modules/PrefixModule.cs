@@ -14,7 +14,7 @@ namespace CoreBot.Modules
             public async Task SetPrefix(char prefix)
             {
                 BotSettings.Instance.BotPrefix = prefix;
-                await FileHelper.SaveFile(FileType.SettingsFile);
+                await FileHelper.SaveFileAsync(FileType.SettingsFile);
                 await ReplyAsync($"Prefix was changed to: **{prefix}**");
             }
         }

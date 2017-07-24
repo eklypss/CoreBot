@@ -7,7 +7,7 @@ namespace CoreBot.Helpers
 {
     public static class LogHelper
     {
-        public async static Task CreateLogger(bool logToFile)
+        public async static Task CreateLoggerAsync(bool logToFile)
         {
             if (logToFile)
             {

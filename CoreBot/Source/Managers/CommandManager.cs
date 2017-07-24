@@ -14,7 +14,8 @@ namespace CoreBot.Managers
         /// <summary>
         /// Adds the specified command.
         /// </summary>
-        public async Task AddCommand(Command command)
+        /// <param name="command">Command to add.</param>
+        public async Task AddCommandAsync(Command command)
         {
             using (var connection = Database.Open())
             {
@@ -26,7 +27,8 @@ namespace CoreBot.Managers
         /// <summary>
         /// Deletes the specified command.
         /// </summary>
-        public async Task DeleteCommand(Command command)
+        /// <param name="command">Command to delete.</param>
+        public async Task DeleteCommandAsync(Command command)
         {
             using (var connection = Database.Open())
             {
@@ -38,7 +40,9 @@ namespace CoreBot.Managers
         /// <summary>
         /// Updates the Action property of the command.
         /// </summary>
-        public async Task UpdateCommand(Command command, string newAction)
+        /// <param name="command">Command to update.</param>
+        /// <param name="newAction">The new action of the command.</param>
+        public async Task UpdateCommandAsync(Command command, string newAction)
         {
             using (var connection = Database.Open())
             {

@@ -9,7 +9,7 @@ namespace CoreBot.Handlers
     {
         private DiscordSocketClient client;
 
-        public async Task Install(DiscordSocketClient discordClient)
+        public async Task InstallAsync(DiscordSocketClient discordClient)
         {
             client = discordClient;
             client.Log += HandleLoggingAsync;
@@ -20,13 +20,14 @@ namespace CoreBot.Handlers
         /// Output messages by the main <see cref="IDiscordClient"/>. Separated from all other log
         /// messages on purpose.
         /// </summary>
+        /// <param name="message">todo: describe message parameter on HandleLoggingAsync</param>
         private async Task HandleLoggingAsync(LogMessage message)
         {
             switch (message.Severity)
             {
                 case LogSeverity.Debug:
-                case LogSeverity.Info:
                 case LogSeverity.Verbose:
+                case LogSeverity.Info:
                 {
                     Log.Information($"[Discord] {message.Message}");
                     break;

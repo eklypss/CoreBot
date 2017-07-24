@@ -12,7 +12,7 @@ namespace CoreBot.Helpers
     {
         private static OrmLiteConnectionFactory factory;
 
-        public async static Task Init()
+        public async static Task InitAsync()
         {
             factory = new OrmLiteConnectionFactory(BotSettings.Instance.DatabaseString, SqliteDialect.Provider);
             using (var connection = Open())

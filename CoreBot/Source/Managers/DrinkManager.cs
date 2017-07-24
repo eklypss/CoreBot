@@ -16,7 +16,7 @@ namespace CoreBot.Modules
         private readonly List<int> drinkIds;
         private readonly Random random;
 
-        public static async Task<DrinkManager> Create()
+        public static async Task<DrinkManager> CreateAsync()
         {
             try
             {
@@ -24,7 +24,7 @@ namespace CoreBot.Modules
                 {
                     var drinks = await connection.SelectAsync<Drink>();
                     var ids = drinks.Select(d => d.Id).ToList();
-                    Log.Information($"Loaded {ids.Count} drinks from database");
+                    Log.Information($"Loaded {ids.Count} drinks from the database.");
                     return new DrinkManager(ids);
                 }
             }

@@ -29,7 +29,7 @@ namespace CoreBot.Modules
                 var found = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
                 if (found == null)
                 {
-                    await commandManager.AddCommand(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
+                    await commandManager.AddCommandAsync(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
                     await ReplyAsync($"Command {commandName} added, action: {commandAction}");
                     Log.Information($"Command {commandName} added, action: {commandAction}");
                 }
@@ -51,7 +51,7 @@ namespace CoreBot.Modules
             var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
             if (command != null)
             {
-                await commandManager.DeleteCommand(command);
+                await commandManager.DeleteCommandAsync(command);
                 await ReplyAsync($"Command deleted: {commandName}");
                 Log.Information($"Command deleted: {commandName}");
             }
@@ -68,7 +68,7 @@ namespace CoreBot.Modules
             var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
             if (command != null)
             {
-                await commandManager.UpdateCommand(command, newAction);
+                await commandManager.UpdateCommandAsync(command, newAction);
                 await ReplyAsync($"Command {commandName} updated, new action: {newAction}");
                 Log.Information($"Command {commandName} updated, new action: {newAction}");
             }

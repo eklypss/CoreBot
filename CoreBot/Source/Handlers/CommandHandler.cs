@@ -19,11 +19,11 @@ namespace CoreBot.Handlers
         private IServiceCollection services;
         private IServiceProvider serviceProvider;
 
-        public async Task Install(DiscordSocketClient discordClient)
+        public async Task InstallAsync(DiscordSocketClient discordClient)
         {
             client = discordClient;
             commandService = new CommandService();
-            var drinkManager = await DrinkManager.Create();
+            var drinkManager = await DrinkManager.CreateAsync();
             services = new ServiceCollection();
             services.AddSingleton(new CommandManager());
             if (drinkManager != null) services.AddSingleton(drinkManager);

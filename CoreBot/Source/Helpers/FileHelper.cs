@@ -10,16 +10,16 @@ namespace CoreBot.Helpers
 {
     public static class FileHelper
     {
-        public async static Task CheckFiles()
+        public async static Task CheckFilesAsync()
         {
-            if (!Directory.Exists(BotSettings.Instance.SettingsFolder)) await CreateFile(FileType.SettingsFolder);
+            if (!Directory.Exists(BotSettings.Instance.SettingsFolder)) await CreateFileAsync(FileType.SettingsFolder);
 
-            if (!File.Exists(BotSettings.Instance.SettingsFile)) await CreateFile(FileType.SettingsFile);
-            else await LoadFile(FileType.SettingsFile);
-            await Database.Init();
+            if (!File.Exists(BotSettings.Instance.SettingsFile)) await CreateFileAsync(FileType.SettingsFile);
+            else await LoadFileAsync(FileType.SettingsFile);
+            await Database.InitAsync();
         }
 
-        public async static Task CreateFile(FileType fileType)
+        public async static Task CreateFileAsync(FileType fileType)
         {
             switch (fileType)
             {
@@ -53,7 +53,7 @@ namespace CoreBot.Helpers
             }
         }
 
-        public async static Task SaveFile(FileType fileType)
+        public async static Task SaveFileAsync(FileType fileType)
         {
             switch (fileType)
             {
@@ -77,7 +77,7 @@ namespace CoreBot.Helpers
             }
         }
 
-        public async static Task LoadFile(FileType fileType)
+        public async static Task LoadFileAsync(FileType fileType)
         {
             switch (fileType)
             {
@@ -91,7 +91,7 @@ namespace CoreBot.Helpers
                         if (BotSettings.Instance.DatabaseString == null) BotSettings.Instance.DatabaseString = DefaultValues.DEFAULT_DATABASE_STRING;
                         if (BotSettings.Instance.BotPrefix == '\0') BotSettings.Instance.BotPrefix = DefaultValues.DEFAULT_PREFIX;
                         // Used to sync new settings to old settings file without having to re-create it.
-                        await SaveFile(FileType.SettingsFile);
+                        await SaveFileAsync(FileType.SettingsFile);
                     }
                     catch (Exception)
                     {
