@@ -10,7 +10,7 @@ namespace CoreBot.Modules
         [Command("math"), Summary("Calculates basic math operations.")]
         public async Task Calculate([Remainder] string input)
         {
-            using (var dataTable = new DataTable() { CaseSensitive = false, Locale = CultureInfo.CurrentCulture })
+            using (var dataTable = new DataTable { CaseSensitive = false, Locale = CultureInfo.CurrentCulture })
             {
                 var result = dataTable.Compute(input, string.Empty);
                 await ReplyAsync($"`{input} = {result}`");
