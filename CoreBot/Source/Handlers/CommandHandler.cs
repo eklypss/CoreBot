@@ -32,15 +32,17 @@ namespace CoreBot.Handlers
             services.AddSingleton(new WeatherService());
             if (drinkManager != null) services.AddSingleton(drinkManager);
 
+            // Build ServiceProvider and add modules
             serviceProvider = services.BuildServiceProvider();
             await commandService.AddModulesAsync(Assembly.GetEntryAssembly());
             client.MessageReceived += HandleCommandAsync;
+            Log.Debug("CommandHandler installed.");
         }
 
         private async Task HandleCommandAsync(SocketMessage message)
         {
             Log.Information($"{message.Author.Username} ({message.Author}): {message.Content}");
-            if (message == null)
+            if (message == null) // This should never happen, but just in case.
             {
                 Log.Warning($"Message {message.Id} is not from a valid user.");
             }
@@ -71,6 +73,7 @@ namespace CoreBot.Handlers
                             if (result.Error != CommandError.UnknownCommand)
                             {
                                 await userMessage.Channel.SendMessageAsync(result.ToString());
+                                Log.Error($"Additional information: {result.ErrorReason}, {result.Error.Value}");
                             }
                         }
                     }
