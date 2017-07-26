@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Managers;
 using CoreBot.Modules;
+using CoreBot.Services;
 using CoreBot.Settings;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -25,8 +26,12 @@ namespace CoreBot.Handlers
             commandService = new CommandService();
             var drinkManager = await DrinkManager.CreateAsync();
             services = new ServiceCollection();
+
+            // Add services to the ServiceCollection
             services.AddSingleton(new CommandManager());
+            services.AddSingleton(new WeatherService());
             if (drinkManager != null) services.AddSingleton(drinkManager);
+
             serviceProvider = services.BuildServiceProvider();
             await commandService.AddModulesAsync(Assembly.GetEntryAssembly());
             client.MessageReceived += HandleCommandAsync;
