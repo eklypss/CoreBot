@@ -2,6 +2,10 @@
 
 namespace CoreBot.Models.Weather
 {
+    /// <summary>
+    /// Base class for deserializing JSON, used by <see cref="CoreBot.Services.WeatherService"/>.
+    /// Root object is <see cref="TopLevel"/>.
+    /// </summary>
     public class WeatherResponse
     {
         public class Coord
