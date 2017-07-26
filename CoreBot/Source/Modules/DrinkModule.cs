@@ -5,17 +5,17 @@ namespace CoreBot.Modules
 {
     public class DrinkModule : ModuleBase
     {
-        private readonly DrinkManager drinkManager;
+        private readonly DrinkManager _drinkManager;
 
         public DrinkModule(DrinkManager drinkManager)
         {
-            this.drinkManager = drinkManager;
+            _drinkManager = drinkManager;
         }
 
         [Command("juoma")]
         public async Task RandomDrink()
         {
-            string link = drinkManager.RandomLink();
+            string link = _drinkManager.RandomLink();
             await ReplyAsync(link);
         }
     }

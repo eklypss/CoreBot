@@ -13,8 +13,8 @@ namespace CoreBot.Modules
 {
     public class DrinkManager
     {
-        private readonly List<int> drinkIds;
-        private readonly Random random;
+        private readonly List<int> _drinkIds;
+        private readonly Random _random;
 
         public static async Task<DrinkManager> CreateAsync()
         {
@@ -37,13 +37,13 @@ namespace CoreBot.Modules
 
         private DrinkManager(List<int> drinkIds)
         {
-            random = new Random();
-            this.drinkIds = drinkIds;
+            _random = new Random();
+            _drinkIds = drinkIds;
         }
 
         public string RandomLink()
         {
-            int randomId = drinkIds[random.Next(drinkIds.Count)];
+            int randomId = _drinkIds[_random.Next(_drinkIds.Count)];
             return string.Format(DefaultValues.ALKO_URL, randomId);
         }
     }
