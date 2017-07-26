@@ -13,6 +13,7 @@ namespace CoreBot.Handlers
         {
             client = discordClient;
             client.Log += HandleLoggingAsync;
+            Log.Debug("LogHandler installed.");
             await Task.CompletedTask;
         }
 
@@ -34,9 +35,13 @@ namespace CoreBot.Handlers
                 }
                 case LogSeverity.Critical:
                 case LogSeverity.Error:
-                case LogSeverity.Warning:
                 {
                     Log.Error($"[Discord] [{message.Severity}] {message.Message} {message.Exception} {message.Source}");
+                    break;
+                }
+                case LogSeverity.Warning:
+                {
+                    Log.Warning($"[Discord] [{message.Severity}] {message.Message} {message.Exception} {message.Source}");
                     break;
                 }
             }
