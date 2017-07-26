@@ -30,6 +30,7 @@ namespace CoreBot.Settings
         public bool LogToFile { get; set; } = true;
         public string SettingsFolder { get; set; }
         public string SettingsFile { get; set; }
+        public string WeatherAPIKey { get; set; }
 
         private BotSettings()
         {
