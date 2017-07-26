@@ -43,7 +43,6 @@ namespace CoreBot.Handlers
             if (message == null)
             {
                 Log.Warning($"Message {message.Id} is not from a valid user.");
-                return;
             }
             else
             {
