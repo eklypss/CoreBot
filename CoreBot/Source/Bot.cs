@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using CoreBot.Exceptions;
 using CoreBot.Helpers;
-using CoreBot.Service;
+using CoreBot.Services;
 using CoreBot.Settings;
 using Discord;
 using Discord.WebSocket;

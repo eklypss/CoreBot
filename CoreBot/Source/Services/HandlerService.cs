@@ -1,7 +1,7 @@
 ﻿using CoreBot.Handlers;
 using CoreBot.Interfaces;
 
-namespace CoreBot.Service
+namespace CoreBot.Services
 {
     public class HandlerService : IHandlerService
     {
