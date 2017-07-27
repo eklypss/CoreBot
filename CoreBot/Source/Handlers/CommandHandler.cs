@@ -15,27 +15,27 @@ namespace CoreBot.Handlers
 {
     public class CommandHandler
     {
-        private DiscordSocketClient client;
-        private CommandService commandService;
-        private IServiceCollection services;
-        private IServiceProvider serviceProvider;
+        private DiscordSocketClient _client;
+        private CommandService _commandService;
+        private IServiceCollection _services;
+        private IServiceProvider _serviceProvider;
 
         public async Task InstallAsync(DiscordSocketClient discordClient)
         {
-            client = discordClient;
-            commandService = new CommandService();
+            _client = discordClient;
+            _commandService = new CommandService();
             var drinkManager = await DrinkManager.CreateAsync();
-            services = new ServiceCollection();
+            _services = new ServiceCollection();
 
             // Add services to the ServiceCollection
-            services.AddSingleton(new CommandManager());
-            services.AddSingleton(new WeatherService());
-            if (drinkManager != null) services.AddSingleton(drinkManager);
+            _services.AddSingleton(new CommandManager());
+            _services.AddSingleton(new WeatherService());
+            if (drinkManager != null) _services.AddSingleton(drinkManager);
 
             // Build ServiceProvider and add modules
-            serviceProvider = services.BuildServiceProvider();
-            await commandService.AddModulesAsync(Assembly.GetEntryAssembly());
-            client.MessageReceived += HandleCommandAsync;
+            _serviceProvider = _services.BuildServiceProvider();
+            await _commandService.AddModulesAsync(Assembly.GetEntryAssembly());
+            _client.MessageReceived += HandleCommandAsync;
             Log.Debug("CommandHandler installed.");
         }
 
@@ -49,11 +49,11 @@ namespace CoreBot.Handlers
             else
             {
                 var userMessage = (SocketUserMessage)message;
-                var context = new SocketCommandContext(client, userMessage);
+                var context = new SocketCommandContext(_client, userMessage);
                 int argPos = 0;
                 if (userMessage.HasCharPrefix(BotSettings.Instance.BotPrefix, ref argPos))
                 {
-                    var result = await commandService.ExecuteAsync(context, argPos, serviceProvider);
+                    var result = await _commandService.ExecuteAsync(context, argPos, _serviceProvider);
                     if (!result.IsSuccess) // Module was not found, check for dynamic commands.
                     {
                         Log.Information(result.ToString());

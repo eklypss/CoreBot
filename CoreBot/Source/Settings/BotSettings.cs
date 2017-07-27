@@ -6,21 +6,21 @@ namespace CoreBot.Settings
 {
     public class BotSettings : IBotSettings
     {
-        private static BotSettings instance;
+        private static BotSettings _instance;
 
         public static BotSettings Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new BotSettings();
+                    _instance = new BotSettings();
                 }
-                return instance;
+                return _instance;
             }
             set
             {
-                instance = value;
+                _instance = value;
             }
         }
 

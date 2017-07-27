@@ -7,12 +7,12 @@ namespace CoreBot.Handlers
 {
     public class LogHandler
     {
-        private DiscordSocketClient client;
+        private DiscordSocketClient _client;
 
-        public async Task InstallAsync(DiscordSocketClient discordClient)
+        public async Task InstallAsync(DiscordSocketClient client)
         {
-            client = discordClient;
-            client.Log += HandleLoggingAsync;
+            _client = client;
+            _client.Log += HandleLoggingAsync;
             Log.Debug("LogHandler installed.");
             await Task.CompletedTask;
         }

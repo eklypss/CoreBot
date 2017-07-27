@@ -5,17 +5,17 @@ namespace CoreBot.Collections
 {
     public class Commands
     {
-        private static Commands instance;
+        private static Commands _instance;
 
         public static Commands Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new Commands();
+                    _instance = new Commands();
                 }
-                return instance;
+                return _instance;
             }
         }
 

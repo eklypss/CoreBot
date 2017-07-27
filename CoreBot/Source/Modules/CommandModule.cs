@@ -12,13 +12,13 @@ namespace CoreBot.Modules
     [Group("command"), Summary("Module for modifying and listing commands.")]
     public class CommandModule : ModuleBase
     {
-        private readonly CommandManager commandManager;
-        private readonly CommandService commandService;
+        private readonly CommandManager _commandManager;
+        private readonly CommandService _commandService;
 
-        public CommandModule(CommandManager cm, CommandService commands)
+        public CommandModule(CommandManager commandManager, CommandService commandService)
         {
-            commandManager = cm;
-            commandService = commands;
+            _commandManager = commandManager;
+            _commandService = commandService;
         }
 
         [Command("add"), Summary("Adds a new dynamic command.")]
@@ -29,7 +29,7 @@ namespace CoreBot.Modules
                 var found = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
                 if (found == null)
                 {
-                    await commandManager.AddCommandAsync(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
+                    await _commandManager.AddCommandAsync(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
                     await ReplyAsync($"Command {commandName} added, action: {commandAction}");
                     Log.Information($"Command {commandName} added, action: {commandAction}");
                 }
@@ -51,7 +51,7 @@ namespace CoreBot.Modules
             var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
             if (command != null)
             {
-                await commandManager.DeleteCommandAsync(command);
+                await _commandManager.DeleteCommandAsync(command);
                 await ReplyAsync($"Command deleted: {commandName}");
                 Log.Information($"Command deleted: {commandName}");
             }
@@ -68,7 +68,7 @@ namespace CoreBot.Modules
             var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
             if (command != null)
             {
-                await commandManager.UpdateCommandAsync(command, newAction);
+                await _commandManager.UpdateCommandAsync(command, newAction);
                 await ReplyAsync($"Command {commandName} updated, new action: {newAction}");
                 Log.Information($"Command {commandName} updated, new action: {newAction}");
             }
@@ -82,7 +82,7 @@ namespace CoreBot.Modules
         [Command("list"), Summary("Lists all available commands, both dynamic and module based.")]
         public async Task ListCommands()
         {
-            var staticCommandNames = commandService.Modules.Select(module =>
+            var staticCommandNames = _commandService.Modules.Select(module =>
             {
                 var moduleCommandNames = module.Commands.Select(c => c.Name);
                 return $"{module.Name} *({string.Join(", ", moduleCommandNames)})*";

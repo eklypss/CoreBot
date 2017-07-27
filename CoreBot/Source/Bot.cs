@@ -11,14 +11,14 @@ namespace CoreBot
 {
     internal class Bot
     {
-        private readonly HandlerService handler;
-        private DiscordSocketClient client;
+        private readonly HandlerService _handler;
+        private DiscordSocketClient _client;
 
         public static void Main(string[] args) => new Bot().MainAsync().GetAwaiter().GetResult();
 
         private Bot()
         {
-            handler = new HandlerService();
+            _handler = new HandlerService();
         }
 
         private async Task MainAsync()
@@ -28,13 +28,13 @@ namespace CoreBot
 
             if (!string.IsNullOrWhiteSpace(BotSettings.Instance.BotToken))
             {
-                client = new DiscordSocketClient();
-                await client.LoginAsync(TokenType.Bot, BotSettings.Instance.BotToken);
-                await client.StartAsync();
+                _client = new DiscordSocketClient();
+                await _client.LoginAsync(TokenType.Bot, BotSettings.Instance.BotToken);
+                await _client.StartAsync();
 
                 // Install handlers
-                await handler.LogHandler.InstallAsync(client);
-                await handler.CommandHandler.InstallAsync(client);
+                await _handler.LogHandler.InstallAsync(_client);
+                await _handler.CommandHandler.InstallAsync(_client);
             }
             else
             {
