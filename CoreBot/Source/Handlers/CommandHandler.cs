@@ -23,7 +23,10 @@ namespace CoreBot.Handlers
         public async Task InstallAsync(DiscordSocketClient discordClient)
         {
             _client = discordClient;
-            _commandService = new CommandService();
+
+            var config = new CommandServiceConfig() { DefaultRunMode = RunMode.Async };
+            _commandService = new CommandService(config);
+
             var drinkManager = await DrinkManager.CreateAsync();
             _services = new ServiceCollection();
 
