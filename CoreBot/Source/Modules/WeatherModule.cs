@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using CoreBot.Helpers;
+﻿using System.Threading.Tasks;
 using CoreBot.Services;
 using Discord.Commands;
 using Serilog;
@@ -21,8 +18,9 @@ namespace CoreBot.Modules
         public async Task Weather([Remainder] string location)
         {
             Log.Information($"Getting weather data for the given location: {location}.");
+
             var weather = await _weatherService.GetWeatherDataAsync(location);
-            await ReplyAsync($"[**{weather.Name}, {weather.Sys.Country}**], **temp:** {Math.Round(weather.Main.Temp - 273, 1)}°C, {weather.Weather.FirstOrDefault().Description}, **wind:** {weather.Wind.Speed} m/s, **updated:** {HelperMethods.FromUnixTime((long)weather.Dt).AddHours(3).ToString()}");
+            await ReplyAsync(weather);
         }
     }
 }

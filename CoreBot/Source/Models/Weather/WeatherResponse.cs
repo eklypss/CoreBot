@@ -107,7 +107,7 @@ namespace CoreBot.Models.Weather
             public double Id { get; set; }
 
             [JsonProperty("dt")]
-            public double Dt { get; set; }
+            public long Dt { get; set; }
 
             [JsonProperty("main")]
             public Main Main { get; set; }
