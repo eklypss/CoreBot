@@ -31,6 +31,7 @@ namespace CoreBot.Settings
         public string SettingsFolder { get; set; }
         public string SettingsFile { get; set; }
         public string WeatherAPIKey { get; set; }
+        public string EPAPIKey { get; set; }
 
         private BotSettings()
         {

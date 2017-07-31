@@ -8,6 +8,7 @@ using CoreBot.Services;
 using CoreBot.Settings;
 using Discord.Commands;
 using Discord.WebSocket;
+using epnetcore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -33,6 +34,7 @@ namespace CoreBot.Handlers
             // Add services to the ServiceCollection
             _services.AddSingleton(new CommandManager());
             _services.AddSingleton(new WeatherService());
+            _services.AddSingleton(new EPClient(BotSettings.Instance.EPAPIKey));
             if (drinkManager != null) _services.AddSingleton(drinkManager);
 
             // Build ServiceProvider and add modules
