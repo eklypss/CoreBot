@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace CoreBot.Models.Weather
 {
@@ -101,7 +102,7 @@ namespace CoreBot.Models.Weather
             public string Base { get; set; }
 
             [JsonProperty("cod")]
-            public double Cod { get; set; }
+            public int Code { get; set; }
 
             [JsonProperty("id")]
             public double Id { get; set; }
@@ -119,7 +120,7 @@ namespace CoreBot.Models.Weather
             public Sys Sys { get; set; }
 
             [JsonProperty("weather")]
-            public Weather[] Weather { get; set; }
+            public List<Weather> Weather { get; set; }
 
             [JsonProperty("wind")]
             public Wind Wind { get; set; }

@@ -35,7 +35,7 @@ namespace CoreBot.Services
                 return fmiQuery.Result;
             }
             var result = JsonConvert.DeserializeObject<WeatherResponse.TopLevel>(openWeatherQuery.Result);
-            if (result.Cod == 404)
+            if (result.Code == 404)
             {
                 return "404";
             }
