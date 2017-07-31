@@ -51,22 +51,28 @@ namespace CoreBot.Services
         {
             try
             {
-                Log.Information($"Getting FMI weather data for location: {location}.");
-                var url = string.Format(DefaultValues.FMI_URL, location);
-                var document = await _parser.ParseAsync(await GetAsync(url));
+                using (var http = new HttpClient())
+                {
+                    Log.Information($"Getting FMI weather data for the given location: {location}.");
+                    var idResponse = await http.GetAsync(string.Format(DefaultValues.FMI_URL, location));
 
-                var id = document.QuerySelector("#observation-station-menu option").GetAttribute("value");
+                    // Parse initial response
+                    var document = await _parser.ParseAsync(await idResponse.Content.ReadAsStringAsync());
+                    var id = document.QuerySelector("#observation-station-menu option").GetAttribute("value");
+                    var statusCss = ".first-mobile-forecast-time-step-content div.weather-symbol";
+                    var weatherStatus = document.QuerySelector(statusCss).GetAttribute("title");
 
-                var statusCss = ".first-mobile-forecast-time-step-content div.weather-symbol";
-                var weatherStatus = document.QuerySelector(statusCss).GetAttribute("title");
+                    var weatherResponse = await http.GetAsync(DefaultValues.FMI_TEMP_URL + id);
 
-                dynamic weatherInfo = JObject.Parse(await GetAsync(DefaultValues.FMI_TEMP_URL + id));
-                var temperature = weatherInfo.t2m.Last[1];
-                var wind = weatherInfo.WindSpeedMS != null ? weatherInfo.WindSpeedMS.Last[1] : "??";
-                long timeStamp = weatherInfo.latestObservationTime / 1000;
+                    // Parse weather response
+                    dynamic weatherInfo = JObject.Parse(await weatherResponse.Content.ReadAsStringAsync());
+                    var temperature = weatherInfo.t2m.Last[1];
+                    var wind = weatherInfo.WindSpeedMS != null ? weatherInfo.WindSpeedMS.Last[1] : "??";
+                    long timeStamp = weatherInfo.latestObservationTime / 1000;
+                    var dateString = timeStamp.ToDateTime().ToString();
 
-                var dateString = timeStamp.ToDateTime().ToString();
-                return CreateWeatherMessage(location, temperature, "FI", weatherStatus, wind, dateString);
+                    return CreateWeatherMessage(location, temperature, "FI", weatherStatus, wind, dateString);
+                }
             }
             catch (Exception)
             {
