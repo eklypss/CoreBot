@@ -15,6 +15,7 @@ namespace CoreBot.Modules
         }
 
         [Command("weather")]
+        [Alias("sää")]
         public async Task Weather([Remainder] string location)
         {
             Log.Information($"Getting weather data for the given location: {location}.");
