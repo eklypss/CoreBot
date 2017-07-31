@@ -11,7 +11,7 @@ namespace CoreBot.Modules
         [Command("find")]
         public async Task GetEmotes(string searchTerm)
         {
-            var emotes = Context.Guild.Emotes.Where(x => x.Name.Contains(searchTerm));
+            var emotes = Context.Guild.Emotes.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
             var emoteNames = new List<string>();
             foreach (var emote in emotes)
             {
