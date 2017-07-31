@@ -14,10 +14,6 @@ namespace CoreBot.Services
 {
     public class WeatherService
     {
-        private const string FMI_URL = "http://ilmatieteenlaitos.fi/saa/{0}?forecast=short";
-        private const string FMI_TEMP_URL = "http://ilmatieteenlaitos.fi/observation-data?station=";
-        private const string OPEN_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q={0}&APPID={1}";
-
         private HtmlParser _parser;
 
         public WeatherService()
@@ -27,7 +23,7 @@ namespace CoreBot.Services
 
         public async Task<string> GetWeatherDataAsync(string location)
         {
-            var openWeatherUrl = String.Format(OPEN_WEATHER_URL, location, BotSettings.Instance.WeatherAPIKey);
+            var openWeatherUrl = String.Format(DefaultValues.OPEN_WEATHER_URL, location, BotSettings.Instance.WeatherAPIKey);
 
             // Don't use await for parallel page loading
             var openWeatherQuery = GetAsync(openWeatherUrl);
@@ -62,7 +58,7 @@ namespace CoreBot.Services
 
         private async Task<string> FetchFmiAsync(string location)
         {
-            var url = String.Format(FMI_URL, location);
+            var url = String.Format(DefaultValues.FMI_URL, location);
             var document = await _parser.ParseAsync(await GetAsync(url));
 
             var id = document.QuerySelector("#observation-station-menu option").GetAttribute("value");
@@ -70,7 +66,7 @@ namespace CoreBot.Services
             var statusCss = ".first-mobile-forecast-time-step-content div.weather-symbol";
             var weatherStatus = document.QuerySelector(statusCss).GetAttribute("title");
 
-            dynamic weatherInfo = JObject.Parse(await GetAsync(FMI_TEMP_URL + id));
+            dynamic weatherInfo = JObject.Parse(await GetAsync(DefaultValues.FMI_TEMP_URL + id));
             var temperature = weatherInfo.t2m.Last[1];
             var wind = weatherInfo.WindSpeedMS != null ? weatherInfo.WindSpeedMS.Last[1] : "??";
             long timeStamp = weatherInfo.latestObservationTime / 1000;
