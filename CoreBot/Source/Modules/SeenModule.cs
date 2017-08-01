@@ -16,7 +16,7 @@ namespace CoreBot.Modules
             if (found != null)
             {
                 var msg = found.First(m => m.Author.Username.ToLower() == userName);
-                await ReplyAsync($"{msg.Author.Username} was last seen on {msg.Timestamp.ToLocalTime()} saying {msg.Content}.");
+                await ReplyAsync($"{msg.Author.Username} was last seen on {msg.Timestamp.ToLocalTime()} saying: `{msg.Content}`");
             }
             else
             {
