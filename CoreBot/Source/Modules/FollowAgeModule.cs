@@ -7,7 +7,7 @@ namespace CoreBot.Modules
 {
     public class FollowAgeModule : ModuleBase
     {
-        [Command("followage")]
+        [Command("followage"), Summary("Displays how long the specified user has followed the specified Twitch channel.")]
         public async Task GetFollowAge(string user, string channel)
         {
             using (var http = new HttpClient())
