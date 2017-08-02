@@ -18,7 +18,7 @@ namespace CoreBot.Modules
         public async Task GetPlayerContract([Remainder] string playerName)
         {
             var id = await _client.GetPlayerIdAsync(playerName);
-            var stats = await _client.GetPlayerStats(id);
+            var stats = await _client.GetPlayerStatsAsync(id);
             var data = stats.Data.Find(x => x.Season.EndYear == 2017 || x.Season.EndYear == 2018);
 
             if (data != null)
@@ -33,7 +33,7 @@ namespace CoreBot.Modules
         public async Task GetPlayerStats([Remainder] string playerName)
         {
             var id = await _client.GetPlayerIdAsync(playerName);
-            var stats = await _client.GetPlayerStats(id);
+            var stats = await _client.GetPlayerStatsAsync(id);
             var data = stats.Data.FindAll(x => x.Season.EndYear == 2017);
 
             if (data != null)
