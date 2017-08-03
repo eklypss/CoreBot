@@ -13,6 +13,7 @@ namespace CoreBot.Modules
         }
 
         [Command("juoma"), Summary("Returns a random drink from Alko website.")]
+        [Alias("drink")]
         public async Task RandomDrink()
         {
             string link = _drinkManager.RandomLink();
