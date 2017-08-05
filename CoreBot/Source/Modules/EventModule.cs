@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Managers;
@@ -34,11 +35,14 @@ namespace CoreBot.Modules
         [Command("list")]
         public async Task ListEvents()
         {
+            var list = new List<string>();
+            Events.Instance.EventsList.Sort((a, b) => a.DateTime.CompareTo(b.DateTime));
             foreach (var eve in Events.Instance.EventsList)
             {
                 var remainder = eve.DateTime.Subtract(DateTime.Now);
-                await ReplyAsync($"**Event:** {eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
+                list.Add($"**Event:** {eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
             }
+            await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
         }
 
         [Command("delete")]
