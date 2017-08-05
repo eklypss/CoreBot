@@ -37,8 +37,21 @@ namespace CoreBot.Modules
             foreach (var eve in Events.Instance.EventsList)
             {
                 var remainder = eve.DateTime.Subtract(DateTime.Now);
-                await ReplyAsync($"**Event:** {eve.Description}, **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
+                await ReplyAsync($"**Event:** {eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
             }
+        }
+
+        [Command("delete")]
+        [Alias("del")]
+        public async Task DeleteEvent(int id)
+        {
+            var eve = Events.Instance.EventsList.Find(x => x.Id == id);
+            if (eve != null)
+            {
+                await _eventManager.DeleteEventAsync(eve);
+                await ReplyAsync($"Event **{eve.Description}** deleted.");
+            }
+            else await ReplyAsync("Event not found.");
         }
     }
 }
