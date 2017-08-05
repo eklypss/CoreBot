@@ -22,10 +22,20 @@ namespace CoreBot.Modules
             {
                 using (var connection = Database.Open())
                 {
-                    var drinks = await connection.SelectAsync<Drink>();
-                    var ids = drinks.Select(d => d.Id).ToList();
-                    Log.Information($"Loaded {ids.Count} drinks from the database.");
-                    return new DrinkManager(ids);
+                    if(connection.TableExists<Drink>())
+                    {
+                        var drinks = await connection.SelectAsync<Drink>();
+                        var ids = drinks.Select(d => d.Id).ToList();
+                        Log.Information($"Loaded {ids.Count} drinks from the database.");
+                        return new DrinkManager(ids);
+                    }
+                    else
+                    {
+                        connection.CreateTable<Drink>();
+                        Log.Warning("Created drinks table because it didn't exist.");
+                        return null;
+                    }
+
                 }
             }
             catch (SqliteException ex)

@@ -18,8 +18,11 @@ namespace CoreBot.Helpers
             using (var connection = Open())
             {
                 connection.CreateTableIfNotExists<Command>();
+                connection.CreateTableIfNotExists<Event>();
                 Commands.Instance.CommandsList = await connection.SelectAsync<Command>();
+                Events.Instance.EventsList = await connection.SelectAsync<Event>();
                 Log.Information($"Loaded {Commands.Instance.CommandsList.Count} commands from {BotSettings.Instance.DatabaseString}.");
+                Log.Information($"Loaded {Events.Instance.EventsList.Count} events from {BotSettings.Instance.DatabaseString}.");
             }
         }
 

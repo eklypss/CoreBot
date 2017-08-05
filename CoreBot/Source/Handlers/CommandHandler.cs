@@ -31,9 +31,12 @@ namespace CoreBot.Handlers
             var drinkManager = await DrinkManager.CreateAsync();
             _services = new ServiceCollection();
 
+            var eventManager = new EventManager();
             // Add services to the ServiceCollection
             _services.AddSingleton(new CommandManager());
+            _services.AddSingleton(eventManager);
             _services.AddSingleton(new WeatherService());
+            _services.AddSingleton(new EventService(_client, eventManager));
             _services.AddSingleton(new EPClient(BotSettings.Instance.EPAPIKey));
             if (drinkManager != null) _services.AddSingleton(drinkManager);
 
