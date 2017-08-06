@@ -8,6 +8,7 @@ using CoreBot.Managers;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Discord.WebSocket;
+using Humanizer;
 using Serilog;
 
 namespace CoreBot.Services
@@ -39,7 +40,7 @@ namespace CoreBot.Services
                         foreach (var eve in eventList)
                         {
                             var remainder = eve.DateTime.Subtract(DateTime.Now);
-                            messageList.Add($"{eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
+                            messageList.Add($"{eve.Description} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}");
                         }
                         Task.Run(async () => await client.Guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).TextChannels.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel).
                         SendMessageAsync($"{string.Join(Environment.NewLine, messageList)}"));

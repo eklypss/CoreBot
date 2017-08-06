@@ -5,6 +5,7 @@ using CoreBot.Collections;
 using CoreBot.Managers;
 using CoreBot.Models;
 using Discord.Commands;
+using Humanizer;
 
 namespace CoreBot.Modules
 {
@@ -28,7 +29,7 @@ namespace CoreBot.Modules
             if (remainder.TotalSeconds > 0)
             {
                 await _eventManager.AddEventAsync(new Event(description, eventDate));
-                await ReplyAsync($"Event **{description}** added, **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
+                await ReplyAsync($"Event **{description}** added, **time left:** {remainder.Humanize(2)}");
             }
             else await ReplyAsync("Invalid date.");
         }
@@ -41,7 +42,7 @@ namespace CoreBot.Modules
             foreach (var eve in Events.Instance.EventsList)
             {
                 var remainder = eve.DateTime.Subtract(DateTime.Now);
-                list.Add($"{eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
+                list.Add($"{eve.Description} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}");
             }
             await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
         }
@@ -56,7 +57,7 @@ namespace CoreBot.Modules
                 if (eve.Description.ToLower().Contains(searchTerm.ToLower()))
                 {
                     var remainder = eve.DateTime.Subtract(DateTime.Now);
-                    list.Add($"{eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
+                    list.Add($"{eve.Description} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}");
                 }
             }
             if (list.Count > 0)
@@ -76,7 +77,7 @@ namespace CoreBot.Modules
                 if (eve.DateTime.Date == DateTime.Today.Date)
                 {
                     var remainder = eve.DateTime.Subtract(DateTime.Now);
-                    list.Add($"{eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
+                    list.Add($"{eve.Description} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}");
                 }
             }
             if (list.Count > 0)
@@ -96,7 +97,7 @@ namespace CoreBot.Modules
                 if (eve.DateTime.Date == DateTime.Now.AddDays(1).Date)
                 {
                     var remainder = eve.DateTime.Subtract(DateTime.Now);
-                    list.Add($"{eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
+                    list.Add($"{eve.Description} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}");
                 }
             }
             if (list.Count > 0)
