@@ -20,7 +20,8 @@ namespace CoreBot.Managers
             using (var connection = Database.Open())
             {
                 await connection.InsertAsync(eve);
-                Events.Instance.EventsList.Add(eve);
+                Events.Instance.EventsList.Clear();
+                Events.Instance.EventsList = await connection.SelectAsync<Event>();
             }
         }
 
@@ -29,7 +30,6 @@ namespace CoreBot.Managers
             using (var connection = Database.Open())
             {
                 await connection.DeleteAsync(eve);
-                Events.Instance.EventsList.Remove(eve);
             }
         }
 
