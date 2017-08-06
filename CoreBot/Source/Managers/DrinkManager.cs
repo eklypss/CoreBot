@@ -22,7 +22,7 @@ namespace CoreBot.Modules
             {
                 using (var connection = Database.Open())
                 {
-                    if(connection.TableExists<Drink>())
+                    if (connection.TableExists<Drink>())
                     {
                         var drinks = await connection.SelectAsync<Drink>();
                         var ids = drinks.Select(d => d.Id).ToList();
@@ -35,7 +35,6 @@ namespace CoreBot.Modules
                         Log.Warning("Created drinks table because it didn't exist.");
                         return null;
                     }
-
                 }
             }
             catch (SqliteException ex)

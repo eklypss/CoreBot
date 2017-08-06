@@ -6,6 +6,7 @@ using CoreBot.Managers;
 using CoreBot.Modules;
 using CoreBot.Services;
 using CoreBot.Settings;
+using CoreBot.Source.Services;
 using Discord.Commands;
 using Discord.WebSocket;
 using epnetcore;
@@ -35,6 +36,7 @@ namespace CoreBot.Handlers
             // Add services to the ServiceCollection
             _services.AddSingleton(new CommandManager());
             _services.AddSingleton(eventManager);
+            _services.AddSingleton(new QuoteService());
             _services.AddSingleton(new WeatherService());
             _services.AddSingleton(new EventService(_client, eventManager));
             _services.AddSingleton(new EPClient(BotSettings.Instance.EPAPIKey));
