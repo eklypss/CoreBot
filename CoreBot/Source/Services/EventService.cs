@@ -22,10 +22,9 @@ namespace CoreBot.Services
             {
                 if (DateTime.Now.Hour == 00 && DateTime.Now.Minute == 00 && DateTime.Now.Second == 00)
                 {
-                    Task.Run(async () => await client.Guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).TextChannels.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel).
-                    SendMessageAsync($"Day changed to {DateTime.Now.ToString("dd-MM-yyyy")}"));
                     var eventList = new List<Event>();
                     var messageList = new List<string>();
+                    messageList.Add($"**Day changed to {DateTime.Now.ToString("dd-MM-yyyy")}**");
                     foreach (var ev in Events.Instance.EventsList)
                     {
                         if (ev.DateTime.Subtract(DateTime.Now).TotalHours < 24)
@@ -40,7 +39,7 @@ namespace CoreBot.Services
                         foreach (var eve in eventList)
                         {
                             var remainder = eve.DateTime.Subtract(DateTime.Now);
-                            messageList.Add($"**Event:** {eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
+                            messageList.Add($"{eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
                         }
                         Task.Run(async () => await client.Guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).TextChannels.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel).
                         SendMessageAsync($"{string.Join(Environment.NewLine, messageList)}"));
@@ -52,7 +51,7 @@ namespace CoreBot.Services
                     {
                         Log.Information($"Event ID {eve.Id} completed.");
                         Task.Run(async () => await client.Guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).TextChannels.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel).
-                        SendMessageAsync($"@everyone **Event:** {eve.Description}"));
+                        SendMessageAsync($"@everyone **{eve.Description}**"));
                         Task.Run(async () => await eventManager.DeleteEventAsync(eve));
                     }
                 }
