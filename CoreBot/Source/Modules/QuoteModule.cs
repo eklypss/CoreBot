@@ -6,11 +6,11 @@ namespace CoreBot.Modules
 {
     public class QuoteModule : ModuleBase
     {
-        private QuoteService _service;
+        private readonly QuoteService _quoteService;
 
-        public QuoteModule(QuoteService s)
+        public QuoteModule(QuoteService quoteService)
         {
-            _service = s;
+            _quoteService = quoteService;
         }
 
         [Command("viisaus")]
@@ -18,8 +18,7 @@ namespace CoreBot.Modules
         public async Task Wisdom([Remainder] string searchTerm = "a")
         {
             // Use "a" as default value because its much faster than "*", and still matches 16/26k rows
-
-            await ReplyAsync(await _service.Quote(searchTerm));
+            await ReplyAsync(await _quoteService.Quote(searchTerm));
         }
     }
 }
