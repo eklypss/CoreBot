@@ -12,7 +12,7 @@ using AngleSharp.Parser.Html;
 using CoreBot.Settings;
 using Serilog;
 
-namespace CoreBot.Source.Services
+namespace CoreBot.Services
 {
     /// <summary>
     /// Get a random example text from Kotus old literary finnish website.

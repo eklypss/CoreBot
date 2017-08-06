@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using CoreBot.Source.Services;
+using CoreBot.Services;
 using Discord.Commands;
 
-namespace CoreBot.Source.Modules
+namespace CoreBot.Modules
 {
     public class QuoteModule : ModuleBase
     {

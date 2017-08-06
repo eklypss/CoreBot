@@ -6,7 +6,6 @@ using CoreBot.Managers;
 using CoreBot.Modules;
 using CoreBot.Services;
 using CoreBot.Settings;
-using CoreBot.Source.Services;
 using Discord.Commands;
 using Discord.WebSocket;
 using epnetcore;
