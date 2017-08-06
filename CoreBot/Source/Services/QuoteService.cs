@@ -122,7 +122,7 @@ namespace CoreBot.Services
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    Log.Error(e.Message);
                     fail++;
                     return null;
                 }
