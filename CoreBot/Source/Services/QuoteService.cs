@@ -19,8 +19,8 @@ namespace CoreBot.Source.Services
     /// </summary>
     public class QuoteService
     {
-        private HtmlParser _parser;
-        private Random _random;
+        private readonly HtmlParser _parser;
+        private readonly Random _random;
 
         public QuoteService()
         {
