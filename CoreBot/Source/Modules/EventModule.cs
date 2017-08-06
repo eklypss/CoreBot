@@ -9,6 +9,7 @@ using Discord.Commands;
 namespace CoreBot.Modules
 {
     [Group("event")]
+    [Alias("events")]
     public class EventModule : ModuleBase
     {
         private readonly EventManager _eventManager;
@@ -43,6 +44,66 @@ namespace CoreBot.Modules
                 list.Add($"**Event:** {eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
             }
             await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
+        }
+
+        [Command("find")]
+        public async Task FindEvents([Remainder] string searchTerm)
+        {
+            var list = new List<string>();
+            Events.Instance.EventsList.Sort((a, b) => a.DateTime.CompareTo(b.DateTime));
+            foreach (var eve in Events.Instance.EventsList)
+            {
+                if (eve.Description.ToLower().Contains(searchTerm.ToLower()))
+                {
+                    var remainder = eve.DateTime.Subtract(DateTime.Now);
+                    list.Add($"**Event:** {eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
+                }
+            }
+            if (list.Count > 0)
+            {
+                await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
+            }
+            else await ReplyAsync("No events found.");
+        }
+
+        [Command("today")]
+        public async Task GetEventsToday()
+        {
+            var list = new List<string>();
+            Events.Instance.EventsList.Sort((a, b) => a.DateTime.CompareTo(b.DateTime));
+            foreach (var eve in Events.Instance.EventsList)
+            {
+                if (eve.DateTime.Subtract(DateTime.Now).TotalHours < (TimeSpan.FromHours(24) - DateTime.Now.TimeOfDay).TotalHours)
+                {
+                    var remainder = eve.DateTime.Subtract(DateTime.Now);
+                    list.Add($"**Event:** {eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
+                }
+            }
+            if (list.Count > 0)
+            {
+                await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
+            }
+            else await ReplyAsync("No events today.");
+        }
+
+        [Command("tomorrow")]
+        public async Task GetEventsTomorrow()
+        {
+            var list = new List<string>();
+            Events.Instance.EventsList.Sort((a, b) => a.DateTime.CompareTo(b.DateTime));
+            foreach (var eve in Events.Instance.EventsList)
+            {
+                if (eve.DateTime.Date == DateTime.Now.AddDays(1).Date)
+                {
+                    var remainder = eve.DateTime.Subtract(DateTime.Now);
+                    list.Add($"**Event:** {eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
+                }
+            }
+            if (list.Count > 0)
+            {
+                await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
+            }
+            else await ReplyAsync("No events tomorrow.");
         }
 
         [Command("delete")]
