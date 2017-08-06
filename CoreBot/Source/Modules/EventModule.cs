@@ -73,7 +73,7 @@ namespace CoreBot.Modules
             Events.Instance.EventsList.Sort((a, b) => a.DateTime.CompareTo(b.DateTime));
             foreach (var eve in Events.Instance.EventsList)
             {
-                if (eve.DateTime.Subtract(DateTime.Now).TotalHours < (TimeSpan.FromHours(24) - DateTime.Now.TimeOfDay).TotalHours)
+                if (eve.DateTime.Date == DateTime.Today.Date)
                 {
                     var remainder = eve.DateTime.Subtract(DateTime.Now);
                     list.Add($"**Event:** {eve.Description} (id: {eve.Id}), **time left:** {remainder.Days} days, {remainder.Hours} hours, {remainder.Minutes} minutes, {remainder.Seconds} seconds.");
