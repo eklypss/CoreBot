@@ -133,7 +133,7 @@ namespace CoreBot.Source.Services
 
             timer.Stop();
             Log.Debug($"Fetched {soups.Count()} pages in {timer.ElapsedMilliseconds} ms, + {fail} failed");
-            if (soups.Count() == 0)
+            if (soups.Any())
             {
                 return null;
             }
