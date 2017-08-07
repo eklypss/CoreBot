@@ -11,6 +11,7 @@ using Discord.WebSocket;
 using epnetcore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using CoreBot.Source.Managers;
 
 namespace CoreBot.Handlers
 {
@@ -20,6 +21,7 @@ namespace CoreBot.Handlers
         private CommandService _commandService;
         private IServiceCollection _services;
         private IServiceProvider _serviceProvider;
+        private OldLinkManager _oldLinkManager;
 
         public async Task InstallAsync(DiscordSocketClient discordClient)
         {
@@ -40,6 +42,7 @@ namespace CoreBot.Handlers
             _services.AddSingleton(new EventService(_client, eventManager));
             _services.AddSingleton(new EPClient(BotSettings.Instance.EPAPIKey));
             if (drinkManager != null) _services.AddSingleton(drinkManager);
+            _oldLinkManager = new OldLinkManager();
 
             // Build ServiceProvider and add modules
             _serviceProvider = _services.BuildServiceProvider();
@@ -58,6 +61,7 @@ namespace CoreBot.Handlers
             else
             {
                 var userMessage = (SocketUserMessage)message;
+                await _oldLinkManager.Check(userMessage);
                 var context = new SocketCommandContext(_client, userMessage);
                 int argPos = 0;
                 if (userMessage.HasCharPrefix(BotSettings.Instance.BotPrefix, ref argPos))
