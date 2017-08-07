@@ -20,8 +20,7 @@ namespace CoreBot.Managers
             using (var connection = Database.Open())
             {
                 await connection.InsertAsync(eve);
-                Events.Instance.EventsList.Clear();
-                Events.Instance.EventsList = await connection.SelectAsync<Event>();
+                Events.Instance.EventsList.Add(eve);
             }
         }
 
@@ -33,11 +32,11 @@ namespace CoreBot.Managers
             }
         }
 
-        public async Task UpdateEventAsync(Event eve, bool completed)
+        public async Task CompleteEventAsync(Event eve)
         {
             using (var connection = Database.Open())
             {
-                eve.Completed = completed;
+                eve.Completed = true;
                 await connection.UpdateAsync(eve);
             }
         }
@@ -47,10 +46,10 @@ namespace CoreBot.Managers
             Log.Information("Checking events for expired events.");
             foreach (var eve in Events.Instance.EventsList)
             {
-                if (eve.DateTime.Subtract(DateTime.Now).TotalSeconds <= 0)
+                if (eve.DateTime.Subtract(DateTime.Now).TotalSeconds <= 0 && !eve.Completed)
                 {
-                    Log.Warning($"Removed event: {eve.Description} because it was expired.");
-                    await DeleteEventAsync(eve);
+                    Log.Warning($"Marked event: {eve.Description} as completed because it was expired.");
+                    await CompleteEventAsync(eve);
                 }
             }
         }

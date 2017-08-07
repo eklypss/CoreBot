@@ -53,8 +53,7 @@ namespace CoreBot.Services
                         Log.Information($"Event ID {eve.Id} completed.");
                         Task.Run(async () => await client.Guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).TextChannels.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel).
                         SendMessageAsync($"**{eve.Description}**"));
-                        eve.Completed = true;
-                        Task.Run(async () => await eventManager.DeleteEventAsync(eve));
+                        Task.Run(async () => await eventManager.CompleteEventAsync(eve));
                     }
                 }
             },
