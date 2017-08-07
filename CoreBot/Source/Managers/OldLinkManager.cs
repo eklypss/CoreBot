@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CoreBot.Helpers;
 using CoreBot.Models;
+using CoreBot.Settings;
 using Discord;
 using Discord.WebSocket;
 using Humanizer;
@@ -24,11 +25,22 @@ namespace CoreBot.Source.Managers
                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
+        private bool FilterBlacklisted(UriBuilder uri)
+        {
+            string uriHost = uri.Host.ToLower();
+            string[] blacklist = BotSettings.Instance.OldLinkBlacklist;
+
+            // try to filter out "www.example.com" and "example.com"
+            return !blacklist.Any(blacklistUrl => uriHost.EndsWith(blacklistUrl));
+        }
+
         private IEnumerable<string> Normalize(string message)
         {
             return _urlParser.Matches(message)
                 .OfType<Match>()
-                .Select(m => new UriBuilder(m.Value).Uri.ToString())  // www.google.com -> http://www.google.com/
+                .Select(m => new UriBuilder(m.Value))  // www.google.com -> http://www.google.com/
+                .Where(FilterBlacklisted)
+                .Select(uri => uri.Uri.ToString())
                 .Distinct();
         }
 
