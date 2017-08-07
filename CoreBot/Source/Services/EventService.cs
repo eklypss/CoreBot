@@ -28,7 +28,7 @@ namespace CoreBot.Services
                     messageList.Add($"**Day changed to {DateTime.Now.ToString("dd-MM-yyyy")}**");
                     foreach (var ev in Events.Instance.EventsList)
                     {
-                        if (ev.DateTime.Subtract(DateTime.Now).TotalHours < 24)
+                        if (ev.DateTime.Subtract(DateTime.Now).TotalHours < 24 && !ev.Completed)
                         {
                             eventList.Add(ev);
                         }
@@ -48,11 +48,12 @@ namespace CoreBot.Services
                 }
                 foreach (var eve in Events.Instance.EventsList)
                 {
-                    if (eve.DateTime.Subtract(DateTime.Now).TotalSeconds <= 0)
+                    if (eve.DateTime.Subtract(DateTime.Now).TotalSeconds <= 0 && !eve.Completed)
                     {
                         Log.Information($"Event ID {eve.Id} completed.");
                         Task.Run(async () => await client.Guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).TextChannels.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel).
-                        SendMessageAsync($"@everyone **{eve.Description}**"));
+                        SendMessageAsync($"**{eve.Description}**"));
+                        eve.Completed = true;
                         Task.Run(async () => await eventManager.DeleteEventAsync(eve));
                     }
                 }

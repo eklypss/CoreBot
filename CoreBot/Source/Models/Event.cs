@@ -14,10 +14,14 @@ namespace CoreBot.Models
         [Required]
         public DateTime DateTime { get; set; }
 
+        [Required]
+        public bool Completed { get; set; }
+
         public Event(string desc, DateTime date)
         {
             DateTime = date;
             Description = desc;
+            Completed = false;
         }
     }
 }

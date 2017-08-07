@@ -33,13 +33,11 @@ namespace CoreBot.Managers
             }
         }
 
-        public async Task UpdateEventAsync(Event eve, DateTime newDate, string newDesc)
+        public async Task UpdateEventAsync(Event eve, bool completed)
         {
             using (var connection = Database.Open())
-
             {
-                eve.DateTime = newDate;
-                eve.Description = newDesc;
+                eve.Completed = completed;
                 await connection.UpdateAsync(eve);
             }
         }
