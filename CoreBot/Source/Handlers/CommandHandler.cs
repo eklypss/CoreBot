@@ -11,7 +11,6 @@ using Discord.WebSocket;
 using epnetcore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using CoreBot.Source.Managers;
 
 namespace CoreBot.Handlers
 {

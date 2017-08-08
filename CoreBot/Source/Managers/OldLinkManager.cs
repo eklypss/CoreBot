@@ -12,7 +12,7 @@ using Humanizer;
 using Serilog;
 using ServiceStack.OrmLite;
 
-namespace CoreBot.Source.Managers
+namespace CoreBot.Managers
 {
     public class OldLinkManager
     {
