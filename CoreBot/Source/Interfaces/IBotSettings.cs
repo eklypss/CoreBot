@@ -8,5 +8,10 @@
         bool LogToFile { get; set; }
         string SettingsFolder { get; set; }
         string SettingsFile { get; set; }
+        string DefaultChannel { get; set; }
+        string DefaultGuild { get; set; }
+        string WeatherAPIKey { get; set; }
+        string EPAPIKey { get; set; }
+        string[] OldLinkBlacklist { get; set; }
     }
 }
