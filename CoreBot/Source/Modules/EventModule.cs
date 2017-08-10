@@ -54,7 +54,7 @@ namespace CoreBot.Modules
         }
 
         [Command("complete")]
-        public async Task CompleteEvent(string eventName)
+        public async Task CompleteEvent([Remainder] string eventName)
         {
             var eve = Events.Instance.EventsList.Find(x => x.Message == eventName);
             if (eve != null)
