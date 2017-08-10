@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Collections;
@@ -7,6 +8,7 @@ using CoreBot.Models;
 using CoreBot.Settings;
 using Discord;
 using FluentScheduler;
+using Humanizer;
 using Serilog;
 
 namespace CoreBot.Services
@@ -28,6 +30,23 @@ namespace CoreBot.Services
         {
             await CompleteOutdatedEventsAsync();
             await SchedulePreviousEventsAsync();
+            JobManager.AddJob(async () => await DisplayEventsDailyAsync(), (s) => s.ToRunEvery(1).Days().At(00, 00));
+        }
+
+        private async Task DisplayEventsDailyAsync()
+        {
+            var eventList = new List<string>();
+            if (Events.Instance.EventsList.FindAll(x => !x.Completed).Count > 0) eventList.Add($"Day changed to {DateTime.Now.DayOfWeek.ToString()}, {DateTime.Now.Date.ToString("dd-MM-yyyy")}. Events today:");
+            else eventList.Add($"Day changed to {DateTime.Now.DayOfWeek.ToString()}, {DateTime.Now.Date.ToString("dd-MM-yyyy")}. No events today.");
+            foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed))
+            {
+                var remainder = eve.Date.Subtract(DateTime.Now);
+                if (remainder.TotalHours < 24)
+                {
+                    eventList.Add($"{eve.Message}, **time left:** {remainder.Humanize(2)}.");
+                }
+            }
+            await SendMessageAsync(string.Join(Environment.NewLine, eventList));
         }
 
         public async Task CreateEventAsync(string msg, DateTime date)
@@ -46,10 +65,7 @@ namespace CoreBot.Services
 
         public async Task CompleteEventAsync(Event eve)
         {
-            var guilds = await _client.GetGuildsAsync();
-            var chans = await guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).GetTextChannelsAsync();
-            var channel = chans.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel);
-            await channel.SendMessageAsync(eve.Message);
+            await SendMessageAsync(eve.Message);
             await _eventManager.CompleteEventAsync(eve);
         }
 
@@ -73,6 +89,14 @@ namespace CoreBot.Services
                 await ScheduleEventAsync(eve);
             }
             Log.Information($"Scheduled {Events.Instance.EventsList.FindAll(x => !x.Completed).Count} previous events.");
+        }
+
+        public async Task SendMessageAsync(string msg)
+        {
+            var guilds = await _client.GetGuildsAsync();
+            var chans = await guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).GetTextChannelsAsync();
+            var channel = chans.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel);
+            await channel.SendMessageAsync(msg);
         }
     }
 }
