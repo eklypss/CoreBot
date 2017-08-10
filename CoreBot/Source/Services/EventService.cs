@@ -49,7 +49,7 @@ namespace CoreBot.Services
 
         public async Task CompleteOutdatedEventsAsync()
         {
-            foreach (var eve in Events.Instance.EventsList.Where(x => !x.Completed).ToList())
+            foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed))
             {
                 var remainder = eve.Date.Subtract(DateTime.Now);
                 if (remainder.TotalSeconds < 0)
@@ -62,7 +62,7 @@ namespace CoreBot.Services
 
         public async Task SchedulePreviousEventsAsync()
         {
-            foreach (var eve in Events.Instance.EventsList.Where(x => !x.Completed).ToList())
+            foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed))
             {
                 await ScheduleEventAsync(eve.Message, eve.Date);
             }
