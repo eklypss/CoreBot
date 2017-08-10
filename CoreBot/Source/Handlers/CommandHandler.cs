@@ -27,7 +27,7 @@ namespace CoreBot.Handlers
         {
             _client = discordClient;
 
-            var config = new CommandServiceConfig() { DefaultRunMode = RunMode.Async };
+            var config = new CommandServiceConfig { DefaultRunMode = RunMode.Async };
             _commandService = new CommandService(config);
 
             var drinkManager = await DrinkManager.CreateAsync();

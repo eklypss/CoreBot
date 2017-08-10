@@ -33,7 +33,7 @@ namespace CoreBot.Services
         public async Task CreateEventAsync(string msg, DateTime date)
         {
             Log.Information($"Creating event: {msg}, to happen at {date.ToString()}.");
-            var eve = new Event() { Message = msg, Date = date, Completed = false };
+            var eve = new Event { Message = msg, Date = date, Completed = false };
             await ScheduleEventAsync(eve);
             await _eventManager.SaveEventAsync(eve);
         }
