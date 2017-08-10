@@ -15,6 +15,6 @@ namespace CoreBot.Models
         public bool Completed { get; set; }
 
         [AutoIncrement]
-        public int ID { get; set; }
+        public int Id { get; set; }
     }
 }
