@@ -54,9 +54,10 @@ namespace CoreBot.Modules
         }
 
         [Command("complete")]
-        public async Task CompleteEvent([Remainder] string eventName)
+        [Alias("delete")]
+        public async Task CompleteEvent(int id)
         {
-            var eve = Events.Instance.EventsList.FirstOrDefault(x => x.Message.Contains(eventName));
+            var eve = Events.Instance.EventsList.FirstOrDefault(x => x.Id == id);
             if (eve != null)
             {
                 await _eventService.CompleteEventAsync(eve);
