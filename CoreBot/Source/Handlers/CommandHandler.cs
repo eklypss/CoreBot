@@ -79,18 +79,14 @@ namespace CoreBot.Handlers
                                 break;
                             }
                         }
-                        if (!matchFound)
+                        if (!matchFound && result.Error != CommandError.UnknownCommand)
                         {
                             // If command was found but failed to execute, send error message.
-                            if (result.Error != CommandError.UnknownCommand)
-                            {
-                                await userMessage.Channel.SendMessageAsync(result.ToString());
-                                Log.Error($"Additional information: {result.ErrorReason}, {result.Error.Value}");
-                            }
+                            await userMessage.Channel.SendMessageAsync(result.ToString());
+                            Log.Error($"Additional information: {result.ErrorReason}, {result.Error.Value}");
                         }
                     }
                 }
             }
         }
     }
-}
