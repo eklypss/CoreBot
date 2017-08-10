@@ -1,19 +1,22 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using CoreBot.Settings;
+﻿using System.Threading.Tasks;
+using CoreBot.Services;
 using Discord.Commands;
 
 namespace CoreBot.Modules
 {
     public class RemoteModule : ModuleBase
     {
+        private readonly MessageService _messageService;
+
+        public RemoteModule(MessageService messageService)
+        {
+            _messageService = messageService;
+        }
+
         [Command("remote")]
         public async Task SendRemoteMessage([Remainder] string message)
         {
-            var guilds = await Context.Client.GetGuildsAsync();
-            var textChannels = await guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).GetTextChannelsAsync();
-            var channel = textChannels.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel);
-            await channel.SendMessageAsync(message);
+            await _messageService.SendMessageToDefaultChannelAsync(message);
         }
     }
 }
