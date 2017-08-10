@@ -10,6 +10,7 @@ using Humanizer;
 namespace CoreBot.Modules
 {
     [Group("event")]
+    [Alias("events")]
     public class EventModule : ModuleBase
     {
         private readonly EventService _eventService;
