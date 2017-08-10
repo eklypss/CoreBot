@@ -28,7 +28,7 @@ namespace CoreBot.Services
         private bool FilterBlacklisted(UriBuilder uri)
         {
             string uriHost = uri.Host.ToLower();
-            string[] blacklist = BotSettings.Instance.OldLinkBlacklist;
+            var blacklist = BotSettings.Instance.OldLinkBlacklist;
 
             if (blacklist == null)
                 return true;

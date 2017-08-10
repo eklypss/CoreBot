@@ -1,4 +1,6 @@
-﻿namespace CoreBot.Interfaces
+﻿using System.Collections.Generic;
+
+namespace CoreBot.Interfaces
 {
     public interface IBotSettings
     {
@@ -12,6 +14,6 @@
         string DefaultGuild { get; set; }
         string WeatherAPIKey { get; set; }
         string EPAPIKey { get; set; }
-        string[] OldLinkBlacklist { get; set; }
+        List<string> OldLinkBlacklist { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using CoreBot.Interfaces;
 
@@ -34,7 +35,7 @@ namespace CoreBot.Settings
         public string SettingsFile { get; set; }
         public string WeatherAPIKey { get; set; }
         public string EPAPIKey { get; set; }
-        public string[] OldLinkBlacklist { get; set; }
+        public List<string> OldLinkBlacklist { get; set; }
 
         private BotSettings()
         {
