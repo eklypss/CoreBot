@@ -67,7 +67,7 @@ namespace CoreBot.Managers
             }
         }
 
-        private async Task SendMessage(SocketUserMessage message, Link originalLink)
+        private async Task SendMessage(SocketMessage message, Link originalLink)
         {
             string ago = (DateTime.Now - originalLink.Timestamp).Humanize();
             var users = await message.Channel.GetUsersAsync(CacheMode.AllowDownload).Flatten();
