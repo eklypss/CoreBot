@@ -21,33 +21,33 @@ namespace CoreBot.Services
             _client = client;
             _eventManager = eventManager;
 
-            Task.Run(async () => await Init());
+            Task.Run(async () => await InitAsync());
         }
 
-        public async Task Init()
+        public async Task InitAsync()
         {
-            await CompleteOutdatedEvents();
-            await SchedulePreviousEvents();
+            await CompleteOutdatedEventsAsync();
+            await SchedulePreviousEventsAsync();
         }
 
-        public async Task ScheduleEvent(string msg, DateTime date)
+        public async Task ScheduleEventAsync(string msg, DateTime date)
         {
             var eve = new Event() { Message = msg, Date = date, Completed = false };
             Log.Information($"Scheduling job:  {eve.Message}");
-            JobManager.AddJob(async () => await CompleteEvent(eve), (s) => s.ToRunOnceAt(date));
-            await _eventManager.SaveEvent(eve);
+            JobManager.AddJob(async () => await CompleteEventAsync(eve), (s) => s.ToRunOnceAt(date));
+            await _eventManager.SaveEventAsync(eve);
         }
 
-        public async Task CompleteEvent(Event eve)
+        public async Task CompleteEventAsync(Event eve)
         {
             var guilds = await _client.GetGuildsAsync();
             var chans = await guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).GetTextChannelsAsync();
             var channel = chans.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel);
             await channel.SendMessageAsync(eve.Message);
-            await _eventManager.CompleteEvent(eve);
+            await _eventManager.SaveEventAsync(eve);
         }
 
-        public async Task CompleteOutdatedEvents()
+        public async Task CompleteOutdatedEventsAsync()
         {
             foreach (var eve in Events.Instance.EventsList.Where(x => !x.Completed).ToList())
             {
@@ -55,16 +55,16 @@ namespace CoreBot.Services
                 if (remainder.TotalSeconds < 0)
                 {
                     Log.Information($"Completing outdated event: {eve.Message} (id: {eve.ID}).");
-                    await _eventManager.CompleteEvent(eve);
+                    await _eventManager.SaveEventAsync(eve);
                 }
             }
         }
 
-        public async Task SchedulePreviousEvents()
+        public async Task SchedulePreviousEventsAsync()
         {
             foreach (var eve in Events.Instance.EventsList.Where(x => !x.Completed).ToList())
             {
-                await ScheduleEvent(eve.Message, eve.Date);
+                await ScheduleEventAsync(eve.Message, eve.Date);
             }
         }
     }

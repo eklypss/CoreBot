@@ -29,7 +29,7 @@ namespace CoreBot.Modules
                 if (remainder.TotalSeconds > 0)
                 {
                     await ReplyAsync($"Event added: {message}, **time left:** {remainder.Humanize(2)}.");
-                    await _eventService.ScheduleEvent(message, eventDate);
+                    await _eventService.ScheduleEventAsync(message, eventDate);
                 }
                 else await ReplyAsync("Invalid date.");
             }

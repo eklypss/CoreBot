@@ -9,7 +9,7 @@ namespace CoreBot.Managers
 {
     public class EventManager
     {
-        public async Task SaveEvent(Event eve)
+        public async Task SaveEventAsync(Event eve)
         {
             using (var connection = Database.Open())
             {
@@ -19,7 +19,7 @@ namespace CoreBot.Managers
             }
         }
 
-        public async Task CompleteEvent(Event eve)
+        public async Task CompleteEventAsync(Event eve)
         {
             using (var connection = Database.Open())
             {
