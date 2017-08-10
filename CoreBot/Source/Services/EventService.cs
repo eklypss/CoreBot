@@ -44,7 +44,7 @@ namespace CoreBot.Services
             var chans = await guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).GetTextChannelsAsync();
             var channel = chans.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel);
             await channel.SendMessageAsync(eve.Message);
-            await _eventManager.SaveEventAsync(eve);
+            await _eventManager.CompleteEventAsync(eve);
         }
 
         public async Task CompleteOutdatedEventsAsync()
