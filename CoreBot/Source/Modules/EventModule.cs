@@ -24,6 +24,8 @@ namespace CoreBot.Modules
         public async Task AddEvent(string date, string time, [Remainder] string message)
         {
             DateTime eventDate;
+            if (date == "today") date = DateTime.Now.ToString("dd-MM-yyyy");
+            if (date == "tomorrow") date = DateTime.Now.AddDays(1).ToString("dd-MM-yyyy");
             if (DateTime.TryParse(string.Format("{0} {1}", date, time), out eventDate))
             {
                 var remainder = eventDate.Subtract(DateTime.Now);
