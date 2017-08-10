@@ -32,7 +32,7 @@ namespace CoreBot.Handlers
 
             var drinkManager = await DrinkManager.CreateAsync();
             _services = new ServiceCollection();
-            var eventService = new EventService(_client, new EventManager());
+            var eventService = new EventService(new MessageService(_client), new EventManager());
             // Add services to the ServiceCollection
             _services.AddSingleton(new CommandManager());
             _services.AddSingleton(new QuoteService());

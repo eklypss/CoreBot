@@ -15,12 +15,12 @@ namespace CoreBot.Services
 {
     public class EventService : Registry
     {
-        private readonly IDiscordClient _client;
+        private readonly MessageService _messageService;
         private readonly EventManager _eventManager;
 
-        public EventService(IDiscordClient client, EventManager eventManager)
+        public EventService(MessageService messageService, EventManager eventManager)
         {
-            _client = client;
+            _messageService = messageService;
             _eventManager = eventManager;
 
             Task.Run(async () => await InitAsync());
@@ -46,7 +46,7 @@ namespace CoreBot.Services
                     eventList.Add($"{eve.Message}, **time left:** {remainder.Humanize(2)}.");
                 }
             }
-            await SendMessageAsync(string.Join(Environment.NewLine, eventList));
+            await _messageService.SendMessageToDefaultChannelAsync(string.Join(Environment.NewLine, eventList));
         }
 
         public async Task CreateEventAsync(string msg, DateTime date)
@@ -65,7 +65,7 @@ namespace CoreBot.Services
 
         public async Task CompleteEventAsync(Event eve)
         {
-            await SendMessageAsync(eve.Message);
+            await _messageService.SendMessageToDefaultChannelAsync(eve.Message);
             await _eventManager.CompleteEventAsync(eve);
         }
 
@@ -89,14 +89,6 @@ namespace CoreBot.Services
                 await ScheduleEventAsync(eve);
             }
             Log.Information($"Scheduled {Events.Instance.EventsList.FindAll(x => !x.Completed).Count} previous events.");
-        }
-
-        public async Task SendMessageAsync(string msg)
-        {
-            var guilds = await _client.GetGuildsAsync();
-            var chans = await guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).GetTextChannelsAsync();
-            var channel = chans.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel);
-            await channel.SendMessageAsync(msg);
         }
     }
 }
