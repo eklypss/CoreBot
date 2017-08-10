@@ -87,7 +87,7 @@ namespace CoreBot.Services
             await message.Channel.SendMessageAsync(msg);
         }
 
-        public async Task CheckAsync(SocketUserMessage message)
+        public async Task CheckAsync(SocketMessage message)
         {
             var normalizedUrls = Normalize(message.Content);
             if (!normalizedUrls.Any())
