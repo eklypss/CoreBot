@@ -55,7 +55,7 @@ namespace CoreBot.Services
                 if (remainder.TotalSeconds < 0)
                 {
                     Log.Information($"Completing outdated event: {eve.Message} (id: {eve.ID}).");
-                    await _eventManager.SaveEventAsync(eve);
+                    await _eventManager.CompleteEventAsync(eve);
                 }
             }
         }
