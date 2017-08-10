@@ -47,7 +47,7 @@ namespace CoreBot.Services
                 .Distinct();
         }
 
-        public async Task ReplyToLinks(IEnumerable<string> urls, SocketMessage message)
+        public async Task ReplyToLinksAsync(IEnumerable<string> urls, SocketMessage message)
         {
             using (var conn = DbConnection.Open())
             {
@@ -61,13 +61,13 @@ namespace CoreBot.Services
                     }
                     else
                     {
-                        await SendMessage(message, originalLink);
+                        await SendMessageAsync(message, originalLink);
                     }
                 }
             }
         }
 
-        private async Task SendMessage(SocketMessage message, Link originalLink)
+        private async Task SendMessageAsync(SocketMessage message, Link originalLink)
         {
             string ago = (DateTime.Now - originalLink.Timestamp).Humanize();
             var users = await message.Channel.GetUsersAsync(CacheMode.AllowDownload).Flatten();
@@ -87,13 +87,13 @@ namespace CoreBot.Services
             await message.Channel.SendMessageAsync(msg);
         }
 
-        public async Task Check(SocketUserMessage message)
+        public async Task CheckAsync(SocketUserMessage message)
         {
             var normalizedUrls = Normalize(message.Content);
             if (!normalizedUrls.Any())
                 return;
 
-            await ReplyToLinks(normalizedUrls, message);
+            await ReplyToLinksAsync(normalizedUrls, message);
         }
     }
 }

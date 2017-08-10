@@ -63,7 +63,7 @@ namespace CoreBot.Handlers
             else
             {
                 var userMessage = (SocketUserMessage)message;
-                await _oldLinkService.Check(userMessage);
+                await _oldLinkService.CheckAsync(userMessage);
                 var context = new SocketCommandContext(_client, userMessage);
                 int argPos = 0;
                 if (userMessage.HasCharPrefix(BotSettings.Instance.BotPrefix, ref argPos))
