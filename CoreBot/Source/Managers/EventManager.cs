@@ -24,7 +24,7 @@ namespace CoreBot.Managers
             using (var connection = Database.Open())
             {
                 eve.Completed = true;
-                connection.Update(eve);
+                await connection.UpdateAsync(eve);
                 Log.Information($"Event: {eve.Message} (id: {eve.ID}) completed.");
             }
         }
