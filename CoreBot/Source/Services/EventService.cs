@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Collections;
-using CoreBot.Managers;
+using CoreBot.Database.Dao;
 using CoreBot.Models;
-using CoreBot.Settings;
-using Discord;
 using FluentScheduler;
 using Humanizer;
 using Serilog;
@@ -16,12 +13,12 @@ namespace CoreBot.Services
     public class EventService : Registry
     {
         private readonly MessageService _messageService;
-        private readonly EventManager _eventManager;
+        private readonly EventDao _eventDao;
 
-        public EventService(MessageService messageService, EventManager eventManager)
+        public EventService(MessageService messageService, EventDao eventDao)
         {
             _messageService = messageService;
-            _eventManager = eventManager;
+            _eventDao = eventDao;
 
             Task.Run(async () => await InitAsync());
         }
@@ -54,7 +51,7 @@ namespace CoreBot.Services
             Log.Information($"Creating event: {msg}, to happen at {date.ToString()}.");
             var eve = new Event { Message = msg, Date = date, Completed = false };
             await ScheduleEventAsync(eve);
-            await _eventManager.SaveEventAsync(eve);
+            await _eventDao.SaveEventAsync(eve);
         }
 
         public async Task ScheduleEventAsync(Event eve)
@@ -66,7 +63,7 @@ namespace CoreBot.Services
         public async Task CompleteEventAsync(Event eve)
         {
             await _messageService.SendMessageToDefaultChannelAsync(eve.Message);
-            await _eventManager.CompleteEventAsync(eve);
+            await _eventDao.CompleteEventAsync(eve);
         }
 
         public async Task CompleteOutdatedEventsAsync()
@@ -77,7 +74,7 @@ namespace CoreBot.Services
                 if (remainder.TotalSeconds < 0)
                 {
                     Log.Information($"Completing outdated event: {eve.Message} (id: {eve.Id}).");
-                    await _eventManager.CompleteEventAsync(eve);
+                    await _eventDao.CompleteEventAsync(eve);
                 }
             }
         }

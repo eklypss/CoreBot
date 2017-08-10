@@ -2,8 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using CoreBot.Collections;
-using CoreBot.Managers;
-using CoreBot.Modules;
+using CoreBot.Database.Dao;
 using CoreBot.Services;
 using CoreBot.Settings;
 using Discord.Commands;
@@ -21,7 +20,7 @@ namespace CoreBot.Handlers
         private CommandService _commandService;
         private IServiceCollection _services;
         private IServiceProvider _serviceProvider;
-        private OldLinkManager _oldLinkManager;
+        private OldLinkService _oldLinkService;
 
         public async Task InstallAsync(DiscordSocketClient discordClient)
         {
@@ -30,22 +29,22 @@ namespace CoreBot.Handlers
             var config = new CommandServiceConfig { DefaultRunMode = RunMode.Async };
             _commandService = new CommandService(config);
 
-            var drinkManager = await DrinkManager.CreateAsync();
+            var drinkDao = await DrinkDao.CreateAsync();
             _services = new ServiceCollection();
 
             var messageService = new MessageService(_client);
-            var eventService = new EventService(messageService, new EventManager());
+            var eventService = new EventService(messageService, new EventDao());
 
             // Add services to the ServiceCollection
-            _services.AddSingleton(new CommandManager());
+            _services.AddSingleton(new CommandDao());
             _services.AddSingleton(new QuoteService());
             _services.AddSingleton(new WeatherService());
             _services.AddSingleton(messageService);
             _services.AddSingleton(eventService);
             JobManager.Initialize(eventService);
             _services.AddSingleton(new EPClient(BotSettings.Instance.EPAPIKey));
-            if (drinkManager != null) _services.AddSingleton(drinkManager);
-            _oldLinkManager = new OldLinkManager();
+            if (drinkDao != null) _services.AddSingleton(drinkDao);
+            _oldLinkService = new OldLinkService();
 
             // Build ServiceProvider and add modules
             _serviceProvider = _services.BuildServiceProvider();
@@ -64,7 +63,7 @@ namespace CoreBot.Handlers
             else
             {
                 var userMessage = (SocketUserMessage)message;
-                await _oldLinkManager.Check(userMessage);
+                await _oldLinkService.Check(userMessage);
                 var context = new SocketCommandContext(_client, userMessage);
                 int argPos = 0;
                 if (userMessage.HasCharPrefix(BotSettings.Instance.BotPrefix, ref argPos))

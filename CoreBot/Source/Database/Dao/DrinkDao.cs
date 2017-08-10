@@ -2,32 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CoreBot.Helpers;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Microsoft.Data.Sqlite;
 using Serilog;
 using ServiceStack.OrmLite;
 
-namespace CoreBot.Modules
+namespace CoreBot.Database.Dao
 {
-    public class DrinkManager
+    public class DrinkDao
     {
         private readonly List<int> _drinkIds;
         private readonly Random _random;
 
-        public static async Task<DrinkManager> CreateAsync()
+        public static async Task<DrinkDao> CreateAsync()
         {
             try
             {
-                using (var connection = Database.Open())
+                using (var connection = DbConnection.Open())
                 {
                     if (connection.TableExists<Drink>())
                     {
                         var drinks = await connection.SelectAsync<Drink>();
                         var ids = drinks.Select(d => d.Id).ToList();
                         Log.Information($"Loaded {ids.Count} drinks from the database.");
-                        return new DrinkManager(ids);
+                        return new DrinkDao(ids);
                     }
                     else
                     {
@@ -44,7 +43,7 @@ namespace CoreBot.Modules
             }
         }
 
-        private DrinkManager(List<int> drinkIds)
+        private DrinkDao(List<int> drinkIds)
         {
             _random = new Random();
             _drinkIds = drinkIds;

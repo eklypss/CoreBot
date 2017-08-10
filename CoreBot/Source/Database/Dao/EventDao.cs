@@ -1,17 +1,16 @@
 ﻿using System.Threading.Tasks;
 using CoreBot.Collections;
-using CoreBot.Helpers;
 using CoreBot.Models;
 using Serilog;
 using ServiceStack.OrmLite;
 
-namespace CoreBot.Managers
+namespace CoreBot.Database.Dao
 {
-    public class EventManager
+    public class EventDao
     {
         public async Task SaveEventAsync(Event eve)
         {
-            using (var connection = Database.Open())
+            using (var connection = DbConnection.Open())
             {
                 eve.Id = (int)await connection.InsertAsync(eve, selectIdentity: true);
                 Events.Instance.EventsList.Add(eve);
@@ -21,7 +20,7 @@ namespace CoreBot.Managers
 
         public async Task CompleteEventAsync(Event eve)
         {
-            using (var connection = Database.Open())
+            using (var connection = DbConnection.Open())
             {
                 eve.Completed = true;
                 await connection.UpdateAsync(eve);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using CoreBot.Database;
 using CoreBot.Enum;
 using CoreBot.Settings;
 using Newtonsoft.Json;
@@ -16,7 +17,7 @@ namespace CoreBot.Helpers
 
             if (!File.Exists(BotSettings.Instance.SettingsFile)) await CreateFileAsync(FileType.SettingsFile);
             else await LoadFileAsync(FileType.SettingsFile);
-            await Database.InitAsync();
+            await DbConnection.InitAsync();
         }
 
         public async static Task CreateFileAsync(FileType fileType)

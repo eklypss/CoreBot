@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CoreBot.Helpers;
+using CoreBot.Database;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Discord;
@@ -12,13 +12,13 @@ using Humanizer;
 using Serilog;
 using ServiceStack.OrmLite;
 
-namespace CoreBot.Managers
+namespace CoreBot.Services
 {
-    public class OldLinkManager
+    public class OldLinkService
     {
         private readonly Regex _urlParser;
 
-        public OldLinkManager()
+        public OldLinkService()
         {
             // taken from https://stackoverflow.com/a/10576770
             _urlParser = new Regex(@"\b(?:https?://|www\.)\S+\b",
@@ -49,7 +49,7 @@ namespace CoreBot.Managers
 
         public async Task ReplyToLinks(IEnumerable<string> urls, SocketMessage message)
         {
-            using (var conn = Database.Open())
+            using (var conn = DbConnection.Open())
             {
                 foreach (string url in urls)
                 {

@@ -1,15 +1,14 @@
 ﻿using System.Threading.Tasks;
 using CoreBot.Collections;
-using CoreBot.Helpers;
 using CoreBot.Models;
 using ServiceStack.OrmLite;
 
-namespace CoreBot.Managers
+namespace CoreBot.Database.Dao
 {
     /// <summary>
     /// Class for managing dynamic commands.
     /// </summary>
-    public class CommandManager
+    public class CommandDao
     {
         /// <summary>
         /// Adds the specified command.
@@ -17,7 +16,7 @@ namespace CoreBot.Managers
         /// <param name="command">Command to add.</param>
         public async Task AddCommandAsync(Command command)
         {
-            using (var connection = Database.Open())
+            using (var connection = DbConnection.Open())
             {
                 await connection.InsertAsync(command);
                 Commands.Instance.CommandsList.Add(command);
@@ -30,7 +29,7 @@ namespace CoreBot.Managers
         /// <param name="command">Command to delete.</param>
         public async Task DeleteCommandAsync(Command command)
         {
-            using (var connection = Database.Open())
+            using (var connection = DbConnection.Open())
             {
                 await connection.DeleteAsync(command);
                 Commands.Instance.CommandsList.Remove(command);
@@ -44,7 +43,7 @@ namespace CoreBot.Managers
         /// <param name="newAction">The new action of the command.</param>
         public async Task UpdateCommandAsync(Command command, string newAction)
         {
-            using (var connection = Database.Open())
+            using (var connection = DbConnection.Open())
             {
                 command.Action = newAction;
                 await connection.UpdateAsync(command);

@@ -6,9 +6,9 @@ using CoreBot.Settings;
 using Serilog;
 using ServiceStack.OrmLite;
 
-namespace CoreBot.Helpers
+namespace CoreBot.Database
 {
-    internal static class Database
+    internal static class DbConnection
     {
         private static OrmLiteConnectionFactory _factory;
 

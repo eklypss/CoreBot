@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Collections;
-using CoreBot.Managers;
+using CoreBot.Database.Dao;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Discord.Commands;
@@ -12,12 +12,12 @@ namespace CoreBot.Modules
     [Group("command"), Summary("Module for modifying and listing commands.")]
     public class CommandModule : ModuleBase
     {
-        private readonly CommandManager _commandManager;
+        private readonly CommandDao _commandDao;
         private readonly CommandService _commandService;
 
-        public CommandModule(CommandManager commandManager, CommandService commandService)
+        public CommandModule(CommandDao commandDao, CommandService commandService)
         {
-            _commandManager = commandManager;
+            _commandDao = commandDao;
             _commandService = commandService;
         }
 
@@ -29,7 +29,7 @@ namespace CoreBot.Modules
                 var found = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
                 if (found == null)
                 {
-                    await _commandManager.AddCommandAsync(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
+                    await _commandDao.AddCommandAsync(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
                     await ReplyAsync($"Command {commandName} added, action: {commandAction}");
                     Log.Information($"Command {commandName} added, action: {commandAction}");
                 }
@@ -51,7 +51,7 @@ namespace CoreBot.Modules
             var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
             if (command != null)
             {
-                await _commandManager.DeleteCommandAsync(command);
+                await _commandDao.DeleteCommandAsync(command);
                 await ReplyAsync($"Command deleted: {commandName}");
                 Log.Information($"Command deleted: {commandName}");
             }
@@ -68,7 +68,7 @@ namespace CoreBot.Modules
             var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
             if (command != null)
             {
-                await _commandManager.UpdateCommandAsync(command, newAction);
+                await _commandDao.UpdateCommandAsync(command, newAction);
                 await ReplyAsync($"Command {commandName} updated, new action: {newAction}");
                 Log.Information($"Command {commandName} updated, new action: {newAction}");
             }
