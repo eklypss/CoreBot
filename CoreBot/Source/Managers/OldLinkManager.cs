@@ -47,7 +47,7 @@ namespace CoreBot.Managers
                 .Distinct();
         }
 
-        public async Task ReplyToLinks(IEnumerable<string> urls, SocketUserMessage message)
+        public async Task ReplyToLinks(IEnumerable<string> urls, SocketMessage message)
         {
             using (var conn = Database.Open())
             {
