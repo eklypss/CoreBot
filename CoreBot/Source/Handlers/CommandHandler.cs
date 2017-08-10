@@ -9,6 +9,7 @@ using CoreBot.Settings;
 using Discord.Commands;
 using Discord.WebSocket;
 using epnetcore;
+using FluentScheduler;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -31,11 +32,13 @@ namespace CoreBot.Handlers
 
             var drinkManager = await DrinkManager.CreateAsync();
             _services = new ServiceCollection();
-
+            var eventService = new EventService(_client, new EventManager());
             // Add services to the ServiceCollection
             _services.AddSingleton(new CommandManager());
             _services.AddSingleton(new QuoteService());
             _services.AddSingleton(new WeatherService());
+            _services.AddSingleton(eventService);
+            JobManager.Initialize(eventService);
             _services.AddSingleton(new EPClient(BotSettings.Instance.EPAPIKey));
             if (drinkManager != null) _services.AddSingleton(drinkManager);
             _oldLinkManager = new OldLinkManager();
