@@ -30,6 +30,9 @@ namespace CoreBot.Managers
             string uriHost = uri.Host.ToLower();
             string[] blacklist = BotSettings.Instance.OldLinkBlacklist;
 
+            if (blacklist == null)
+                return true;
+
             // try to filter out "www.example.com" and "example.com"
             return !blacklist.Any(blacklistUrl => uriHost.EndsWith(blacklistUrl));
         }
@@ -58,24 +61,28 @@ namespace CoreBot.Managers
                     }
                     else
                     {
-                        await SendMessage(message.Author.Id, message, originalLink);
+                        await SendMessage(message, originalLink);
                     }
                 }
             }
         }
 
-        private async Task SendMessage(ulong originalSenderId, SocketUserMessage message, Link originalLink)
+        private async Task SendMessage(SocketUserMessage message, Link originalLink)
         {
             string ago = (DateTime.Now - originalLink.Timestamp).Humanize();
-            var users = await message.Channel.GetUsersAsync(CacheMode.CacheOnly).Flatten();
+            var users = await message.Channel.GetUsersAsync(CacheMode.AllowDownload).Flatten();
             string msg = $"Old link <:ewPalm:256415457622360064> sent {ago} ago";
 
-            var originalSender = (SocketGuildUser)users.
-                FirstOrDefault(user => user.Id == originalSenderId);
+            var originalSender = (SocketGuildUser)users
+                .FirstOrDefault(user => user.Id == originalLink.AuthorId);
 
             if (originalSender != null)
             {
-                msg += " by " + originalSender.Nickname;
+                // ???
+                string sender = string.IsNullOrWhiteSpace(originalSender.Nickname) ?
+                    originalSender.Username : originalSender.Nickname;
+
+                msg += " by " + sender;
             }
             await message.Channel.SendMessageAsync(msg);
         }
