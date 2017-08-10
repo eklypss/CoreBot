@@ -16,7 +16,7 @@ namespace CoreBot.Managers
 {
     public class OldLinkManager
     {
-        private Regex _urlParser;
+        private readonly Regex _urlParser;
 
         public OldLinkManager()
         {
