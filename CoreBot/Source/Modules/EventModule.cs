@@ -39,15 +39,29 @@ namespace CoreBot.Modules
         [Command("list")]
         public async Task ListEvents()
         {
-            var list = new List<string>();
-
-            Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
-            foreach (var eve in Events.Instance.EventsList.Where(x => !x.Completed))
+            if (Events.Instance.EventsList.Any(x => !x.Completed))
             {
-                var remainder = eve.Date.Subtract(DateTime.Now);
-                list.Add($"{eve.Message} (id: {eve.ID}), **time left:** {remainder.Humanize(2)}.");
+                var list = new List<string>();
+                Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
+                foreach (var eve in Events.Instance.EventsList.Where(x => !x.Completed))
+                {
+                    var remainder = eve.Date.Subtract(DateTime.Now);
+                    list.Add($"{eve.Message}, **time left:** {remainder.Humanize(2)}.");
+                }
+                await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
-            await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
+            else await ReplyAsync("No events to list.");
+        }
+
+        [Command("complete")]
+        public async Task CompleteEvent(string eventName)
+        {
+            var eve = Events.Instance.EventsList.Find(x => x.Message == eventName);
+            if (eve != null)
+            {
+                await _eventService.CompleteEventAsync(eve);
+            }
+            else await ReplyAsync("Event not found.");
         }
     }
 }
