@@ -59,11 +59,28 @@ namespace CoreBot.Modules
         [Command("today")]
         public async Task GetTodaysEvents()
         {
-            if (Events.Instance.EventsList.FindAll(x => x.Date.Date == DateTime.Today.Date).Count > 0)
+            if (Events.Instance.EventsList.FindAll(x => x.Date.Date == DateTime.Now.Date).Count > 0)
             {
                 var list = new List<string>();
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
-                foreach (var eve in Events.Instance.EventsList.FindAll(x => x.Date.Date == DateTime.Today.Date))
+                foreach (var eve in Events.Instance.EventsList.FindAll(x => x.Date.Date == DateTime.Now.Date))
+                {
+                    var remainder = eve.Date.Subtract(DateTime.Now);
+                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}.");
+                }
+                await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
+            }
+            else await ReplyAsync("No events to list.");
+        }
+
+        [Command("tomorrow")]
+        public async Task GetTomorrowsEvents()
+        {
+            if (Events.Instance.EventsList.FindAll(x => x.Date.Date == DateTime.Now.AddDays(1).Date).Count > 0)
+            {
+                var list = new List<string>();
+                Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
+                foreach (var eve in Events.Instance.EventsList.FindAll(x => x.Date.Date == DateTime.Now.AddDays(1).Date))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
                     list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}.");
