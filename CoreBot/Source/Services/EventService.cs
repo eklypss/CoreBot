@@ -76,7 +76,7 @@ namespace CoreBot.Services
                 var remainder = eve.Date.Subtract(DateTime.Now);
                 if (remainder.TotalSeconds < 0)
                 {
-                    Log.Information($"Completing outdated event: {eve.Message} (id: {eve.ID}).");
+                    Log.Information($"Completing outdated event: {eve.Message} (id: {eve.Id}).");
                     await _eventManager.CompleteEventAsync(eve);
                 }
             }
