@@ -46,7 +46,7 @@ namespace CoreBot.Modules
                 foreach (var eve in Events.Instance.EventsList.Where(x => !x.Completed))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message}, **time left:** {remainder.Humanize(2)}.");
+                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}.");
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }

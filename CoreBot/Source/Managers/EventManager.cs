@@ -13,9 +13,9 @@ namespace CoreBot.Managers
         {
             using (var connection = Database.Open())
             {
-                eve.ID = (int)await connection.InsertAsync(eve, selectIdentity: true);
+                eve.Id = (int)await connection.InsertAsync(eve, selectIdentity: true);
                 Events.Instance.EventsList.Add(eve);
-                Log.Information($"Event: {eve.Message} (id: {eve.ID}) saved.");
+                Log.Information($"Event: {eve.Message} (id: {eve.Id}) saved.");
             }
         }
 
@@ -25,7 +25,7 @@ namespace CoreBot.Managers
             {
                 eve.Completed = true;
                 await connection.UpdateAsync(eve);
-                Log.Information($"Event: {eve.Message} (id: {eve.ID}) completed.");
+                Log.Information($"Event: {eve.Message} (id: {eve.Id}) completed.");
             }
         }
     }
