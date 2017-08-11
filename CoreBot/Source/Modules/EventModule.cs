@@ -63,7 +63,7 @@ namespace CoreBot.Modules
             {
                 var list = new List<string>();
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
-                foreach (var eve in Events.Instance.EventsList.FindAll(x => x.Date.Date == DateTime.Now.Date))
+                foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.Date))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
                     list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}.");
@@ -80,7 +80,7 @@ namespace CoreBot.Modules
             {
                 var list = new List<string>();
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
-                foreach (var eve in Events.Instance.EventsList.FindAll(x => x.Date.Date == DateTime.Now.AddDays(1).Date))
+                foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.AddDays(1).Date))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
                     list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}.");
