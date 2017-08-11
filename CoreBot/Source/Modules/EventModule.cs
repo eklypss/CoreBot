@@ -59,7 +59,7 @@ namespace CoreBot.Modules
         [Command("today")]
         public async Task GetTodaysEvents()
         {
-            if (Events.Instance.EventsList.FindAll(x => x.Date.Date == DateTime.Now.Date).Count > 0)
+            if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.Date).Count > 0)
             {
                 var list = new List<string>();
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
@@ -76,7 +76,7 @@ namespace CoreBot.Modules
         [Command("tomorrow")]
         public async Task GetTomorrowsEvents()
         {
-            if (Events.Instance.EventsList.FindAll(x => x.Date.Date == DateTime.Now.AddDays(1).Date).Count > 0)
+            if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.AddDays(1).Date).Count > 0)
             {
                 var list = new List<string>();
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
