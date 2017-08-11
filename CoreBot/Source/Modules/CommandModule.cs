@@ -63,7 +63,7 @@ namespace CoreBot.Modules
         }
 
         [Command("update"), Summary("Updates the action of a dynamic command.")]
-        public async Task UpdateCommand(string commandName, string newAction)
+        public async Task UpdateCommand(string commandName, [Remainder] string newAction)
         {
             var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
             if (command != null)
