@@ -6,9 +6,11 @@ using AngleSharp.Parser.Html;
 using CoreBot.Helpers;
 using CoreBot.Models.Weather;
 using CoreBot.Settings;
+using Humanizer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
+using ServiceStack;
 using static CoreBot.Helpers.HelperMethods;
 
 namespace CoreBot.Services
@@ -42,7 +44,7 @@ namespace CoreBot.Services
                     Log.Warning($"Weather data not found for {location}.");
                     return "Weather data not found.";
                 }
-                var date = result.Dt.ToDateTime().AddHours(3).ToString();
+                var date = result.Dt.ToDateTime().ToLocalTime();
                 return CreateWeatherMessage(result.Name, Math.Round(result.Main.Temp - 273, 1), result.Sys.Country, result.Weather.FirstOrDefault().Description, result.Wind.Speed, date);
             }
         }
@@ -69,9 +71,9 @@ namespace CoreBot.Services
                     var temperature = weatherInfo.t2m.Last[1];
                     var wind = weatherInfo.WindSpeedMS != null ? weatherInfo.WindSpeedMS.Last[1] : "??";
                     long timeStamp = weatherInfo.latestObservationTime / 1000;
-                    var dateString = timeStamp.ToDateTime().ToString();
+                    var date = timeStamp.ToDateTime();
 
-                    return CreateWeatherMessage(location, temperature, "FI", weatherStatus, wind, dateString);
+                    return CreateWeatherMessage(location.ToTitleCase(), temperature, "FI", weatherStatus, wind, date);
                 }
             }
             catch (Exception)
@@ -82,9 +84,10 @@ namespace CoreBot.Services
         }
 
         private string CreateWeatherMessage(string location, object temp, string country,
-            string status, object wind, string timestamp)
+            string status, object wind, DateTime timestamp)
         {
-            return $"[**{location}, {country}**], **temp:** {temp}°C, {status}, **wind:** {wind} m/s, **updated:** {timestamp}";
+            string ago = (DateTime.Now - timestamp).Humanize();
+            return $"[**{location}, {country}**], **temp:** {temp}°C, {status}, **wind:** {wind} m/s, **updated:** {ago} ago";
         }
     }
 }
