@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Database.Dao;
@@ -87,7 +88,11 @@ namespace CoreBot.Modules
                 var moduleCommandNames = module.Commands.Select(c => c.Name);
                 return $"{module.Name} *({string.Join(", ", moduleCommandNames)})*";
             });
-            var dynamicCommandNames = Commands.Instance.CommandsList.Select(x => x.Name);
+            var dynamicCommandNames = new List<string>();
+            foreach (var cmd in Commands.Instance.CommandsList.Select(x => x.Name))
+            {
+                dynamicCommandNames.Add($"{BotSettings.Instance.BotPrefix}{cmd}");
+            }
             await ReplyAsync($"**Available static commands:** {string.Join(", ", staticCommandNames)}");
             await ReplyAsync($"**Available dynamic commands:** {string.Join(", ", dynamicCommandNames)}");
         }
