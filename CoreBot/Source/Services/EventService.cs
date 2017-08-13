@@ -33,7 +33,7 @@ namespace CoreBot.Services
         private async Task DisplayEventsDailyAsync()
         {
             var eventList = new List<string>();
-            if (Events.Instance.EventsList.FindAll(x => !x.Completed).Count > 0) eventList.Add($"Day changed to {DateTime.Now.DayOfWeek.ToString()}, {DateTime.Now.Date.ToString("dd-MM-yyyy")}. Events today:");
+            if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Today.Date).Count > 0) eventList.Add($"Day changed to {DateTime.Now.DayOfWeek.ToString()}, {DateTime.Now.Date.ToString("dd-MM-yyyy")}. Events today:");
             else eventList.Add($"Day changed to {DateTime.Now.DayOfWeek.ToString()}, {DateTime.Now.Date.ToString("dd-MM-yyyy")}. No events today.");
             foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed))
             {
