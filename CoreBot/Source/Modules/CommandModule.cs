@@ -11,6 +11,7 @@ using Serilog;
 namespace CoreBot.Modules
 {
     [Group("command"), Summary("Module for modifying and listing commands.")]
+    [Alias("commands"), Alias("cmd"), Alias("cmds")]
     public class CommandModule : ModuleBase
     {
         private readonly CommandDao _commandDao;
