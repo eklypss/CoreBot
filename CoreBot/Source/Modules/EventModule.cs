@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Collections;
@@ -26,7 +27,7 @@ namespace CoreBot.Modules
             DateTime eventDate;
             if (date == "today") date = DateTime.Now.ToString("dd-MM-yyyy");
             if (date == "tomorrow") date = DateTime.Now.AddDays(1).ToString("dd-MM-yyyy");
-            if (DateTime.TryParse(string.Format("{0} {1}", date, time), out eventDate))
+            if (DateTime.TryParse(string.Format("{0} {1}", date, time), new CultureInfo("fi-FI"), DateTimeStyles.AssumeLocal, out eventDate))
             {
                 var remainder = eventDate.Subtract(DateTime.Now);
                 if (remainder.TotalSeconds > 0)
