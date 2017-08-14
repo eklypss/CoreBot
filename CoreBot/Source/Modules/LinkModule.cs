@@ -9,7 +9,7 @@ namespace CoreBot.Modules
     /// </summary>
     public class LinkModule : ModuleBase
     {
-        [Command("twitch")]
+        [Command("twitch"), Summary("Allows users to quickly link Twitch channels.")]
         public async Task PostTwitchLink(string channel)
         {
             await ReplyAsync($"https://www.twitch.tv/{channel}");

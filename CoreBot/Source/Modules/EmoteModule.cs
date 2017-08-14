@@ -8,7 +8,7 @@ namespace CoreBot.Modules
     [Group("emote"), Summary("Module for listing custom server emotes.")]
     public class EmoteModule : ModuleBase
     {
-        [Command("find")]
+        [Command("find"), Summary("Lists all server emotes that contain the given string.")]
         public async Task GetEmotes(string searchTerm)
         {
             var emotes = Context.Guild.Emotes.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
@@ -21,7 +21,7 @@ namespace CoreBot.Modules
             else await ReplyAsync("No matches.");
         }
 
-        [Command("list")]
+        [Command("list"), Summary("Lists all the server emotes.")]
         [Alias("all")]
         public async Task ListEmotes()
         {

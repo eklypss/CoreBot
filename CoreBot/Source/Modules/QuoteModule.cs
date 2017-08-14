@@ -13,7 +13,7 @@ namespace CoreBot.Modules
             _quoteService = quoteService;
         }
 
-        [Command("viisaus")]
+        [Command("viisaus"), Summary("Displays a quote linked to the search term.")]
         [Alias("wiisaus")]
         public async Task Wisdom([Remainder] string searchTerm = "a")
         {

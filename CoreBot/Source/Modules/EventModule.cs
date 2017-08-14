@@ -9,7 +9,7 @@ using Humanizer;
 
 namespace CoreBot.Modules
 {
-    [Group("event")]
+    [Group("event"), Summary("Module for adding, viewing and editing events.")]
     [Alias("events")]
     public class EventModule : ModuleBase
     {
@@ -20,7 +20,7 @@ namespace CoreBot.Modules
             _eventService = eventService;
         }
 
-        [Command("add")]
+        [Command("add"), Summary("Adds a new event.")]
         public async Task AddEvent(string date, string time, [Remainder] string message)
         {
             DateTime eventDate;
@@ -39,7 +39,7 @@ namespace CoreBot.Modules
             else await ReplyAsync("Invalid date.");
         }
 
-        [Command("list")]
+        [Command("list"), Summary("Lists all uncompleted events.")]
         public async Task ListEvents()
         {
             if (Events.Instance.EventsList.Any(x => !x.Completed))
@@ -56,7 +56,7 @@ namespace CoreBot.Modules
             else await ReplyAsync("No events to list.");
         }
 
-        [Command("today")]
+        [Command("today"), Summary("Lists all uncompleted events that are occuring today.")]
         public async Task GetTodaysEvents()
         {
             if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.Date).Count > 0)
@@ -73,7 +73,7 @@ namespace CoreBot.Modules
             else await ReplyAsync("No events to list.");
         }
 
-        [Command("tomorrow")]
+        [Command("tomorrow"), Summary("Lists all uncompleted events that are occuring tomorrow.")]
         public async Task GetTomorrowsEvents()
         {
             if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.AddDays(1).Date).Count > 0)
@@ -90,7 +90,7 @@ namespace CoreBot.Modules
             else await ReplyAsync("No events to list.");
         }
 
-        [Command("find")]
+        [Command("find"), Summary("Lists all uncompleted events that contain the given string.")]
         public async Task FindEvents([Remainder] string searchTerm)
         {
             if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Message.ToLower().Contains(searchTerm.ToLower())).Count > 0)
@@ -107,7 +107,7 @@ namespace CoreBot.Modules
             else await ReplyAsync("No events found.");
         }
 
-        [Command("complete")]
+        [Command("complete"), Summary("Completes/removes an uncompleted event, marking it as completed.")]
         [Alias("delete")]
         public async Task CompleteEvent(int id)
         {
