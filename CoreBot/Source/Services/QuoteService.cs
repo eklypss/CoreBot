@@ -155,8 +155,7 @@ namespace CoreBot.Services
             {
                 return null;
             }
-            var randomChoice = quotes[_random.Next(quotes.Count)];
-            return randomChoice;
+            return quotes[_random.Next(quotes.Count)];
         }
 
         public IElement RemoveBookLink(IElement e)
