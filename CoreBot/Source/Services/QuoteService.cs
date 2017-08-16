@@ -38,19 +38,21 @@ namespace CoreBot.Services
             });
 
             var cookies = new CookieContainer();
-            var handler = new HttpClientHandler { CookieContainer = cookies };
-            using (var client = new HttpClient(handler))
+            using (var handler = new HttpClientHandler { CookieContainer = cookies })
             {
-                try
+                using (var client = new HttpClient(handler))
                 {
-                    var pagingResponse = await client.PostAsync(DefaultValues.VKS_PAGING, payload);
-                    var bodyStream = await pagingResponse.Content.ReadAsStreamAsync();
-                    return await StartQuoteFetchAsync(bodyStream, cookies);
-                }
-                catch (Exception e)
-                {
-                    Log.Error("Quote fail: " + e.ToString());
-                    return "500";
+                    try
+                    {
+                        var pagingResponse = await client.PostAsync(DefaultValues.VKS_PAGING, payload);
+                        var bodyStream = await pagingResponse.Content.ReadAsStreamAsync();
+                        return await StartQuoteFetchAsync(bodyStream, cookies);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error("Quote fail: " + e.ToString());
+                        return "500";
+                    }
                 }
             }
         }
