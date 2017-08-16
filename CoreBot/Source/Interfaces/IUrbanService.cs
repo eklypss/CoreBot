@@ -8,6 +8,6 @@ namespace CoreBot.Interfaces
     {
         Task<UrbanResponse> GetUrbanQuotesAsync(string searchTerm);
 
-        Task<List<string>> ParseQuotesAsync(UrbanResponse response);
+        string ParseQuotesAsync(UrbanResponse response);
     }
 }

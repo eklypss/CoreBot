@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
+using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Interfaces;
 using CoreBot.Models.Urban;
 using CoreBot.Settings;
 using Newtonsoft.Json;
 using Serilog;
+using System.Text;
 
 namespace CoreBot.Services
 {
@@ -19,21 +20,22 @@ namespace CoreBot.Services
                 http.DefaultRequestHeaders.Add("X-Mashape-Key", BotSettings.Instance.UrbanMashapeKey);
                 http.DefaultRequestHeaders.Add("Accept", "text/plain");
 
-                var result = await http.GetAsync($"https://mashape-community-urban-dictionary.p.mashape.com/define?term={searchTerm}");
-                var response = JsonConvert.DeserializeObject<UrbanResponse>(await result.Content.ReadAsStringAsync());
+                var result = await http.GetStringAsync($"https://mashape-community-urban-dictionary.p.mashape.com/define?term={searchTerm}");
+                var response = JsonConvert.DeserializeObject<UrbanResponse>(result);
                 Log.Information($"{response.Definitions.Count} definition(s) found for the term: {searchTerm}.");
                 return response;
             }
         }
 
-        public async Task<List<string>> ParseQuotesAsync(UrbanResponse response)
+        public string ParseQuotesAsync(UrbanResponse response)
         {
-            var list = new List<string>();
-            foreach (var definition in response.Definitions)
+            return response.Definitions.Aggregate(new StringBuilder(), (sb, cur) =>
             {
-                list.Add($"**[{definition.Word}]** *{definition.Description}*");
-            }
-            return list;
+                string row = $"**[{cur.Word}]** *{cur.Description}*\n";
+                if (sb.Length + row.Length <= 2000)
+                    sb.Append(row);
+                return sb;
+            }).ToString();
         }
     }
 }
