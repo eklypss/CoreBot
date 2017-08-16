@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Dom.Html;
 using AngleSharp.Parser.Html;
+using CoreBot.Interfaces;
 using CoreBot.Settings;
 using Serilog;
 
@@ -17,7 +18,7 @@ namespace CoreBot.Services
     /// <summary>
     /// Get a random example text from Kotus old literary finnish website.
     /// </summary>
-    public class QuoteService
+    public class QuoteService : IQuoteService
     {
         private readonly HtmlParser _parser;
         private readonly Random _random;
@@ -54,7 +55,7 @@ namespace CoreBot.Services
             }
         }
 
-        private async Task<string> StartQuoteFetch(Stream body, CookieContainer cookies)
+        public async Task<string> StartQuoteFetch(Stream body, CookieContainer cookies)
         {
             var soup = await _parser.ParseAsync(body);
 
@@ -89,7 +90,7 @@ namespace CoreBot.Services
         /// <returns>
         /// Task for valid link suffixes to VKS word pages. Empty enumerable if all invalid.
         /// </returns>
-        private async Task<IEnumerable<string>> FetchLinksFromPage(int pageNumber, CookieContainer cookies)
+        public async Task<IEnumerable<string>> FetchLinksFromPage(int pageNumber, CookieContainer cookies)
         {
             string url = $"{DefaultValues.VKS_URL}?p=searchresults&page={pageNumber}";
             var soup = await CookieFetch(url, cookies);
@@ -110,7 +111,7 @@ namespace CoreBot.Services
         /// <param name="wordLinks">0..15 link suffixes to word pages</param>
         /// <param name="cookies"></param>
         /// <returns>null if enumerable is empty</returns>
-        private async Task<string> SelectQuote(IEnumerable<string> wordLinks, CookieContainer cookies)
+        public async Task<string> SelectQuote(IEnumerable<string> wordLinks, CookieContainer cookies)
         {
             var timer = Stopwatch.StartNew();
             int fail = 0;
@@ -146,7 +147,7 @@ namespace CoreBot.Services
         /// </summary>
         /// <param name="soups">pages representing one word at VKS</param>
         /// <returns>cleaned quote phrase, or null on no quotes</returns>
-        private string RandomQuote(IEnumerable<IHtmlDocument> soups)
+        public string RandomQuote(IEnumerable<IHtmlDocument> soups)
         {
             var quotes = soups
                 .SelectMany(soup => soup.QuerySelectorAll("li.esimerkki span.esimteksti"))
@@ -162,7 +163,7 @@ namespace CoreBot.Services
             return randomChoice;
         }
 
-        private IElement RemoveBookLink(IElement e)
+        public IElement RemoveBookLink(IElement e)
         {
             var bookLink = e.QuerySelector("span");
             if (bookLink != null)
@@ -174,7 +175,7 @@ namespace CoreBot.Services
         }
 
         // Workaround for "TaskCanceledException" on linux
-        private async Task<IHtmlDocument> CookieFetch(string url, CookieContainer cookies)
+        public async Task<IHtmlDocument> CookieFetch(string url, CookieContainer cookies)
         {
             var handler = new HttpClientHandler { CookieContainer = cookies };
             using (var client = new HttpClient(handler))

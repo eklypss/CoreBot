@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Database.Dao;
+using CoreBot.Interfaces;
 using CoreBot.Services;
 using CoreBot.Settings;
 using Discord.Commands;
@@ -14,7 +15,7 @@ using Serilog;
 
 namespace CoreBot.Handlers
 {
-    public class CommandHandler
+    public class CommandHandler : ICommandHandler
     {
         private DiscordSocketClient _client;
         private CommandService _commandService;
@@ -53,7 +54,7 @@ namespace CoreBot.Handlers
             Log.Debug("CommandHandler installed.");
         }
 
-        private async Task HandleCommandAsync(SocketMessage message)
+        public async Task HandleCommandAsync(SocketMessage message)
         {
             Log.Information($"{message.Author.Username} ({message.Author}): {message.Content}");
             if (message == null) // This should never happen, but just in case.

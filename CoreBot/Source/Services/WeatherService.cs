@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AngleSharp.Parser.Html;
 using CoreBot.Helpers;
+using CoreBot.Interfaces;
 using CoreBot.Models.Weather;
 using CoreBot.Settings;
 using Humanizer;
@@ -15,7 +16,7 @@ using static CoreBot.Helpers.HelperMethods;
 
 namespace CoreBot.Services
 {
-    public class WeatherService
+    public class WeatherService : IWeatherService
     {
         private readonly HtmlParser _parser;
 
@@ -49,7 +50,7 @@ namespace CoreBot.Services
             }
         }
 
-        private async Task<string> FmiAsync(string location)
+        public async Task<string> FmiAsync(string location)
         {
             try
             {
@@ -83,7 +84,7 @@ namespace CoreBot.Services
             }
         }
 
-        private string CreateWeatherMessage(string location, object temp, string country,
+        public string CreateWeatherMessage(string location, object temp, string country,
             string status, object wind, DateTime timestamp)
         {
             string ago = (DateTime.Now - timestamp).Humanize();

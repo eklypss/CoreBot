@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using CoreBot.Interfaces;
 using CoreBot.Settings;
 using Discord;
 
 namespace CoreBot.Services
 {
-    public class MessageService
+    public class MessageService : IMessageService
     {
         private readonly IDiscordClient _client;
 

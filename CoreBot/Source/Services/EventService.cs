@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Database.Dao;
+using CoreBot.Interfaces;
 using CoreBot.Models;
 using FluentScheduler;
 using Humanizer;
@@ -10,7 +11,7 @@ using Serilog;
 
 namespace CoreBot.Services
 {
-    public class EventService : Registry
+    public class EventService : Registry, IEventService
     {
         private readonly MessageService _messageService;
         private readonly EventDao _eventDao;
@@ -30,7 +31,7 @@ namespace CoreBot.Services
             JobManager.AddJob(async () => await DisplayEventsDailyAsync(), (s) => s.ToRunEvery(1).Days().At(00, 00));
         }
 
-        private async Task DisplayEventsDailyAsync()
+        public async Task DisplayEventsDailyAsync()
         {
             var eventList = new List<string>();
             if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Today.Date).Count > 0) eventList.Add($"Day changed to {DateTime.Now.DayOfWeek.ToString()}, {DateTime.Now.Date.ToString("dd-MM-yyyy")}. Events today:");

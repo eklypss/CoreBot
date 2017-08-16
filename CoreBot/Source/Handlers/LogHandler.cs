@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
+using CoreBot.Interfaces;
 using Discord;
 using Discord.WebSocket;
 using Serilog;
 
 namespace CoreBot.Handlers
 {
-    public class LogHandler
+    public class LogHandler : ILogHandler
     {
         private DiscordSocketClient _client;
 
@@ -22,7 +23,7 @@ namespace CoreBot.Handlers
         /// messages on purpose.
         /// </summary>
         /// <param name="message">todo: describe message parameter on HandleLoggingAsync</param>
-        private async Task HandleLoggingAsync(LogMessage message)
+        public async Task HandleLoggingAsync(LogMessage message)
         {
             switch (message.Severity)
             {

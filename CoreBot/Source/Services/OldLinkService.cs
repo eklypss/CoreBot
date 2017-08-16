@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CoreBot.Database;
+using CoreBot.Interfaces;
 using CoreBot.Models;
 using CoreBot.Settings;
 using Discord;
@@ -14,7 +15,7 @@ using ServiceStack.OrmLite;
 
 namespace CoreBot.Services
 {
-    public class OldLinkService
+    public class OldLinkService : IOldLinkService
     {
         private readonly Regex _urlParser;
 
@@ -25,7 +26,7 @@ namespace CoreBot.Services
                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
-        private bool FilterBlacklisted(UriBuilder uri)
+        public bool FilterBlacklisted(UriBuilder uri)
         {
             string uriHost = uri.Host.ToLower();
             var blacklist = BotSettings.Instance.OldLinkBlacklist;
@@ -37,7 +38,7 @@ namespace CoreBot.Services
             return !blacklist.Any(blacklistUrl => uriHost.EndsWith(blacklistUrl, StringComparison.CurrentCultureIgnoreCase));
         }
 
-        private IEnumerable<string> Normalize(string message)
+        public IEnumerable<string> Normalize(string message)
         {
             return _urlParser.Matches(message)
                 .OfType<Match>()
@@ -67,7 +68,7 @@ namespace CoreBot.Services
             }
         }
 
-        private async Task SendMessageAsync(SocketMessage message, Link originalLink)
+        public async Task SendMessageAsync(SocketMessage message, Link originalLink)
         {
             string ago = (DateTime.Now - originalLink.Timestamp).Humanize();
             var users = await message.Channel.GetUsersAsync(CacheMode.AllowDownload).Flatten();
