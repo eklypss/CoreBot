@@ -11,13 +11,11 @@ namespace CoreBot.Modules
         [Command("find"), Summary("Lists all server emotes that contain the given string.")]
         public async Task GetEmotes(string searchTerm)
         {
-            var emotes = Context.Guild.Emotes.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
-            var emoteNames = new List<string>();
-            foreach (var emote in emotes)
-            {
-                emoteNames.Add($"<:{emote.Name}:{emote.Id}>");
-            }
-            if (emoteNames.Count > 0) await ReplyAsync(string.Join(" ", emoteNames));
+            var emoteNames = Context.Guild.Emotes
+                .Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()))
+                .Select(emote => $"<:{emote.Name}:{emote.Id}>");
+
+            if (emoteNames.Any()) await ReplyAsync(string.Join(" ", emoteNames));
             else await ReplyAsync("No matches.");
         }
 

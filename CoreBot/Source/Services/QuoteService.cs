@@ -66,20 +66,14 @@ namespace CoreBot.Services
             // Shuffle page numbers for iteration
             var pageOrder = Enumerable.Range(1, pageCount).OrderBy(_ => _random.Next());
 
-            foreach (int page in pageOrder)
+            string quote = await pageOrder.Select(async page =>
             {
+                Console.WriteLine("downloading page...");
                 var wordLinks = await FetchLinksFromPageAsync(page, cookies);
-                var quote = await SelectQuoteAsync(wordLinks, cookies);
+                return await SelectQuoteAsync(wordLinks, cookies);
+            }).FirstOrDefault(q => q != null);
 
-                // This page has either zero words, or only words which are references
-                if (quote == null)
-                {
-                    continue;
-                }
-
-                return quote;
-            }
-            return "no matches";
+            return quote ?? "no matches";
         }
 
         /// <summary>
