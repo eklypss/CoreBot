@@ -29,7 +29,7 @@ namespace CoreBot.Modules
                     // If the message length for all definitions is too long, just display the first definition.
                     // TODO: Change it shows as many definitions as possible (max length is 2000 characters).
                     await ReplyAsync(definitions.FirstOrDefault());
-                    Log.Warning($"Response lenght for all definitions is too long, responding with the first definition only.");
+                    Log.Warning($"Response length ({response.Length}) for all definitions is too long (limit: 2000), responding with the first definition only.");
                 }
                 else await ReplyAsync(response);
             }
