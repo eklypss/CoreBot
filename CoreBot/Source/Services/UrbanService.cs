@@ -20,7 +20,7 @@ namespace CoreBot.Services
                 http.DefaultRequestHeaders.Add("X-Mashape-Key", BotSettings.Instance.UrbanMashapeKey);
                 http.DefaultRequestHeaders.Add("Accept", "text/plain");
 
-                var result = await http.GetStringAsync($"https://mashape-community-urban-dictionary.p.mashape.com/define?term={searchTerm}");
+                var result = await http.GetStringAsync(string.Format(DefaultValues.URBAN_API_URL, searchTerm));
                 var response = JsonConvert.DeserializeObject<UrbanResponse>(result);
                 Log.Information($"{response.Definitions.Count} definition(s) found for the term: {searchTerm}.");
                 return response;
