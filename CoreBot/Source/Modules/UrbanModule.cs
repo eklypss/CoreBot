@@ -18,10 +18,8 @@ namespace CoreBot.Modules
         {
             var quotes = await _urbanService.GetUrbanQuotesAsync(searchTerm);
             string definitions = _urbanService.ParseQuotesAsync(quotes);
-            if (definitions.Length > 0)
-                await ReplyAsync(definitions);
-            else
-                await ReplyAsync("No definitions found.");
+            if (definitions.Length > 0) await ReplyAsync(definitions);
+            else await ReplyAsync("No definitions found.");
         }
     }
 }
