@@ -8,6 +8,10 @@ namespace CoreBot.Database.Dao
 {
     public class EventDao
     {
+        /// <summary>
+        /// Saves the given <see cref="Event"/> to the database.
+        /// </summary>
+        /// <param name="eve">Event to save.</param>
         public async Task SaveEventAsync(Event eve)
         {
             using (var connection = DbConnection.Open())
@@ -18,6 +22,10 @@ namespace CoreBot.Database.Dao
             }
         }
 
+        /// <summary>
+        /// Completes the given <see cref="Event"/>.
+        /// </summary>
+        /// <param name="eve">Event to complete.</param>
         public async Task CompleteEventAsync(Event eve)
         {
             using (var connection = DbConnection.Open())
