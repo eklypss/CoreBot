@@ -7,6 +7,7 @@ namespace CoreBot.Modules
     public class RandomModule : ModuleBase
     {
         [Command("random"), Summary("Generates a random number between two given values.")]
+        [Alias("rng", "rand", "rdm")]
         public async Task Random(int firstNumber, int secondNumber)
         {
             var random = new Random();
