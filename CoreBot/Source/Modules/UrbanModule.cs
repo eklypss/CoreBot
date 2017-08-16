@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CoreBot.Services;
 using Discord.Commands;
-using Serilog;
 
 namespace CoreBot.Modules
 {
