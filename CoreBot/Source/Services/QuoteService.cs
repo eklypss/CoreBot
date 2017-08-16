@@ -29,7 +29,7 @@ namespace CoreBot.Services
             _random = new Random();
         }
 
-        public async Task<string> Quote(string searchTerm)
+        public async Task<string> GetQuoteAsync(string searchTerm)
         {
             var payload = new FormUrlEncodedContent(new[]
             {
@@ -45,7 +45,7 @@ namespace CoreBot.Services
                 {
                     var pagingResponse = await client.PostAsync(DefaultValues.VKS_PAGING, payload);
                     var bodyStream = await pagingResponse.Content.ReadAsStreamAsync();
-                    return await StartQuoteFetch(bodyStream, cookies);
+                    return await StartQuoteFetchAsync(bodyStream, cookies);
                 }
                 catch (Exception e)
                 {
@@ -55,7 +55,7 @@ namespace CoreBot.Services
             }
         }
 
-        public async Task<string> StartQuoteFetch(Stream body, CookieContainer cookies)
+        public async Task<string> StartQuoteFetchAsync(Stream body, CookieContainer cookies)
         {
             var soup = await _parser.ParseAsync(body);
 
@@ -68,8 +68,8 @@ namespace CoreBot.Services
 
             foreach (int page in pageOrder)
             {
-                var wordLinks = await FetchLinksFromPage(page, cookies);
-                var quote = await SelectQuote(wordLinks, cookies);
+                var wordLinks = await FetchLinksFromPageAsync(page, cookies);
+                var quote = await SelectQuoteAsync(wordLinks, cookies);
 
                 // This page has either zero words, or only words which are references
                 if (quote == null)
@@ -90,10 +90,10 @@ namespace CoreBot.Services
         /// <returns>
         /// Task for valid link suffixes to VKS word pages. Empty enumerable if all invalid.
         /// </returns>
-        public async Task<IEnumerable<string>> FetchLinksFromPage(int pageNumber, CookieContainer cookies)
+        public async Task<IEnumerable<string>> FetchLinksFromPageAsync(int pageNumber, CookieContainer cookies)
         {
             string url = $"{DefaultValues.VKS_URL}?p=searchresults&page={pageNumber}";
-            var soup = await CookieFetch(url, cookies);
+            var soup = await CookieFetchAsync(url, cookies);
 
             var linkElements = soup.QuerySelectorAll("td.search-item-word");
 
@@ -111,7 +111,7 @@ namespace CoreBot.Services
         /// <param name="wordLinks">0..15 link suffixes to word pages</param>
         /// <param name="cookies"></param>
         /// <returns>null if enumerable is empty</returns>
-        public async Task<string> SelectQuote(IEnumerable<string> wordLinks, CookieContainer cookies)
+        public async Task<string> SelectQuoteAsync(IEnumerable<string> wordLinks, CookieContainer cookies)
         {
             var timer = Stopwatch.StartNew();
             int fail = 0;
@@ -119,7 +119,7 @@ namespace CoreBot.Services
             {
                 try
                 {
-                    return await CookieFetch(DefaultValues.VKS_URL + link, cookies);
+                    return await CookieFetchAsync(DefaultValues.VKS_URL + link, cookies);
                 }
                 catch (Exception e)
                 {
@@ -175,7 +175,7 @@ namespace CoreBot.Services
         }
 
         // Workaround for "TaskCanceledException" on linux
-        public async Task<IHtmlDocument> CookieFetch(string url, CookieContainer cookies)
+        public async Task<IHtmlDocument> CookieFetchAsync(string url, CookieContainer cookies)
         {
             var handler = new HttpClientHandler { CookieContainer = cookies };
             using (var client = new HttpClient(handler))

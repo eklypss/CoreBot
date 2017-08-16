@@ -18,7 +18,7 @@ namespace CoreBot.Modules
         public async Task Wisdom([Remainder] string searchTerm = "a")
         {
             // Use "a" as default value because its much faster than "*", and still matches 16/26k rows
-            await ReplyAsync(await _quoteService.Quote(searchTerm));
+            await ReplyAsync(await _quoteService.GetQuoteAsync(searchTerm));
         }
     }
 }
