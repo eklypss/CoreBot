@@ -14,6 +14,7 @@ namespace CoreBot.Interfaces
         string DefaultGuild { get; set; }
         string WeatherAPIKey { get; set; }
         string EPAPIKey { get; set; }
+        string UrbanMashapeKey { get; set; }
         List<string> OldLinkBlacklist { get; set; }
     }
 }

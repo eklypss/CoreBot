@@ -40,8 +40,11 @@ namespace CoreBot.Handlers
             _services.AddSingleton(new CommandDao());
             _services.AddSingleton(new QuoteService());
             _services.AddSingleton(new WeatherService());
+            _services.AddSingleton(new UrbanService());
+
             _services.AddSingleton(messageService);
             _services.AddSingleton(eventService);
+
             JobManager.Initialize(eventService);
             _services.AddSingleton(new EPClient(BotSettings.Instance.EPAPIKey));
             if (drinkDao != null) _services.AddSingleton(drinkDao);

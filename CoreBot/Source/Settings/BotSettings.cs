@@ -36,6 +36,7 @@ namespace CoreBot.Settings
         public string WeatherAPIKey { get; set; }
         public string EPAPIKey { get; set; }
         public List<string> OldLinkBlacklist { get; set; }
+        public string UrbanMashapeKey { get; set; }
 
         private BotSettings()
         {
