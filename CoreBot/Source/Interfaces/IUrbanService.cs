@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CoreBot.Models.Urban;
 
 namespace CoreBot.Interfaces
@@ -8,6 +7,6 @@ namespace CoreBot.Interfaces
     {
         Task<UrbanResponse> GetUrbanQuotesAsync(string searchTerm);
 
-        string ParseQuotesAsync(UrbanResponse response);
+        string ParseQuotes(UrbanResponse response);
     }
 }

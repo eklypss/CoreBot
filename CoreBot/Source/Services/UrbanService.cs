@@ -27,7 +27,7 @@ namespace CoreBot.Services
             }
         }
 
-        public string ParseQuotesAsync(UrbanResponse response)
+        public string ParseQuotes(UrbanResponse response)
         {
             return response.Definitions.Aggregate(new StringBuilder(), (sb, cur) =>
             {

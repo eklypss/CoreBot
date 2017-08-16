@@ -17,7 +17,7 @@ namespace CoreBot.Modules
         public async Task GetUrbanQuote([Remainder] string searchTerm)
         {
             var quotes = await _urbanService.GetUrbanQuotesAsync(searchTerm);
-            string definitions = _urbanService.ParseQuotesAsync(quotes);
+            string definitions = _urbanService.ParseQuotes(quotes);
             if (definitions.Length > 0) await ReplyAsync(definitions);
             else await ReplyAsync("No definitions found.");
         }
