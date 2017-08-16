@@ -26,7 +26,7 @@ namespace CoreBot.Services
             }
         }
 
-        public async Task<IEnumerable<string>> ParseQuotesAsync(UrbanResponse response)
+        public async Task<List<string>> ParseQuotesAsync(UrbanResponse response)
         {
             var list = new List<string>();
             foreach (var definition in response.Definitions)
