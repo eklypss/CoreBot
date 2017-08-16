@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Database.Dao;
@@ -93,8 +94,8 @@ namespace CoreBot.Modules
                 .Select(x => x.Name)
                 .Select(name => $"{BotSettings.Instance.BotPrefix}{name}");
 
-            await ReplyAsync($"**Available static commands:**\n{string.Join("\n", staticCommandNames)}");
-            await ReplyAsync($"**Available dynamic commands:**\n{string.Join("\n", dynamicCommandNames)}");
+            await ReplyAsync($"**Available static commands:**{Environment.NewLine}{string.Join(Environment.NewLine, staticCommandNames)}");
+            await ReplyAsync($"**Available dynamic commands:**{Environment.NewLine}{string.Join(Environment.NewLine, dynamicCommandNames)}");
         }
     }
 }
