@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace CoreBot.Services
         {
             return response.Definitions.Aggregate(new StringBuilder(), (sb, cur) =>
             {
-                string row = $"**[{cur.Word}]** *{cur.Description}*\n";
+                string row = $"**[{cur.Word}]** *{cur.Description}*{Environment.NewLine}";
                 if (sb.Length + row.Length <= 2000)
                     sb.Append(row);
                 return sb;
