@@ -1,12 +1,12 @@
-﻿using System.Net.Http;
-using System.Linq;
+﻿using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using CoreBot.Interfaces;
 using CoreBot.Models.Urban;
 using CoreBot.Settings;
 using Newtonsoft.Json;
 using Serilog;
-using System.Text;
 
 namespace CoreBot.Services
 {
