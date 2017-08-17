@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace CoreBot.Exceptions
 {
@@ -17,7 +18,7 @@ namespace CoreBot.Exceptions
         {
         }
 
-        protected CoreBotException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context)
+        protected CoreBotException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }
