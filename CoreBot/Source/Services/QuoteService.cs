@@ -70,7 +70,7 @@ namespace CoreBot.Services
 
             string quote = await pageOrder.Select(async page =>
             {
-                Console.WriteLine("downloading page...");
+                Log.Information("Downloading page...");
                 var wordLinks = await FetchLinksFromPageAsync(page, cookies);
                 return await SelectQuoteAsync(wordLinks, cookies);
             }).FirstOrDefault(q => q != null);
