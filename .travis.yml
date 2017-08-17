@@ -1,0 +1,14 @@
+language: csharp
+solution: CoreBot.sln
+mono: none
+dotnet: 2.0.0
+dist: trusty
+before_install:
+- openssl aes-256-cbc -K $encrypted_a207b69bc07f_key -iv $encrypted_a207b69bc07f_iv
+  -in CoreBot.Scripts/deploy_key.enc -out deploy_key -d
+- chmod 600 deploy_key
+- chmod +x CoreBot.Scripts/*
+script:
+- dotnet restore
+- dotnet test CoreBot.Test
+- CoreBot.Scripts/travis-deploy.sh
