@@ -11,7 +11,7 @@ namespace CoreBot.Modules
         public async Task Random(int firstNumber, int secondNumber)
         {
             var random = new Random();
-            await ReplyAsync($"{random.Next(firstNumber, secondNumber)}");
+            await ReplyAsync($"{random.Next(firstNumber, secondNumber + 1)}");
         }
     }
 }
