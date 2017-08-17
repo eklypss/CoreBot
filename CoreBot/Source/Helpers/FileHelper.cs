@@ -13,8 +13,8 @@ namespace CoreBot.Helpers
     {
         public async static Task CheckFilesAsync()
         {
+            Log.Information("Checking bot files.");
             if (!Directory.Exists(BotSettings.Instance.SettingsFolder)) await CreateFileAsync(FileType.SettingsFolder);
-
             if (!File.Exists(BotSettings.Instance.SettingsFile)) await CreateFileAsync(FileType.SettingsFile);
             else await LoadFileAsync(FileType.SettingsFile);
             await DbConnection.InitAsync();
