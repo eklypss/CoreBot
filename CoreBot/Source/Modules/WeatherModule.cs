@@ -19,7 +19,6 @@ namespace CoreBot.Modules
         public async Task Weather([Remainder] string location)
         {
             Log.Information($"Getting weather data for the given location: {location}.");
-
             var weather = await _weatherService.GetWeatherDataAsync(location);
             await ReplyAsync(weather);
         }

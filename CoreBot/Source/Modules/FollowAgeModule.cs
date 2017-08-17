@@ -7,14 +7,13 @@ namespace CoreBot.Modules
 {
     public class FollowAgeModule : ModuleBase
     {
+        private static readonly HttpClient _http = new HttpClient();
+
         [Command("followage"), Summary("Displays how long the specified user has followed the specified Twitch channel.")]
         public async Task GetFollowAge(string user, string channel)
         {
-            using (var http = new HttpClient())
-            {
-                var result = await http.GetAsync(string.Format(DefaultValues.FOLLOWAGE_URL, user, channel));
-                await ReplyAsync(await result.Content.ReadAsStringAsync());
-            }
+            var result = await _http.GetAsync(string.Format(DefaultValues.FOLLOWAGE_URL, user, channel));
+            await ReplyAsync(await result.Content.ReadAsStringAsync());
         }
     }
 }

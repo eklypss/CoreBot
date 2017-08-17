@@ -13,19 +13,18 @@ namespace CoreBot.Services
 {
     public class UrbanService : IUrbanService
     {
+        private static readonly HttpClient _http = new HttpClient();
+
         public async Task<UrbanResponse> GetUrbanQuotesAsync(string searchTerm)
         {
-            using (var http = new HttpClient())
-            {
-                Log.Information($"Getting definitions for the given term: {searchTerm}.");
-                http.DefaultRequestHeaders.Add("X-Mashape-Key", BotSettings.Instance.UrbanMashapeKey);
-                http.DefaultRequestHeaders.Add("Accept", "text/plain");
+            Log.Information($"Getting definitions for the given term: {searchTerm}.");
+            _http.DefaultRequestHeaders.Add("X-Mashape-Key", BotSettings.Instance.UrbanMashapeKey);
+            _http.DefaultRequestHeaders.Add("Accept", "text/plain");
 
-                var result = await http.GetStringAsync(string.Format(DefaultValues.URBAN_API_URL, searchTerm));
-                var response = JsonConvert.DeserializeObject<UrbanResponse>(result);
-                Log.Information($"{response.Definitions.Count} definition(s) found for the term: {searchTerm}.");
-                return response;
-            }
+            var result = await _http.GetStringAsync(string.Format(DefaultValues.URBAN_API_URL, searchTerm));
+            var response = JsonConvert.DeserializeObject<UrbanResponse>(result);
+            Log.Information($"{response.Definitions.Count} definition(s) found for the term: {searchTerm}.");
+            return response;
         }
 
         public string ParseQuotes(UrbanResponse response)
