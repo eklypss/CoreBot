@@ -10,7 +10,7 @@ fi
 BUILD_DIR="CoreBot/bin/Release/netcoreapp2.0/linux-arm/publish"
 
 eval "$(ssh-agent -s)"
-ssh-add /tmp/deploy_key
+ssh-add deploy_key
 
 dotnet publish -c Release -r linux-arm CoreBot
 echo "publish done"
