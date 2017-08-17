@@ -14,5 +14,11 @@ namespace CoreBot.Modules
         {
             await ReplyAsync($"https://www.twitch.tv/{channel}");
         }
+
+        [Command("twitter"), Summary("Allows users to quickly link Twitter user profiles.")]
+        public async Task PostTwitterLink(string user)
+        {
+            await ReplyAsync($"https://twitter.com/{user}");
+        }
     }
 }
