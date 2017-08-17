@@ -41,7 +41,7 @@ namespace CoreBot.Services
                 var remainder = eve.Date.Subtract(DateTime.Now);
                 if (remainder.TotalHours < 24)
                 {
-                    eventList.Add($"{eve.Message}, **time left:** {remainder.Humanize(2)}.");
+                    eventList.Add($"{eve.Message}, **time left:** {remainder.Humanize(3)}.");
                 }
             }
             await _messageService.SendMessageToDefaultChannelAsync(string.Join(Environment.NewLine, eventList));

@@ -32,7 +32,7 @@ namespace CoreBot.Modules
                 var remainder = eventDate.Subtract(DateTime.Now);
                 if (remainder.TotalSeconds > 0)
                 {
-                    await ReplyAsync($"Event added: {message}, **time left:** {remainder.Humanize(2)}.");
+                    await ReplyAsync($"Event added: {message}, **time left:** {remainder.Humanize(3)}.");
                     await _eventService.CreateEventAsync(message, eventDate);
                 }
                 else await ReplyAsync("Invalid date.");
@@ -50,7 +50,7 @@ namespace CoreBot.Modules
                 foreach (var eve in Events.Instance.EventsList.Where(x => !x.Completed))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}.");
+                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(3)}.");
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
@@ -67,7 +67,7 @@ namespace CoreBot.Modules
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.Date))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}.");
+                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(3)}.");
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
@@ -84,7 +84,7 @@ namespace CoreBot.Modules
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.AddDays(1).Date))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}.");
+                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(3)}.");
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
@@ -99,7 +99,7 @@ namespace CoreBot.Modules
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
                 var nextEvent = Events.Instance.EventsList.FirstOrDefault(x => !x.Completed);
                 var remainder = nextEvent.Date.Subtract(DateTime.Now);
-                await ReplyAsync($"Next event: {nextEvent.Message} (id: {nextEvent.Id}), **time left:** {remainder.Humanize(2)}.");
+                await ReplyAsync($"Next event: {nextEvent.Message} (id: {nextEvent.Id}), **time left:** {remainder.Humanize(3)}.");
             }
             else await ReplyAsync("No events to list.");
         }
@@ -114,7 +114,7 @@ namespace CoreBot.Modules
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Message.ToLower().Contains(searchTerm.ToLower())))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(2)}.");
+                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(3)}.");
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
