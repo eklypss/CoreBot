@@ -91,6 +91,19 @@ namespace CoreBot.Modules
             else await ReplyAsync("No events to list.");
         }
 
+        [Command("next"), Summary("Displays the next event.")]
+        public async Task GetNextEvent()
+        {
+            if (Events.Instance.EventsList.FindAll(x => !x.Completed).Count > 0)
+            {
+                Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
+                var nextEvent = Events.Instance.EventsList.FirstOrDefault(x => !x.Completed);
+                var remainder = nextEvent.Date.Subtract(DateTime.Now);
+                await ReplyAsync($"Next event: {nextEvent.Message} (id: {nextEvent.Id}), **time left:** {remainder.Humanize(2)}.");
+            }
+            else await ReplyAsync("No events to list.");
+        }
+
         [Command("find"), Summary("Lists all uncompleted events that contain the given string.")]
         public async Task FindEvents([Remainder] string searchTerm)
         {
