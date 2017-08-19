@@ -20,6 +20,7 @@ namespace CoreBot.Database
                 connection.CreateTableIfNotExists<Command>();
                 connection.CreateTableIfNotExists<Link>();
                 connection.CreateTableIfNotExists<Event>();
+                connection.CreateTableIfNotExists<Aroma>();
 
                 Commands.Instance.CommandsList = await connection.SelectAsync<Command>();
                 Log.Information($"Loaded {Commands.Instance.CommandsList.Count} commands from {BotSettings.Instance.DatabaseString}.");

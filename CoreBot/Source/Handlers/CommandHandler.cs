@@ -41,6 +41,7 @@ namespace CoreBot.Handlers
             _services.AddSingleton(new QuoteService());
             _services.AddSingleton(new WeatherService());
             _services.AddSingleton(new UrbanService());
+            _services.AddSingleton(new AromaService(new AromaDao()));
 
             _services.AddSingleton(messageService);
             _services.AddSingleton(eventService);
