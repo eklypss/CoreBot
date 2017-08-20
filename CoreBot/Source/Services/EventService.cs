@@ -27,7 +27,7 @@ namespace CoreBot.Services
         public async Task InitAsync()
         {
             await CompleteOutdatedEventsAsync();
-            await SchedulePreviousEventsAsync();
+            SchedulePreviousEvents();
             JobManager.AddJob(async () => await DisplayEventsDailyAsync(), (s) => s.ToRunEvery(1).Days().At(00, 00));
         }
 
@@ -51,11 +51,11 @@ namespace CoreBot.Services
         {
             Log.Information($"Creating event: {msg}, to happen at {date.ToString()}.");
             var eve = new Event { Message = msg, Date = date, Completed = false };
-            await ScheduleEventAsync(eve);
+            ScheduleEvent(eve);
             await _eventDao.SaveEventAsync(eve);
         }
 
-        public async Task ScheduleEventAsync(Event eve)
+        public void ScheduleEvent(Event eve)
         {
             Log.Information($"Scheduling event:  {eve.Message}.");
             JobManager.AddJob(async () => await CompleteEventAsync(eve), (s) => s.ToRunOnceAt(eve.Date));
@@ -80,11 +80,11 @@ namespace CoreBot.Services
             }
         }
 
-        public async Task SchedulePreviousEventsAsync()
+        public void SchedulePreviousEvents()
         {
             foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed))
             {
-                await ScheduleEventAsync(eve);
+                ScheduleEvent(eve);
             }
             Log.Information($"Scheduled {Events.Instance.EventsList.FindAll(x => !x.Completed).Count} previous events.");
         }

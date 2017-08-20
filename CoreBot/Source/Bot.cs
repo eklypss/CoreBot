@@ -14,7 +14,7 @@ namespace CoreBot
         private readonly HandlerService _handler;
         private DiscordSocketClient _client;
 
-        public static void Main(string[] args) => new Bot().MainAsync().GetAwaiter().GetResult();
+        public static void Main() => new Bot().MainAsync().GetAwaiter().GetResult();
 
         private Bot()
         {
@@ -23,7 +23,7 @@ namespace CoreBot
 
         private async Task MainAsync()
         {
-            await LogHelper.CreateLoggerAsync(BotSettings.Instance.LogToFile);
+            LogHelper.CreateLogger(BotSettings.Instance.LogToFile);
             await FileHelper.CheckFilesAsync();
 
             if (!string.IsNullOrWhiteSpace(BotSettings.Instance.BotToken))
@@ -33,7 +33,7 @@ namespace CoreBot
                 await _client.StartAsync();
 
                 // Install handlers
-                await _handler.LogHandler.InstallAsync(_client);
+                _handler.LogHandler.Install(_client);
                 await _handler.CommandHandler.InstallAsync(_client);
             }
             else

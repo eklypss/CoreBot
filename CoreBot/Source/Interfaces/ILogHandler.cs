@@ -6,8 +6,8 @@ namespace CoreBot.Interfaces
 {
     public interface ILogHandler
     {
-        Task InstallAsync(DiscordSocketClient client);
+        void Install(DiscordSocketClient client);
 
-        Task HandleLoggingAsync(LogMessage message);
+        Task PrintDiscordMessage(LogMessage message);
     }
 }

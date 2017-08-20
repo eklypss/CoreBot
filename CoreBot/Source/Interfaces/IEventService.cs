@@ -12,12 +12,12 @@ namespace CoreBot.Interfaces
 
         Task CreateEventAsync(string msg, DateTime date);
 
-        Task ScheduleEventAsync(Event eve);
+        void ScheduleEvent(Event eve);
 
         Task CompleteEventAsync(Event eve);
 
         Task CompleteOutdatedEventsAsync();
 
-        Task SchedulePreviousEventsAsync();
+        void SchedulePreviousEvents();
     }
 }

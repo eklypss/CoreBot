@@ -10,20 +10,19 @@ namespace CoreBot.Handlers
     {
         private DiscordSocketClient _client;
 
-        public async Task InstallAsync(DiscordSocketClient client)
+        public void Install(DiscordSocketClient client)
         {
             _client = client;
-            _client.Log += HandleLoggingAsync;
+            _client.Log += PrintDiscordMessage;
             Log.Debug("LogHandler installed.");
-            await Task.CompletedTask;
         }
 
         /// <summary>
         /// Output messages by the main <see cref="IDiscordClient"/>. Separated from all other log
-        /// messages on purpose.
+        /// messages on purpose. Logging to file is blocking so it should be executed on another thread.
         /// </summary>
         /// <param name="message">todo: describe message parameter on HandleLoggingAsync</param>
-        public async Task HandleLoggingAsync(LogMessage message)
+        public async Task PrintDiscordMessage(LogMessage message)
         {
             switch (message.Severity)
             {
@@ -31,22 +30,29 @@ namespace CoreBot.Handlers
                 case LogSeverity.Verbose:
                 case LogSeverity.Info:
                 {
-                    Log.Information($"[Discord] {message.Message}");
+                    await Task.Run(() => Log.Information($"[Discord] {message.Message}"));
                     break;
                 }
                 case LogSeverity.Critical:
                 case LogSeverity.Error:
                 {
-                    Log.Error($"[Discord] [{message.Severity}] {message.Message} {message.Exception} {message.Source}");
+                    await Task.Run(() =>
+                    {
+                        Log.Error($"[Discord] [{message.Severity}] {message.Message} " +
+                            $"{message.Exception} {message.Source}");
+                    });
                     break;
                 }
                 case LogSeverity.Warning:
                 {
-                    Log.Warning($"[Discord] [{message.Severity}] {message.Message} {message.Exception} {message.Source}");
+                    await Task.Run(() =>
+                    {
+                        Log.Warning($"[Discord] [{message.Severity}] {message.Message} " +
+                            $"{message.Exception} {message.Source}");
+                    });
                     break;
                 }
             }
-            await Task.CompletedTask;
         }
     }
 }

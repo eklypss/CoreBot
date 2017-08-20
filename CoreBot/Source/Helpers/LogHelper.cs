@@ -1,13 +1,12 @@
 ﻿using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using Serilog;
 
 namespace CoreBot.Helpers
 {
     public static class LogHelper
     {
-        public async static Task CreateLoggerAsync(bool logToFile)
+        public static void CreateLogger(bool logToFile)
         {
             if (logToFile)
             {
@@ -21,7 +20,6 @@ namespace CoreBot.Helpers
             {
                 Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.LiterateConsole().CreateLogger();
             }
-            await Task.CompletedTask;
         }
     }
 }
