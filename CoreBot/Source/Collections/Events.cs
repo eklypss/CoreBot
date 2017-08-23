@@ -5,18 +5,11 @@ namespace CoreBot.Collections
 {
     public class Events
     {
-        private static Events _instance;
+        private static Events _instance = new Events();
 
         public static Events Instance
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new Events();
-                }
-                return _instance;
-            }
+            get { return _instance; }
         }
 
         public List<Event> EventsList { get; set; }
