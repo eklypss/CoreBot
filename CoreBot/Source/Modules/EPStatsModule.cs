@@ -36,7 +36,7 @@ namespace CoreBot.Modules
         {
             var id = await _client.GetPlayerIdAsync(playerName);
             var stats = await _client.GetPlayerStatsAsync(id);
-            var data = stats.Data.FindAll(x => x.Season.EndYear == 2017);
+            var data = stats.Data.FindAll(x => x.Season.EndYear == 2018);
 
             if (data != null)
             {
