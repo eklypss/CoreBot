@@ -140,7 +140,7 @@ namespace CoreBot.Modules
             var eve = Events.Instance.EventsList.FirstOrDefault(x => x.Id == id);
             if (eve != null)
             {
-                await ReplyAsync($"**Event ID:** {eve.Id} **Date:** {eve.Date.ToString()} **Completed:** {eve.Completed}");
+                await ReplyAsync($"**Event ID:** {eve.Id} **Message:** {eve.Message} **Date:** {eve.Date.ToString()} **Completed:** {eve.Completed}");
             }
             else await ReplyAsync("Event not found.");
         }
