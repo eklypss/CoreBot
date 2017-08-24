@@ -26,17 +26,17 @@ namespace CoreBot.Settings
         }
 
         public string BotToken { get; set; } = string.Empty;
-        public char BotPrefix { get; set; }
-        public string DefaultChannel { get; set; }
-        public string DefaultGuild { get; set; }
-        public string DatabaseString { get; set; }
+        public char BotPrefix { get; set; } = DefaultValues.DEFAULT_PREFIX;
+        public string DefaultChannel { get; set; } = string.Empty;
+        public string DefaultGuild { get; set; } = string.Empty;
+        public string DatabaseString { get; set; } = string.Empty;
         public bool LogToFile { get; set; } = true;
-        public string SettingsFolder { get; set; }
-        public string SettingsFile { get; set; }
-        public string WeatherAPIKey { get; set; }
-        public string EPAPIKey { get; set; }
+        public string SettingsFolder { get; set; } = string.Empty;
+        public string SettingsFile { get; set; } = string.Empty;
+        public string WeatherAPIKey { get; set; } = string.Empty;
+        public string EPAPIKey { get; set; } = string.Empty;
         public List<string> OldLinkBlacklist { get; set; }
-        public string UrbanMashapeKey { get; set; }
+        public string UrbanMashapeKey { get; set; } = string.Empty;
 
         private BotSettings()
         {
