@@ -5,7 +5,7 @@ namespace CoreBot.Collections
 {
     public class Events
     {
-        private static Events _instance = new Events();
+        private static readonly Events _instance = new Events();
 
         public static Events Instance
         {

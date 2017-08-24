@@ -5,7 +5,7 @@ namespace CoreBot.Collections
 {
     public class Commands
     {
-        private static Commands _instance = new Commands();
+        private static readonly Commands _instance = new Commands();
 
         public static Commands Instance
         {
