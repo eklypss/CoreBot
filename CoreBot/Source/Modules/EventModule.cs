@@ -132,5 +132,17 @@ namespace CoreBot.Modules
             }
             else await ReplyAsync("Event not found.");
         }
+
+        [Command("info"), Summary("Shows basic information about the specified event.")]
+        [Alias("details")]
+        public async Task ShowEventDetails(int id)
+        {
+            var eve = Events.Instance.EventsList.FirstOrDefault(x => x.Id == id);
+            if (eve != null)
+            {
+                await ReplyAsync($"**Event ID:** {eve.Id} **Date:** {eve.Date.ToString()} **Completed:** {eve.Completed}");
+            }
+            else await ReplyAsync("Event not found.");
+        }
     }
 }
