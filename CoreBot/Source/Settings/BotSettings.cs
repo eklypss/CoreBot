@@ -31,8 +31,8 @@ namespace CoreBot.Settings
         public string DefaultGuild { get; set; } = string.Empty;
         public string DatabaseString { get; set; } = string.Empty;
         public bool LogToFile { get; set; } = true;
-        public string SettingsFolder { get; set; } = string.Empty;
-        public string SettingsFile { get; set; } = string.Empty;
+        public string SettingsFolder { get; set; }
+        public string SettingsFile { get; set; }
         public string WeatherAPIKey { get; set; } = string.Empty;
         public string EPAPIKey { get; set; } = string.Empty;
         public List<string> OldLinkBlacklist { get; set; }
