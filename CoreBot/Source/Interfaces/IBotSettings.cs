@@ -16,5 +16,8 @@ namespace CoreBot.Interfaces
         string EPAPIKey { get; set; }
         string UrbanMashapeKey { get; set; }
         List<string> OldLinkBlacklist { get; set; }
+        string DateTimeFormat { get; set; }
+        string DateFormat { get; set; }
+        string DateTimeCulture { get; set; }
     }
 }
