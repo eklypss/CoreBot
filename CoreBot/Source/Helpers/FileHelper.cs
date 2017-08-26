@@ -89,8 +89,14 @@ namespace CoreBot.Helpers
                         Log.Information("Trying to load configuration files.");
                         BotSettings.Instance = JsonConvert.DeserializeObject<BotSettings>(File.ReadAllText(BotSettings.Instance.SettingsFile));
                         Log.Information("Successfully loaded the configuration file.");
-                        if (BotSettings.Instance.DatabaseString == null) BotSettings.Instance.DatabaseString = DefaultValues.DEFAULT_DATABASE_STRING;
+
+                        // If values have not been set, use default values instead.
                         if (BotSettings.Instance.BotPrefix == '\0') BotSettings.Instance.BotPrefix = DefaultValues.DEFAULT_PREFIX;
+                        if (string.IsNullOrEmpty(BotSettings.Instance.DatabaseString)) BotSettings.Instance.DatabaseString = DefaultValues.DEFAULT_DATABASE_STRING;
+                        if (string.IsNullOrEmpty(BotSettings.Instance.DateTimeFormat)) BotSettings.Instance.DateTimeFormat = DefaultValues.DEFAULT_DATETIME_FORMAT;
+                        if (string.IsNullOrEmpty(BotSettings.Instance.DateFormat)) BotSettings.Instance.DateFormat = DefaultValues.DEFAULT_DATE_FORMAT;
+                        if (string.IsNullOrEmpty(BotSettings.Instance.DateTimeCulture)) BotSettings.Instance.DateTimeCulture = DefaultValues.DEFAULT_CULTURE;
+
                         // Used to sync new settings to old settings file without having to re-create it.
                         await SaveFileAsync(FileType.SettingsFile);
                     }

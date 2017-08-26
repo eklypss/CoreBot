@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Services;
+using CoreBot.Settings;
 using Discord.Commands;
 using Humanizer;
 
@@ -25,9 +26,9 @@ namespace CoreBot.Modules
         public async Task AddEvent(string date, string time, [Remainder] string message)
         {
             DateTime eventDate;
-            if (date == "today") date = DateTime.Now.ToString("dd-MM-yyyy");
-            if (date == "tomorrow") date = DateTime.Now.AddDays(1).ToString("dd-MM-yyyy");
-            if (DateTime.TryParse(string.Format("{0} {1}", date, time), new CultureInfo("fi-FI"), DateTimeStyles.AssumeLocal, out eventDate))
+            if (date == "today") date = DateTime.Now.ToString(BotSettings.Instance.DateFormat);
+            if (date == "tomorrow") date = DateTime.Now.AddDays(1).ToString(BotSettings.Instance.DateFormat);
+            if (DateTime.TryParse(string.Format("{0} {1}", date, time), new CultureInfo(BotSettings.Instance.DateTimeCulture), DateTimeStyles.AssumeLocal, out eventDate))
             {
                 var remainder = eventDate.Subtract(DateTime.Now);
                 if (remainder.TotalSeconds > 0)
@@ -140,7 +141,7 @@ namespace CoreBot.Modules
             var eve = Events.Instance.EventsList.FirstOrDefault(x => x.Id == id);
             if (eve != null)
             {
-                await ReplyAsync($"**Event ID:** {eve.Id} **Message:** {eve.Message} **Date:** {eve.Date.ToString()} **Completed:** {eve.Completed}");
+                await ReplyAsync($"**Event ID:** {eve.Id} **Message:** {eve.Message} **Date:** {eve.Date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))} **Completed:** {eve.Completed}");
             }
             else await ReplyAsync("Event not found.");
         }

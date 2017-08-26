@@ -17,5 +17,9 @@
         public const string URBAN_API_URL = "https://mashape-community-urban-dictionary.p.mashape.com/define?term={0}";
         public const string VKS_URL = "http://kaino.kotus.fi/vks/";
         public const string VKS_PAGING = VKS_URL + "?p=searchresults";
+
+        public const string DEFAULT_DATETIME_FORMAT = "dd/MM/yyyy H:mm:ss";
+        public const string DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
+        public const string DEFAULT_CULTURE = "fi-FI";
     }
 }

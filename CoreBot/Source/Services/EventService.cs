@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Database.Dao;
 using CoreBot.Interfaces;
 using CoreBot.Models;
+using CoreBot.Settings;
 using FluentScheduler;
 using Humanizer;
 using Serilog;
@@ -35,7 +37,7 @@ namespace CoreBot.Services
         {
             var eventList = new List<string>();
             if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Today.Date).Count > 0) eventList.Add($"Day changed to {DateTime.Now.DayOfWeek.ToString()}, {DateTime.Now.Date.ToString("dd-MM-yyyy")}. Events today:");
-            else eventList.Add($"Day changed to {DateTime.Now.DayOfWeek.ToString()}, {DateTime.Now.Date.ToString("dd-MM-yyyy")}. No events today.");
+            else eventList.Add($"Day changed to {DateTime.Now.DayOfWeek.ToString()}, {DateTime.Now.Date.ToString(BotSettings.Instance.DateFormat)}. No events today.");
             foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed))
             {
                 var remainder = eve.Date.Subtract(DateTime.Now);
@@ -49,7 +51,7 @@ namespace CoreBot.Services
 
         public async Task CreateEventAsync(string msg, DateTime date)
         {
-            Log.Information($"Creating event: {msg}, to happen at {date.ToString()}.");
+            Log.Information($"Creating event: {msg}, to happen at {date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))}.");
             var eve = new Event { Message = msg, Date = date, Completed = false };
             ScheduleEvent(eve);
             await _eventDao.SaveEventAsync(eve);

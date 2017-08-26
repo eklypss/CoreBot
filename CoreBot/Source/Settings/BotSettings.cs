@@ -37,6 +37,9 @@ namespace CoreBot.Settings
         public string EPAPIKey { get; set; } = string.Empty;
         public List<string> OldLinkBlacklist { get; set; }
         public string UrbanMashapeKey { get; set; } = string.Empty;
+        public string DateTimeFormat { get; set; }
+        public string DateFormat { get; set; }
+        public string DateTimeCulture { get; set; }
 
         private BotSettings()
         {
