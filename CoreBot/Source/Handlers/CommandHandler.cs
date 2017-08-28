@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Globalization;
 using System.Reflection;
 using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Database.Dao;
 using CoreBot.Interfaces;
+using CoreBot.Models;
 using CoreBot.Services;
 using CoreBot.Settings;
 using Discord.Commands;
@@ -45,6 +47,7 @@ namespace CoreBot.Handlers
             _services.AddSingleton(new EPClient(BotSettings.Instance.EPAPIKey));
             _services.AddSingleton(messageService);
             _services.AddSingleton(eventService);
+            _services.AddSingleton(new StartupTime());
             if (drinkDao != null) _services.AddSingleton(drinkDao);
             _oldLinkService = new OldLinkService();
 

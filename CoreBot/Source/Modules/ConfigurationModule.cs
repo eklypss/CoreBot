@@ -1,8 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CoreBot.Enum;
 using CoreBot.Helpers;
+using CoreBot.Models;
 using CoreBot.Settings;
 using Discord.Commands;
+using Humanizer;
 
 namespace CoreBot.Modules
 {
@@ -11,12 +14,25 @@ namespace CoreBot.Modules
     /// </summary>
     public class ConfigurationModule : ModuleBase
     {
+        private readonly StartupTime _startupTime;
+
+        public ConfigurationModule(StartupTime startupTime)
+        {
+            _startupTime = startupTime;
+        }
+
         [Command("prefix"), Summary("Sets the command prefix used by the bot.")]
         public async Task SetPrefix(char prefix)
         {
             BotSettings.Instance.BotPrefix = prefix;
             await FileHelper.SaveFileAsync(FileType.SettingsFile);
             await ReplyAsync($"Prefix was changed to: **{prefix}**");
+        }
+
+        [Command("uptime"), Summary("Gets the uptime of the bot (aka time since bot was started)")]
+        public async Task GetUptime()
+        {
+            await ReplyAsync($"Bot started: {_startupTime.StartTime.Subtract(DateTime.Now).Humanize(2)} ago (at  **{_startupTime.StartTime.ToString()}**)");
         }
     }
 }
