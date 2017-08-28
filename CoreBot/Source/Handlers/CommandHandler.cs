@@ -42,14 +42,13 @@ namespace CoreBot.Handlers
             _services.AddSingleton(new WeatherService());
             _services.AddSingleton(new UrbanService());
             _services.AddSingleton(new AromaService(new AromaDao()));
-
+            _services.AddSingleton(new EPClient(BotSettings.Instance.EPAPIKey));
             _services.AddSingleton(messageService);
             _services.AddSingleton(eventService);
-
-            JobManager.Initialize(eventService);
-            _services.AddSingleton(new EPClient(BotSettings.Instance.EPAPIKey));
             if (drinkDao != null) _services.AddSingleton(drinkDao);
             _oldLinkService = new OldLinkService();
+
+            JobManager.Initialize(eventService);
 
             // Build ServiceProvider and add modules
             _serviceProvider = _services.BuildServiceProvider();
@@ -61,7 +60,7 @@ namespace CoreBot.Handlers
         public async Task HandleCommandAsync(SocketMessage message)
         {
             Log.Information($"{message.Author.Username} ({message.Author}): {message.Content}");
-            if (message == null) // This should never happen, but just in case.
+            if (message.Author == null) // This should never happen, but just in case.
             {
                 Log.Warning($"Message {message.Id} is not from a valid user.");
             }
