@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using CoreBot.Enum;
 using CoreBot.Helpers;
@@ -32,7 +33,7 @@ namespace CoreBot.Modules
         [Command("uptime"), Summary("Gets the uptime of the bot (aka time since bot was started)")]
         public async Task GetUptime()
         {
-            await ReplyAsync($"Bot started {_startupTime.StartTime.Subtract(DateTime.Now).Humanize(2)} ago (at  *{_startupTime.StartTime.ToString()}*)");
+            await ReplyAsync($"Bot started {_startupTime.StartTime.Subtract(DateTime.Now).Humanize(2)} ago (at  *{_startupTime.StartTime.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))}*)");
         }
     }
 }
