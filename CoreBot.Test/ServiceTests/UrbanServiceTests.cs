@@ -8,18 +8,24 @@ namespace CoreBot.Test.ServiceTests
     [TestFixture]
     public class UrbanServiceTests
     {
+        private UrbanService _urbanService;
+
+        [SetUp]
+        public void Setup()
+        {
+            _urbanService = new UrbanService();
+        }
+
         [Test]
         public void Service_ShouldThrowException_WhenNoSearchTermGiven()
         {
-            var service = new UrbanService();
-            Assert.That(async () => await service.GetUrbanQuotesAsync(null), Throws.TypeOf<ArgumentException>());
+            Assert.That(async () => await _urbanService.GetUrbanQuotesAsync(null), Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
         public void Parser_ShouldThrowException_WhenInputIsEmpty()
         {
-            var service = new UrbanService();
-            Assert.That(() => service.ParseQuotes(new UrbanResponse()), Throws.ArgumentNullException);
+            Assert.That(() => _urbanService.ParseQuotes(new UrbanResponse()), Throws.ArgumentNullException);
         }
     }
 }
