@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Enum;
 using CoreBot.Helpers;
@@ -34,6 +35,20 @@ namespace CoreBot.Modules
         public async Task GetUptime()
         {
             await ReplyAsync($"Bot started {_startupTime.StartTime.Subtract(DateTime.Now).Humanize(BotSettings.Instance.HumanizerPrecision)} ago (at *{_startupTime.StartTime.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))}*)");
+        }
+
+        [Command("precision"), Summary("Sets the precision used by Humanizer.")]
+        public async Task SetPrecision(byte precision)
+        {
+            // Only values between 1 and 5 seem to work.
+            if (Enumerable.Range(1, 5).Contains(precision))
+            {
+                var previousPrecision = BotSettings.Instance.HumanizerPrecision;
+                BotSettings.Instance.HumanizerPrecision = precision;
+                await FileHelper.SaveFileAsync(FileType.SettingsFile);
+                await ReplyAsync($"Humanizer precision was changed to: {precision}. Previous precision: {previousPrecision}.");
+            }
+            else await ReplyAsync("Invalid value.");
         }
     }
 }
