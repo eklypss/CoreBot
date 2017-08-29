@@ -35,7 +35,7 @@ namespace CoreBot.Services
                 return true;
 
             // try to filter out "www.example.com" and "example.com"
-            return !blacklist.Any(blacklistUrl => uriHost.EndsWith(blacklistUrl, StringComparison.CurrentCultureIgnoreCase));
+            return !blacklist.Any(blacklistUrl => uriHost.EndsWith(blacklistUrl, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public IEnumerable<string> Normalize(string message)

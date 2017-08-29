@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
@@ -12,7 +13,7 @@ namespace CoreBot.Modules
         public async Task GetEmotes(string searchTerm)
         {
             var emoteNames = Context.Guild.Emotes
-                .Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()))
+                .Where(x => x.Name.Equals(searchTerm, StringComparison.InvariantCultureIgnoreCase))
                 .Select(emote => $"<:{emote.Name}:{emote.Id}>");
 
             if (emoteNames.Any()) await ReplyAsync(string.Join(" ", emoteNames));
