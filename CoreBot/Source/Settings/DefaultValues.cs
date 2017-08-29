@@ -21,5 +21,7 @@
         public const string DEFAULT_DATETIME_FORMAT = "dd/MM/yyyy H:mm:ss";
         public const string DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
         public const string DEFAULT_CULTURE = "fi-FI";
+
+        public const byte HUMANIZER_PRECISION = 2;
     }
 }

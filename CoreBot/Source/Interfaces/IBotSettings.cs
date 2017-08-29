@@ -19,5 +19,6 @@ namespace CoreBot.Interfaces
         string DateTimeFormat { get; set; }
         string DateFormat { get; set; }
         string DateTimeCulture { get; set; }
+        byte HumanizerPrecision { get; set; }
     }
 }

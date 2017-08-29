@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreBot.Settings;
 using Discord.Commands;
 using Humanizer;
 
@@ -18,7 +19,7 @@ namespace CoreBot.Modules
             if (found != null)
             {
                 var msg = found.First(m => m.Author.Username.ToLower() == userName);
-                await ReplyAsync($"{msg.Author.Username} was last seen {DateTime.Now.Subtract(msg.Timestamp.DateTime).Humanize(3)} ago saying: `{msg.Content}`");
+                await ReplyAsync($"{msg.Author.Username} was last seen {DateTime.Now.Subtract(msg.Timestamp.DateTime).Humanize(BotSettings.Instance.HumanizerPrecision)} ago saying: `{msg.Content}`");
             }
             else
             {

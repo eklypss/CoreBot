@@ -81,7 +81,7 @@ namespace CoreBot.Services
 
         public string CreateWeatherMessage(string location, object temp, string country, string status, object wind, DateTime timestamp)
         {
-            string ago = (DateTime.Now - timestamp).Humanize();
+            string ago = (DateTime.Now - timestamp).Humanize(BotSettings.Instance.HumanizerPrecision);
             return $"[**{location}, {country}**], **temp:** {temp}°C, {status}, **wind:** {wind} m/s, **updated:** {ago} ago";
         }
     }
