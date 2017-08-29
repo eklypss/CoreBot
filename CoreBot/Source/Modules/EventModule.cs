@@ -123,7 +123,7 @@ namespace CoreBot.Modules
         }
 
         [Command("complete"), Summary("Completes/removes an uncompleted event, marking it as completed.")]
-        [Alias("delete")]
+        [Alias("delete", "del")]
         public async Task CompleteEvent(int id)
         {
             var eve = Events.Instance.EventsList.FirstOrDefault(x => x.Id == id);
