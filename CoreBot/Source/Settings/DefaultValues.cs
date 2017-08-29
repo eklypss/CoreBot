@@ -22,6 +22,6 @@
         public const string DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
         public const string DEFAULT_CULTURE = "fi-FI";
 
-        public const byte HUMANIZER_PRECISION = 2;
+        public const int HUMANIZER_PRECISION = 2;
     }
 }

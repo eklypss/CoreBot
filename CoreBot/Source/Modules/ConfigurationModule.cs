@@ -38,7 +38,7 @@ namespace CoreBot.Modules
         }
 
         [Command("precision"), Summary("Sets the precision used by Humanizer.")]
-        public async Task SetPrecision(byte precision)
+        public async Task SetPrecision(int precision)
         {
             // Only values between 1 and 5 seem to work.
             if (Enumerable.Range(1, 5).Contains(precision))

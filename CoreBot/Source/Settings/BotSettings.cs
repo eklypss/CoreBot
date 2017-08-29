@@ -40,7 +40,7 @@ namespace CoreBot.Settings
         public string DateTimeFormat { get; set; }
         public string DateFormat { get; set; }
         public string DateTimeCulture { get; set; }
-        public byte HumanizerPrecision { get; set; } = DefaultValues.HUMANIZER_PRECISION;
+        public int HumanizerPrecision { get; set; } = DefaultValues.HUMANIZER_PRECISION;
 
         private BotSettings()
         {
