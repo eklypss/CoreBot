@@ -17,6 +17,7 @@ namespace CoreBot.Services
 
         public async Task<UrbanResponse> GetUrbanQuotesAsync(string searchTerm)
         {
+            if (string.IsNullOrEmpty(searchTerm)) throw new ArgumentException("Search term cannot be null or empty.");
             Log.Information($"Getting definitions for the given term: {searchTerm}.");
             _http.DefaultRequestHeaders.Add("X-Mashape-Key", BotSettings.Instance.UrbanMashapeKey);
             _http.DefaultRequestHeaders.Add("Accept", "text/plain");
