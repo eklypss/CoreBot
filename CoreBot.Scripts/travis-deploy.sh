@@ -18,12 +18,11 @@ chmod 600 deploy_key
 ssh-add deploy_key
 rm -f deploy_key
 
-echo "publishing..."
 dotnet publish -c Release -r linux-arm CoreBot
 
 echo "killing previous process..."
 ssh -o StrictHostKeyChecking=no -p $CORE_PORT $CORE_SERVER \
-    "fuser -s -k -SIGTERM publish/CoreBot || true" &>/dev/null
+    "systemctl --user stop corebot" &>/dev/null
 
 echo "rsyncing new files..."
 rsync -chrv -e "ssh -o StrictHostKeyChecking=no -p $CORE_PORT" \
@@ -32,7 +31,6 @@ rsync -chrv -e "ssh -o StrictHostKeyChecking=no -p $CORE_PORT" \
 
 echo "starting process..."
 ssh -o StrictHostKeyChecking=no -p $CORE_PORT $CORE_SERVER \
-    "tmux new-window 'publish/CoreBot' ||
-    tmux new-session -d 'publish/CoreBot'" &>/dev/null
+    "systemctl --user start corebot" &>/dev/null
 
 echo "deploy done"
