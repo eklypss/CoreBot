@@ -13,7 +13,7 @@ namespace CoreBot.Modules
         public async Task GetEmotes(string searchTerm)
         {
             var emoteNames = Context.Guild.Emotes
-                .Where(x => x.Name.Equals(searchTerm, StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => x.Name.ToLower().Contains(searchTerm))
                 .Select(emote => $"<:{emote.Name}:{emote.Id}>");
 
             if (emoteNames.Any()) await ReplyAsync(string.Join(" ", emoteNames));
