@@ -81,7 +81,7 @@ namespace CoreBot.Handlers
                         var matchFound = false;
                         foreach (var command in Commands.Instance.CommandsList)
                         {
-                            if (userMessage.Content == $"{BotSettings.Instance.BotPrefix}{command.Name}")
+                            if (userMessage.Content.Equals($"{BotSettings.Instance.BotPrefix}{command.Name}", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 await userMessage.Channel.SendMessageAsync(command.Action);
                                 matchFound = true;
