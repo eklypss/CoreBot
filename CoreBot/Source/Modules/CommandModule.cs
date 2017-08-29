@@ -28,7 +28,7 @@ namespace CoreBot.Modules
         {
             if (commandAction.Length > 0 || !string.IsNullOrEmpty(commandAction))
             {
-                var found = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
+                var found = Commands.Instance.CommandsList.Find(x => x.Name.Equals(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), StringComparison.InvariantCultureIgnoreCase));
                 if (found == null)
                 {
                     await _commandDao.AddCommandAsync(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
@@ -50,7 +50,7 @@ namespace CoreBot.Modules
         [Command("delete"), Summary("Deletes a dynamic command.")]
         public async Task DeleteCommand(string commandName)
         {
-            var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
+            var command = Commands.Instance.CommandsList.Find(x => x.Name.Equals(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), StringComparison.InvariantCultureIgnoreCase));
             if (command != null)
             {
                 await _commandDao.DeleteCommandAsync(command);
@@ -67,7 +67,7 @@ namespace CoreBot.Modules
         [Command("update"), Summary("Updates the action of a dynamic command.")]
         public async Task UpdateCommand(string commandName, [Remainder] string newAction)
         {
-            var command = Commands.Instance.CommandsList.Find(x => x.Name == commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty));
+            var command = Commands.Instance.CommandsList.Find(x => x.Name.Equals(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), StringComparison.InvariantCultureIgnoreCase));
             if (command != null)
             {
                 await _commandDao.UpdateCommandAsync(command, newAction);
