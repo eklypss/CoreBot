@@ -15,7 +15,7 @@ namespace CoreBot.Modules
 
         [Command("juoma"), Summary("Returns a random drink from Alko website.")]
         [Alias("drink")]
-        public async Task RandomDrink()
+        public async Task GetRandomDrinkAsync()
         {
             string link = _drinkDao.RandomLink();
             await ReplyAsync(link);

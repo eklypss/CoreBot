@@ -24,7 +24,7 @@ namespace CoreBot.Modules
         }
 
         [Command("prefix"), Summary("Sets the command prefix used by the bot.")]
-        public async Task SetPrefix(char prefix)
+        public async Task SetPrefixAsync(char prefix)
         {
             BotSettings.Instance.BotPrefix = prefix;
             await FileHelper.SaveFileAsync(FileType.SettingsFile);
@@ -32,13 +32,13 @@ namespace CoreBot.Modules
         }
 
         [Command("uptime"), Summary("Gets the uptime of the bot (aka time since bot was started)")]
-        public async Task GetUptime()
+        public async Task ReplyWithUptimeAsync()
         {
             await ReplyAsync($"Bot started {_startupTime.StartTime.Subtract(DateTime.Now).Humanize(BotSettings.Instance.HumanizerPrecision)} ago (at *{_startupTime.StartTime.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))}*)");
         }
 
         [Command("precision"), Summary("Sets the precision used by Humanizer.")]
-        public async Task SetPrecision(int precision)
+        public async Task SetPrecisionAsync(int precision)
         {
             // Only values between 1 and 5 seem to work.
             if (Enumerable.Range(1, 5).Contains(precision))

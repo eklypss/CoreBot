@@ -14,7 +14,7 @@ namespace CoreBot.Modules
         }
 
         [Command("vivahteet")]
-        public async Task RandomAromas()
+        public async Task GetRandomAromasAsync()
         {
             await ReplyAsync(await _aromaService.RandomAromas());
         }

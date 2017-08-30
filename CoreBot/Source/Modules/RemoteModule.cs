@@ -14,7 +14,7 @@ namespace CoreBot.Modules
         }
 
         [Command("remote"), Summary("Allows users to send messages to the main channel in the main guild, specified in the BotSettings from other guilds or channels.")]
-        public async Task SendRemoteMessage([Remainder] string message)
+        public async Task SendRemoteMessageAsync([Remainder] string message)
         {
             await _messageService.SendMessageToDefaultChannelAsync(message);
         }

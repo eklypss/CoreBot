@@ -8,7 +8,7 @@ namespace CoreBot.Modules
     {
         [Command("random"), Summary("Generates a random number between two given values.")]
         [Alias("rng", "rand", "rdm")]
-        public async Task Random(int firstNumber, int secondNumber)
+        public async Task GetRandomNumberAsync(int firstNumber, int secondNumber)
         {
             var random = new Random();
             await ReplyAsync($"{random.Next(firstNumber, secondNumber + 1)}");

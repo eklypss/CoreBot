@@ -14,7 +14,7 @@ namespace CoreBot.Modules
         }
 
         [Command("urban"), Summary("Gets definition for the given input from the Urban Dictionary.")]
-        public async Task GetUrbanQuote([Remainder] string searchTerm)
+        public async Task GetUrbanQuoteAsync([Remainder] string searchTerm)
         {
             var quotes = await _urbanService.GetUrbanQuotesAsync(searchTerm);
             string definitions = _urbanService.ParseQuotes(quotes);

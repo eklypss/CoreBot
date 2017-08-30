@@ -10,13 +10,13 @@ namespace CoreBot.Modules
     public class LinkModule : ModuleBase
     {
         [Command("twitch"), Summary("Allows users to quickly link Twitch channels.")]
-        public async Task PostTwitchLink(string channel)
+        public async Task GetTwitchLinkAsync(string channel)
         {
             await ReplyAsync($"https://www.twitch.tv/{channel}");
         }
 
         [Command("twitter"), Summary("Allows users to quickly link Twitter user profiles.")]
-        public async Task PostTwitterLink(string user)
+        public async Task GetTwitterLinkAsync(string user)
         {
             await ReplyAsync($"https://twitter.com/{user}");
         }

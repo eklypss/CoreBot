@@ -10,7 +10,7 @@ namespace CoreBot.Modules
     public class EmoteModule : ModuleBase
     {
         [Command("find"), Summary("Lists all server emotes that contain the given string.")]
-        public async Task GetEmotes(string searchTerm)
+        public async Task FindEmotesAsync(string searchTerm)
         {
             var emoteNames = Context.Guild.Emotes
                 .Where(x => x.Name.ToLower().Contains(searchTerm))
@@ -22,7 +22,7 @@ namespace CoreBot.Modules
 
         [Command("list"), Summary("Lists all the server emotes.")]
         [Alias("all")]
-        public async Task ListEmotes()
+        public async Task ListEmotesAsync()
         {
             var emoteNames = new List<string>();
             foreach (var emote in Context.Guild.Emotes)

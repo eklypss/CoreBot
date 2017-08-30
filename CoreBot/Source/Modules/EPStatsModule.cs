@@ -17,7 +17,7 @@ namespace CoreBot.Modules
         }
 
         [Command("contract"), Summary("Displays contract summary of the given player.")]
-        public async Task GetPlayerContract([Remainder] string playerName)
+        public async Task GetPlayerContractInfoAsync([Remainder] string playerName)
         {
             var id = await _client.GetPlayerIdAsync(playerName);
             var stats = await _client.GetPlayerStatsAsync(id);
@@ -32,7 +32,7 @@ namespace CoreBot.Modules
         }
 
         [Command("stats"), Summary("Displays stats of the given player.")]
-        public async Task GetPlayerStats([Remainder] string playerName)
+        public async Task GetPlayerStatsAsync([Remainder] string playerName)
         {
             var id = await _client.GetPlayerIdAsync(playerName);
             var stats = await _client.GetPlayerStatsAsync(id);
