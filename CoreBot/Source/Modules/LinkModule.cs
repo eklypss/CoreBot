@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using CoreBot.Settings;
 using Discord.Commands;
 
 namespace CoreBot.Modules
@@ -12,13 +13,13 @@ namespace CoreBot.Modules
         [Command("twitch"), Summary("Allows users to quickly link Twitch channels.")]
         public async Task GetTwitchLinkAsync(string channel)
         {
-            await ReplyAsync($"https://www.twitch.tv/{channel}");
+            await ReplyAsync(string.Format(DefaultValues.TWITCH_URL, channel));
         }
 
         [Command("twitter"), Summary("Allows users to quickly link Twitter user profiles.")]
         public async Task GetTwitterLinkAsync(string user)
         {
-            await ReplyAsync($"https://twitter.com/{user}");
+            await ReplyAsync(string.Format(DefaultValues.TWITTER_URL, user));
         }
     }
 }
