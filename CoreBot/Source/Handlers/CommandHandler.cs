@@ -7,6 +7,7 @@ using CoreBot.Interfaces;
 using CoreBot.Models;
 using CoreBot.Services;
 using CoreBot.Settings;
+using CoreBot.Api;
 using Discord.Commands;
 using Discord.WebSocket;
 using epnetcore;
@@ -27,6 +28,7 @@ namespace CoreBot.Handlers
         public async Task InstallAsync(DiscordSocketClient discordClient)
         {
             _client = discordClient;
+            new Server(_client);
 
             var config = new CommandServiceConfig { DefaultRunMode = RunMode.Async };
             _commandService = new CommandService(config);
