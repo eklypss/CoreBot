@@ -1,4 +1,5 @@
-﻿using CoreBot.Settings;
+﻿using System;
+using CoreBot.Settings;
 using Discord.WebSocket;
 using Grapevine.Server;
 
@@ -6,15 +7,26 @@ namespace CoreBot.Api
 {
     public class Server
     {
+        private readonly RestServer _restServer;
+
         public Server(DiscordSocketClient discordClient)
         {
-            var server = new RestServer
+            _restServer = new RestServer
             {
-                Port = BotSettings.Instance.GrapevineServerPort.ToString()
+                Port = BotSettings.Instance.GrapevineServerPort.ToString(),
             };
 
-            server.Properties["client"] = discordClient;
-            server.Start();
+            _restServer.Properties["client"] = discordClient;
+        }
+
+        public void Start()
+        {
+            _restServer.Start();
+        }
+
+        public void Stop()
+        {
+            _restServer.Stop();
         }
     }
 }
