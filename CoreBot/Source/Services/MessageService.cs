@@ -19,9 +19,9 @@ namespace CoreBot.Services
 
         public async Task SendMessageToDefaultChannelAsync(string message)
         {
-            var guilds = await _client.GetGuildsAsync();
             try
             {
+                var guilds = await _client.GetGuildsAsync();
                 var chans = await guilds
                     .First(x => x.Name == BotSettings.Instance.DefaultGuild)
                     .GetTextChannelsAsync();
