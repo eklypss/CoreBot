@@ -41,6 +41,7 @@ namespace CoreBot.Settings
         public string DateFormat { get; set; }
         public string DateTimeCulture { get; set; }
         public int HumanizerPrecision { get; set; } = DefaultValues.HUMANIZER_PRECISION;
+        public int GrapevineServerPort { get; set; } = DefaultValues.GRAPEVINE_SERVER_PORT;
 
         private BotSettings()
         {

@@ -19,12 +19,12 @@
         public const string VKS_PAGING = VKS_URL + "?p=searchresults";
         public const string TWITCH_URL = "https://www.twitch.tv/{0}";
         public const string TWITTER_URL = "https://twitter.com/{0}";
-        public const int SERVER_PORT = 5700;
 
         public const string DEFAULT_DATETIME_FORMAT = "dd/MM/yyyy H:mm:ss";
         public const string DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
         public const string DEFAULT_CULTURE = "fi-FI";
 
         public const int HUMANIZER_PRECISION = 2;
+        public const int GRAPEVINE_SERVER_PORT = 5700;
     }
 }

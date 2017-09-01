@@ -20,5 +20,6 @@ namespace CoreBot.Interfaces
         string DateFormat { get; set; }
         string DateTimeCulture { get; set; }
         int HumanizerPrecision { get; set; }
+        int GrapevineServerPort { get; set; }
     }
 }
