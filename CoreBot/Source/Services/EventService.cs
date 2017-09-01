@@ -59,14 +59,22 @@ namespace CoreBot.Services
 
         public void ScheduleEvent(Event eve)
         {
-            Log.Information($"Scheduling event:  {eve.Message}.");
-            JobManager.AddJob(async () => await CompleteEventAsync(eve), (s) => s.ToRunOnceAt(eve.Date));
+            if (eve != null)
+            {
+                Log.Information($"Scheduling event:  {eve.Message}.");
+                JobManager.AddJob(async () => await CompleteEventAsync(eve), (s) => s.ToRunOnceAt(eve.Date));
+            }
+            else Log.Warning("Attempted to schedule an invalid event.");
         }
 
         public async Task CompleteEventAsync(Event eve)
         {
-            await _messageService.SendMessageToDefaultChannelAsync(eve.Message);
-            await _eventDao.CompleteEventAsync(eve);
+            if (eve != null)
+            {
+                await _messageService.SendMessageToDefaultChannelAsync(eve.Message);
+                await _eventDao.CompleteEventAsync(eve);
+            }
+            else Log.Warning("Attempted to complete an invalid event.");
         }
 
         public async Task CompleteOutdatedEventsAsync()
