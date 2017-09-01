@@ -19,20 +19,20 @@ namespace CoreBot.Services
 
         public async Task SendMessageToDefaultChannelAsync(string message)
         {
+            var guilds = await _client.GetGuildsAsync();
             try
             {
-                var guilds = await _client.GetGuildsAsync();
-                var chans = await guilds.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultGuild).GetTextChannelsAsync();
-                var channel = chans.FirstOrDefault(x => x.Name == BotSettings.Instance.DefaultChannel);
+                var chans = await guilds
+                    .First(x => x.Name == BotSettings.Instance.DefaultGuild)
+                    .GetTextChannelsAsync();
+
+                var channel = chans.First(x => x.Name == BotSettings.Instance.DefaultChannel);
                 await channel.SendMessageAsync(message);
-            }
-            catch (NullReferenceException)
-            {
-                Log.Error("Can't send message to default channel since it has not been set.");
             }
             catch (Exception)
             {
-                Log.Error($"Couldn't send message to {BotSettings.Instance.DefaultChannel} on {BotSettings.Instance.DefaultGuild}.");
+                Log.Error($"couldn't send message because channel '{BotSettings.Instance.DefaultChannel}'" +
+                    $" at '{BotSettings.Instance.DefaultGuild}' not found");
             }
         }
     }
