@@ -29,10 +29,13 @@ namespace CoreBot.Services
                 var channel = chans.First(x => x.Name == BotSettings.Instance.DefaultChannel);
                 await channel.SendMessageAsync(message);
             }
+            catch (NullReferenceException)
+            {
+                Log.Error($"Could not send message to default channel since it has not been set or was not found.");
+            }
             catch (Exception)
             {
-                Log.Error($"couldn't send message because channel '{BotSettings.Instance.DefaultChannel}'" +
-                    $" at '{BotSettings.Instance.DefaultGuild}' not found");
+                Log.Error($"couldn't send message because channel '{BotSettings.Instance.DefaultChannel}' at '{BotSettings.Instance.DefaultGuild}' not found");
             }
         }
     }
