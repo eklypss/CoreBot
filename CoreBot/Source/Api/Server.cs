@@ -10,7 +10,7 @@ namespace CoreBot.Api
         {
             var server = new RestServer
             {
-                Port = DefaultValues.GRAPEVINE_SERVER_PORT.ToString()
+                Port = BotSettings.Instance.GrapevineServerPort.ToString()
             };
 
             server.Properties["client"] = discordClient;
