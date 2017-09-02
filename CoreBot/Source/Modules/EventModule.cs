@@ -68,7 +68,7 @@ namespace CoreBot.Modules
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.Date))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                    list.Add($"{eve.Message} at **{eve.Date.TimeOfDay}** (id: {eve.Id}), **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
@@ -85,7 +85,7 @@ namespace CoreBot.Modules
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.AddDays(1).Date))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                    list.Add($"{eve.Message} at **{eve.Date.TimeOfDay}** (id: {eve.Id}), **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
