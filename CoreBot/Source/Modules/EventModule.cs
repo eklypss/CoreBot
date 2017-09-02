@@ -135,7 +135,7 @@ namespace CoreBot.Modules
         }
 
         [Command("info"), Summary("Shows basic information about the specified event.")]
-        [Alias("details")]
+        [Alias("details", "id")]
         public async Task ShowEventDetailsAsync(int id)
         {
             var eve = Events.Instance.EventsList.FirstOrDefault(x => x.Id == id);
