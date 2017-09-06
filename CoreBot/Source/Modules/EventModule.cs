@@ -72,7 +72,7 @@ namespace CoreBot.Modules
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
-            else await ReplyAsync("No events to list.");
+            else await ReplyAsync("No events today.");
         }
 
         [Command("tomorrow"), Summary("Lists all uncompleted events that are occuring tomorrow.")]
@@ -89,7 +89,7 @@ namespace CoreBot.Modules
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
-            else await ReplyAsync("No events to list.");
+            else await ReplyAsync("No events tomorrow.");
         }
 
         [Command("next"), Summary("Displays the next event.")]
