@@ -141,7 +141,8 @@ namespace CoreBot.Modules
             var eve = Events.Instance.EventsList.FirstOrDefault(x => x.Id == id);
             if (eve != null)
             {
-                await ReplyAsync($"**Event ID:** {eve.Id} {Environment.NewLine}**Message:** {eve.Message} {Environment.NewLine}**Date:** {eve.Date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))} {Environment.NewLine}**Completed:** {eve.Completed}");
+                if (eve.Completed) await ReplyAsync($"**Event ID:** {eve.Id} {Environment.NewLine}**Message:** {eve.Message} {Environment.NewLine}**Date:** {eve.Date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))} {Environment.NewLine}**Completed:** {eve.Completed} ({eve.Date.Subtract(DateTime.Now).Humanize(BotSettings.Instance.HumanizerPrecision)} ago)");
+                else await ReplyAsync($"**Event ID:** {eve.Id} {Environment.NewLine}**Message:** {eve.Message} {Environment.NewLine}**Date:** {eve.Date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))} {Environment.NewLine}**Completed:** {eve.Completed} {Environment.NewLine}**Time left:** {eve.Date.Subtract(DateTime.Now).Humanize(BotSettings.Instance.HumanizerPrecision)}.");
             }
             else await ReplyAsync("Event not found.");
         }
