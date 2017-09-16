@@ -27,8 +27,10 @@ namespace CoreBot.Settings
 
         public string BotToken { get; set; } = string.Empty;
         public char BotPrefix { get; set; } = DefaultValues.DEFAULT_PREFIX;
-        public string DefaultChannel { get; set; } = string.Empty;
-        public string DefaultGuild { get; set; } = string.Empty;
+
+        public ulong DefaultChannel { get; set; }
+        public ulong DefaultGuild { get; set; }
+
         public string DatabaseString { get; set; } = string.Empty;
         public bool LogToFile { get; set; } = true;
         public string SettingsFolder { get; set; }

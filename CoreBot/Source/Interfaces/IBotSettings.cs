@@ -10,8 +10,8 @@ namespace CoreBot.Interfaces
         bool LogToFile { get; set; }
         string SettingsFolder { get; set; }
         string SettingsFile { get; set; }
-        string DefaultChannel { get; set; }
-        string DefaultGuild { get; set; }
+        ulong DefaultChannel { get; set; }
+        ulong DefaultGuild { get; set; }
         string WeatherAPIKey { get; set; }
         string EPAPIKey { get; set; }
         string UrbanMashapeKey { get; set; }
