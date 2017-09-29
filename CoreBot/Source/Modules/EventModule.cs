@@ -8,6 +8,7 @@ using CoreBot.Services;
 using CoreBot.Settings;
 using Discord.Commands;
 using Humanizer;
+using Serilog;
 
 namespace CoreBot.Modules
 {
@@ -25,20 +26,28 @@ namespace CoreBot.Modules
         [Command("add"), Summary("Adds a new event.")]
         public async Task AddEventAsync(string date, string time, [Remainder] string message)
         {
-            DateTime eventDate;
-            if (date == "today") date = DateTime.Now.ToString(BotSettings.Instance.DateFormat);
-            if (date == "tomorrow") date = DateTime.Now.AddDays(1).ToString(BotSettings.Instance.DateFormat);
-            if (DateTime.TryParse(string.Format("{0} {1}", date, time), new CultureInfo(BotSettings.Instance.DateTimeCulture), DateTimeStyles.AssumeLocal, out eventDate))
+            if (Context.User.IsBot)
             {
-                var remainder = eventDate.Subtract(DateTime.Now);
-                if (remainder.TotalSeconds > 0)
+                Log.Warning($"Bot '{Context.User.Username}' tried to add an event, prevented.");
+                await ReplyAsync("Bots cannot add events.");
+            }
+            else
+            {
+                DateTime eventDate;
+                if (date == "today") date = DateTime.Now.ToString(BotSettings.Instance.DateFormat);
+                if (date == "tomorrow") date = DateTime.Now.AddDays(1).ToString(BotSettings.Instance.DateFormat);
+                if (DateTime.TryParse(string.Format("{0} {1}", date, time), new CultureInfo(BotSettings.Instance.DateTimeCulture), DateTimeStyles.AssumeLocal, out eventDate))
                 {
-                    await ReplyAsync($"Event added: {message}, **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
-                    await _eventService.CreateEventAsync(message, eventDate);
+                    var remainder = eventDate.Subtract(DateTime.Now);
+                    if (remainder.TotalSeconds > 0)
+                    {
+                        await ReplyAsync($"Event added: {message}, **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                        await _eventService.CreateEventAsync(message, eventDate);
+                    }
+                    else await ReplyAsync("Invalid date.");
                 }
                 else await ReplyAsync("Invalid date.");
             }
-            else await ReplyAsync("Invalid date.");
         }
 
         [Command("list"), Summary("Lists all uncompleted events.")]
