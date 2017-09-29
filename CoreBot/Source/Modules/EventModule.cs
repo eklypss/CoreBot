@@ -41,8 +41,9 @@ namespace CoreBot.Modules
                     var remainder = eventDate.Subtract(DateTime.Now);
                     if (remainder.TotalSeconds > 0)
                     {
-                        await ReplyAsync($"Event added: {message}, **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
                         await _eventService.CreateEventAsync(message, eventDate);
+                        Log.Information($"Event added: {message}, **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                        await ReplyAsync($"Event added: {message}, **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
                     }
                     else await ReplyAsync("Invalid date.");
                 }
