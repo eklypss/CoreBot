@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using CoreBot.Helpers;
 using CoreBot.Interfaces;
+using Discord.WebSocket;
 
 namespace CoreBot.Settings
 {
@@ -44,11 +47,26 @@ namespace CoreBot.Settings
         public string DateTimeCulture { get; set; }
         public int HumanizerPrecision { get; set; } = DefaultValues.DEFAULT_HUMANIZER_PRECISION;
         public int GrapevineServerPort { get; set; } = DefaultValues.DEFAULT_GRAPEVINE_SERVER_PORT;
+        public string DiscordnetLoglevel { get; set; } = DefaultValues.DEFAULT_LOGLEVEL;
 
         private BotSettings()
         {
             SettingsFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Settings");
             SettingsFile = Path.Combine(SettingsFolder, "BotSettings.json");
+        }
+
+        public static DiscordSocketConfig CreateDiscordConfig(string loglevel)
+        {
+            if (!LogHelper.logLevels.ContainsKey(loglevel))
+            {
+                var levels = string.Join(", ", LogHelper.logLevels.Keys);
+
+                Console.Error.WriteLine("invalid loglevel: " + loglevel);
+                Console.Error.WriteLine("valid loglevels: " + levels);
+                Environment.Exit(1);
+            }
+
+            return new DiscordSocketConfig { LogLevel = LogHelper.logLevels[loglevel] };
         }
     }
 }

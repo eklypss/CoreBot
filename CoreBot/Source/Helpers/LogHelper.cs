@@ -1,11 +1,24 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using Discord;
 using Serilog;
 
 namespace CoreBot.Helpers
 {
     public static class LogHelper
     {
+        public static Dictionary<string, LogSeverity> logLevels
+            = new Dictionary<string, LogSeverity>
+            {
+                { "Debug", LogSeverity.Debug },
+                { "Verbose", LogSeverity.Verbose },
+                { "Info", LogSeverity.Info },
+                { "Warning", LogSeverity.Warning },
+                { "Error", LogSeverity.Error },
+                { "Critical", LogSeverity.Critical },
+            };
+
         public static void CreateLogger(bool logToFile)
         {
             if (logToFile)
