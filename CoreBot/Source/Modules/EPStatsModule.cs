@@ -19,7 +19,18 @@ namespace CoreBot.Modules
         [Command("contract"), Summary("Displays contract summary of the given player.")]
         public async Task GetPlayerContractInfoAsync([Remainder] string playerName)
         {
-            var id = await _client.GetPlayerIdAsync(playerName);
+            int id;
+
+            try
+            {
+                id = await _client.GetPlayerIdAsync(playerName);
+            }
+            catch (NullReferenceException)
+            {
+                await ReplyAsync("no contract found for " + playerName);
+                return;
+            }
+
             var stats = await _client.GetPlayerStatsAsync(id);
             var data = stats.Data.Find(x => x.Season.EndYear == 2017 || x.Season.EndYear == 2018);
 
@@ -34,7 +45,18 @@ namespace CoreBot.Modules
         [Command("stats"), Summary("Displays stats of the given player.")]
         public async Task GetPlayerStatsAsync([Remainder] string playerName)
         {
-            var id = await _client.GetPlayerIdAsync(playerName);
+            int id;
+
+            try
+            {
+                id = await _client.GetPlayerIdAsync(playerName);
+            }
+            catch (NullReferenceException)
+            {
+                await ReplyAsync("no stats for " + playerName);
+                return;
+            }
+
             var stats = await _client.GetPlayerStatsAsync(id);
             var data = stats.Data.FindAll(x => x.Season.EndYear == 2018);
 
