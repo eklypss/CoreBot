@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using CoreBot.Api;
 using CoreBot.Collections;
 using CoreBot.Database.Dao;
 using CoreBot.Interfaces;
 using CoreBot.Models;
 using CoreBot.Services;
 using CoreBot.Settings;
-using CoreBot.Api;
 using Discord.Commands;
 using Discord.WebSocket;
 using epnetcore;
 using FluentScheduler;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Discord;
 
 namespace CoreBot.Handlers
 {

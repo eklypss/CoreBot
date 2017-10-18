@@ -1,5 +1,4 @@
-﻿using System;
-using CoreBot.Settings;
+﻿using CoreBot.Settings;
 using Discord.WebSocket;
 using Grapevine.Server;
 
