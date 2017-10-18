@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using CoreBot.Interfaces;
 using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using Serilog;
 
@@ -10,10 +11,11 @@ namespace CoreBot.Handlers
     {
         private DiscordSocketClient _client;
 
-        public void Install(DiscordSocketClient client)
+        public void Install(DiscordSocketClient client, CommandService commandService)
         {
             _client = client;
             _client.Log += PrintDiscordMessage;
+            commandService.Log += PrintDiscordMessage;
             Log.Debug("LogHandler installed.");
         }
 

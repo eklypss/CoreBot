@@ -14,6 +14,7 @@ using epnetcore;
 using FluentScheduler;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Discord;
 
 namespace CoreBot.Handlers
 {
@@ -25,15 +26,13 @@ namespace CoreBot.Handlers
         private IServiceProvider _serviceProvider;
         private OldLinkService _oldLinkService;
 
-        public async Task InstallAsync(DiscordSocketClient discordClient)
+        public async Task InstallAsync(DiscordSocketClient discordClient,
+            CommandService commandService)
         {
             _client = discordClient;
-
+            _commandService = commandService;
             var server = new Server(_client);
             server.Start();
-
-            var config = new CommandServiceConfig { DefaultRunMode = RunMode.Async };
-            _commandService = new CommandService(config);
 
             var drinkDao = await DrinkDao.CreateAsync();
             _services = new ServiceCollection();

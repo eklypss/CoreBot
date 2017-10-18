@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using CoreBot.Helpers;
 using CoreBot.Interfaces;
+using Discord.Commands;
 using Discord.WebSocket;
 
 namespace CoreBot.Settings
@@ -57,16 +58,19 @@ namespace CoreBot.Settings
 
         public static DiscordSocketConfig CreateDiscordConfig(string loglevel)
         {
-            if (!LogHelper.logLevels.ContainsKey(loglevel))
+            return new DiscordSocketConfig
             {
-                var levels = string.Join(", ", LogHelper.logLevels.Keys);
+                LogLevel = LogHelper.ParseLoglevel(loglevel)
+            };
+        }
 
-                Console.Error.WriteLine("invalid loglevel: " + loglevel);
-                Console.Error.WriteLine("valid loglevels: " + levels);
-                Environment.Exit(1);
-            }
-
-            return new DiscordSocketConfig { LogLevel = LogHelper.logLevels[loglevel] };
+        public static CommandServiceConfig CreateCommandConfig(string loglevel)
+        {
+            return new CommandServiceConfig
+            {
+                DefaultRunMode = RunMode.Async,
+                LogLevel = LogHelper.ParseLoglevel(loglevel)
+            };
         }
     }
 }

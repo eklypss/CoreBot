@@ -4,6 +4,7 @@ using CoreBot.Helpers;
 using CoreBot.Services;
 using CoreBot.Settings;
 using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using Serilog;
 
@@ -36,9 +37,14 @@ namespace CoreBot
                 await _client.LoginAsync(TokenType.Bot, BotSettings.Instance.BotToken);
                 await _client.StartAsync();
 
+                var commandService = new CommandService
+                (
+                    BotSettings.CreateCommandConfig(BotSettings.Instance.DiscordnetLoglevel)
+                );
+
                 // Install handlers
-                _handler.LogHandler.Install(_client);
-                await _handler.CommandHandler.InstallAsync(_client);
+                _handler.LogHandler.Install(_client, commandService);
+                await _handler.CommandHandler.InstallAsync(_client, commandService);
             }
             else
             {

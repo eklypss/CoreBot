@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Discord;
@@ -18,6 +19,20 @@ namespace CoreBot.Helpers
                 { "Error", LogSeverity.Error },
                 { "Critical", LogSeverity.Critical },
             };
+
+        public static LogSeverity ParseLoglevel(string loglevel)
+        {
+            if (!logLevels.ContainsKey(loglevel))
+            {
+                var levels = string.Join(", ", LogHelper.logLevels.Keys);
+
+                Console.Error.WriteLine("invalid loglevel: " + loglevel);
+                Console.Error.WriteLine("valid loglevels: " + levels);
+                Environment.Exit(1);
+            }
+
+            return logLevels[loglevel];
+        }
 
         public static void CreateLogger(bool logToFile)
         {
