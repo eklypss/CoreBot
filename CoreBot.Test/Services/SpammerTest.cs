@@ -4,7 +4,7 @@ using Discord;
 using Moq;
 using NUnit.Framework;
 
-namespace CoreBot.Test.ServiceTests
+namespace CoreBot.Test.Services
 {
     [TestFixture]
     internal class SpammerTest

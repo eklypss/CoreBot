@@ -3,10 +3,10 @@ using CoreBot.Models.Urban;
 using CoreBot.Services;
 using NUnit.Framework;
 
-namespace CoreBot.Test.ServiceTests
+namespace CoreBot.Test.Services
 {
     [TestFixture]
-    public class UrbanServiceTests
+    public class UrbanServiceTest
     {
         private UrbanService _urbanService;
 
