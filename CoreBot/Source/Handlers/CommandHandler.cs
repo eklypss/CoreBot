@@ -24,6 +24,7 @@ namespace CoreBot.Handlers
         private IServiceCollection _services;
         private IServiceProvider _serviceProvider;
         private OldLinkService _oldLinkService;
+        private Spammer _spammer;
 
         public async Task InstallAsync(DiscordSocketClient discordClient,
             CommandService commandService)
@@ -51,6 +52,7 @@ namespace CoreBot.Handlers
             _services.AddSingleton(new StartupTime());
             if (drinkDao != null) _services.AddSingleton(drinkDao);
             _oldLinkService = new OldLinkService();
+            _spammer = new Spammer();
 
             JobManager.Initialize(eventService);
 
@@ -72,6 +74,7 @@ namespace CoreBot.Handlers
             {
                 var userMessage = (SocketUserMessage)message;
                 await _oldLinkService.CheckAsync(userMessage);
+                await _spammer.CheckSpamAsync(userMessage);
                 var context = new SocketCommandContext(_client, userMessage);
                 int argPos = 0;
                 if (userMessage.HasCharPrefix(BotSettings.Instance.BotPrefix, ref argPos))

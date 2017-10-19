@@ -19,6 +19,7 @@
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
     <PackageReference Include="MathNet.Numerics" Version="3.20.0" />
     <PackageReference Include="Microsoft.Data.SQLite" Version="1.1.1" />
+    <PackageReference Include="Moq" Version="4.7.142" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Serilog" Version="2.5.0" />
     <PackageReference Include="Serilog.Sinks.Literate" Version="3.0.0" />
