@@ -39,7 +39,7 @@ namespace CoreBot.Modules
                 if (data.Player.Caphit == null || string.IsNullOrEmpty(data.Player.Caphit)) await ReplyAsync($"**Contract:** {data.Player.Contract} **Team:** {data.Team.Name}");
                 else await ReplyAsync($"**Contract:** {data.Player.Contract} **Cap hit:** {data.Player.Caphit} **Team:** {data.Team.Name}");
             }
-            else await ReplyAsync("Player not found.");
+            else await ReplyAsync("no contract found for current season");
         }
 
         [Command("stats"), Summary("Displays stats of the given player.")]
@@ -53,39 +53,42 @@ namespace CoreBot.Modules
             }
             catch (NullReferenceException)
             {
-                await ReplyAsync("no stats for " + playerName);
+                await ReplyAsync("no stats found for " + playerName);
                 return;
             }
 
             var stats = await _client.GetPlayerStatsAsync(id);
             var data = stats.Data.FindAll(x => x.Season.EndYear == 2018);
 
-            if (data != null)
+            if (data.Count < 1)
             {
-                var statsList = new List<string>();
-                var season = data.FirstOrDefault();
-                var player = season.Player;
-                statsList.Add($"**Player:** {player.FirstName} {player.LastName}  **Season:** {season.Season.StartYear}-{season.Season.EndYear} **DoB:** {player.DateOfBirth} **Country:** {player.Country.Name} **Height:** {player.Height} cm **Weight:** {player.Weight} kg");
-                foreach (var team in data)
-                {
-                    string gameType = string.Empty;
-                    switch (team.GameType)
-                    {
-                        case "REGULAR_SEASON": gameType = "Regular season"; break;
-                        case "PLAYOFFS": gameType = "Playoffs"; break;
-                        default: gameType = team.GameType; break;
-                    }
-                    if (player.PlayerPosition == "GOALIE")
-                    {
-                        statsList.Add($"**Team:** {team.Team.Name} ({gameType}) **GP:** {team.GP} **SVP:** {team.SVP} **GAA:** {team.GAA}");
-                    }
-                    else
-                    {
-                        statsList.Add($"**Team:** {team.Team.Name} ({gameType}) **GP:** {team.GP} **G:** {team.G} **A:** {team.A} **TP:** {team.TP} **PPG:** {team.PPG} **+/-:** {team.PM} **PIM:** {team.PIM}");
-                    }
-                }
-                await ReplyAsync($"{string.Join(Environment.NewLine, statsList)}");
+                await ReplyAsync("no stats for this season for " + playerName);
+                return;
             }
+
+            var statsList = new List<string>();
+            var season = data.FirstOrDefault();
+            var player = season.Player;
+            statsList.Add($"**Player:** {player.FirstName} {player.LastName}  **Season:** {season.Season.StartYear}-{season.Season.EndYear} **DoB:** {player.DateOfBirth} **Country:** {player.Country.Name} **Height:** {player.Height} cm **Weight:** {player.Weight} kg");
+            foreach (var team in data)
+            {
+                string gameType = string.Empty;
+                switch (team.GameType)
+                {
+                    case "REGULAR_SEASON": gameType = "Regular season"; break;
+                    case "PLAYOFFS": gameType = "Playoffs"; break;
+                    default: gameType = team.GameType; break;
+                }
+                if (player.PlayerPosition == "GOALIE")
+                {
+                    statsList.Add($"**Team:** {team.Team.Name} ({gameType}) **GP:** {team.GP} **SVP:** {team.SVP} **GAA:** {team.GAA}");
+                }
+                else
+                {
+                    statsList.Add($"**Team:** {team.Team.Name} ({gameType}) **GP:** {team.GP} **G:** {team.G} **A:** {team.A} **TP:** {team.TP} **PPG:** {team.PPG} **+/-:** {team.PM} **PIM:** {team.PIM}");
+                }
+            }
+            await ReplyAsync($"{string.Join(Environment.NewLine, statsList)}");
         }
     }
 }
