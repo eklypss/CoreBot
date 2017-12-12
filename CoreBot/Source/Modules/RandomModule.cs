@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord.Commands;
+using CoreBot.Settings;
+using Humanizer;
 
 namespace CoreBot.Modules
 {
@@ -12,6 +14,16 @@ namespace CoreBot.Modules
         {
             var random = new Random();
             await ReplyAsync($"{random.Next(firstNumber, secondNumber + 1)}");
+        }
+
+        [Command("randomdate"), Summary("Returns a random date.")]
+        public async Task GetRandomDate()
+        {
+            var currentDate = DateTime.Now;
+            var random = new Random();
+            var randomDate = currentDate.AddHours(random.Next(0, 175316)); // 20 years
+            var remainder = randomDate.Subtract(DateTime.Now);
+            await ReplyAsync($"Random date: {randomDate.ToString()} (in {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
         }
     }
 }
