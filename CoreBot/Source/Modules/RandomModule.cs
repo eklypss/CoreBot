@@ -23,7 +23,7 @@ namespace CoreBot.Modules
             var random = new Random();
             var randomDate = currentDate.AddHours(random.Next(0, 175316)); // 20 years
             var remainder = randomDate.Subtract(DateTime.Now);
-            await ReplyAsync($"Random date: {randomDate.ToString()} (in {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+            await ReplyAsync($"Random date: {randomDate.ToString(BotSettings.Instance.DateFormat)} (in {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)})");
         }
     }
 }
