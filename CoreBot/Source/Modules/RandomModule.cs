@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using CoreBot.Settings;
 using Humanizer;
+using Humanizer.Localisation;
 
 namespace CoreBot.Modules
 {
@@ -21,9 +22,9 @@ namespace CoreBot.Modules
         {
             var currentDate = DateTime.Now;
             var random = new Random();
-            var randomDate = currentDate.AddHours(random.Next(0, 175316)); // 20 years
+            var randomDate = currentDate.AddHours(random.Next(0, 87600)); // 10 years
             var remainder = randomDate.Subtract(DateTime.Now);
-            await ReplyAsync($"Random date: {randomDate.ToString(BotSettings.Instance.DateFormat)} (in {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)})");
+            await ReplyAsync($"Random date: {randomDate.ToString(BotSettings.Instance.DateFormat)} (in {remainder.Humanize(BotSettings.Instance.HumanizerPrecision, maxUnit: TimeUnit.Year)})");
         }
     }
 }
