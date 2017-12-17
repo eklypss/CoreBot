@@ -18,11 +18,12 @@ namespace CoreBot.Modules
         }
 
         [Command("randomdate"), Summary("Returns a random date.")]
-        public async Task GetRandomDate()
+        public async Task GetRandomDate(int years = 10)
         {
             var currentDate = DateTime.Now;
             var random = new Random();
-            var randomDate = currentDate.AddHours(random.Next(0, 87600)); // 10 years
+            int hours = years * 365 * 24;
+            var randomDate = currentDate.AddHours(random.Next(0, hours));
             var remainder = randomDate.Subtract(DateTime.Now);
             await ReplyAsync($"Random date: {randomDate.ToString(BotSettings.Instance.DateFormat)} (in {remainder.Humanize(BotSettings.Instance.HumanizerPrecision, maxUnit: TimeUnit.Year)})");
         }
