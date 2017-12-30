@@ -4,6 +4,9 @@ using Discord.Commands;
 using CoreBot.Settings;
 using Humanizer;
 using Humanizer.Localisation;
+using Serilog;
+using Discord;
+using System.Collections.Generic;
 
 namespace CoreBot.Modules
 {
@@ -26,6 +29,19 @@ namespace CoreBot.Modules
             var randomDate = currentDate.AddHours(random.Next(0, hours));
             var remainder = randomDate.Subtract(DateTime.Now);
             await ReplyAsync($"Random date: {randomDate.ToString(BotSettings.Instance.DateFormat)} (in {remainder.Humanize(BotSettings.Instance.HumanizerPrecision, maxUnit: TimeUnit.Year)})");
+        }
+
+        [Command("randomuser"), Summary("Returns a random user from the guild.")]
+        public async Task GetRandomUser()
+        {
+            var users = await Context.Guild.GetUsersAsync();
+            // Create new list of users because the method above doesn't do it(?)
+            var list = new List<IUser>();
+            foreach (var user in users)
+            {
+                list.Add(user);
+            }
+            await ReplyAsync($"Random user: {list[new Random().Next(0, list.Count)]}");
         }
     }
 }
