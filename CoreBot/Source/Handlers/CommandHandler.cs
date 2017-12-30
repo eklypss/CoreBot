@@ -77,30 +77,48 @@ namespace CoreBot.Handlers
                 await _spammer.CheckSpamAsync(userMessage);
                 var context = new SocketCommandContext(_client, userMessage);
                 int argPos = 0;
+
                 if (userMessage.HasCharPrefix(BotSettings.Instance.BotPrefix, ref argPos))
                 {
-                    var result = await _commandService.ExecuteAsync(context, argPos, _serviceProvider);
-                    if (!result.IsSuccess) // Module was not found, check for dynamic commands.
-                    {
-                        Log.Information(result.ToString());
-                        var matchFound = false;
-                        foreach (var command in Commands.Instance.CommandsList)
-                        {
-                            if (userMessage.Content.Equals($"{BotSettings.Instance.BotPrefix}{command.Name}", StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                await userMessage.Channel.SendMessageAsync(command.Action);
-                                matchFound = true;
-                                break;
-                            }
-                        }
-                        if (!matchFound && result.Error != CommandError.UnknownCommand)
-                        {
-                            // If command was found but failed to execute, send error message.
-                            await userMessage.Channel.SendMessageAsync(result.ToString());
-                            Log.Error($"Additional information: {result.ErrorReason}, {result.Error.Value}");
-                        }
-                    }
+                    await userMessage.Channel.TriggerTypingAsync();
+                    await ExecuteCommand(userMessage, context, argPos);
                 }
+            }
+        }
+
+        private async Task ExecuteCommand(SocketMessage userMessage, ICommandContext context, int argPos)
+        {
+            var result = await _commandService.ExecuteAsync(context, argPos, _serviceProvider);
+
+            // if command throws exception, result is still successfull
+            if (result.IsSuccess)
+            {
+                return;
+            }
+
+            Log.Information(result.ToString());
+
+            var dynamicCommand = Commands.Instance.CommandsList
+                .Find(command => userMessage.Content.Equals($"{BotSettings.Instance.BotPrefix}{command.Name}",
+                    StringComparison.InvariantCultureIgnoreCase));
+
+            if (dynamicCommand != null)
+            {
+                await userMessage.Channel.SendMessageAsync(dynamicCommand.Action);
+                return;
+            }
+
+            // commandService failed, no dynamic command matches
+
+            if (result.Error == CommandError.UnknownCommand)
+            {
+                await userMessage.Channel.SendMessageAsync("no command " + userMessage.Content);
+            }
+            else
+            {
+                // If command was found but failed to execute, send error message.
+                await userMessage.Channel.SendMessageAsync(result.ToString());
+                Log.Error($"Additional information: {result.ErrorReason} {result.Error.Value}");
             }
         }
     }
