@@ -32,13 +32,13 @@ namespace CoreBot.Modules
                 if (found == null)
                 {
                     await _commandDao.AddCommandAsync(new Command(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), commandAction));
-                    await ReplyAsync($"Command {commandName} added, action: {commandAction}");
+                    await ReplyAsync($"Command ``{commandName}`` added, action: ``{commandAction}``");
                     Log.Information($"Command {commandName} added, action: {commandAction}");
                 }
                 else
                 {
                     Log.Warning($"Could not add command {commandName} since it already exists.");
-                    await ReplyAsync($"Command {commandName} already exists. Use {BotSettings.Instance.BotPrefix}command update {commandName} to edit the existing command.");
+                    await ReplyAsync($"Command ``{commandName}`` already exists. Use ``{BotSettings.Instance.BotPrefix}command update {commandName}`` to edit the existing command.");
                 }
             }
             else
@@ -54,13 +54,13 @@ namespace CoreBot.Modules
             if (command != null)
             {
                 await _commandDao.DeleteCommandAsync(command);
-                await ReplyAsync($"Command deleted: {commandName}");
+                await ReplyAsync($"Command deleted: ``{commandName}``");
                 Log.Information($"Command deleted: {commandName}");
             }
             else
             {
                 Log.Warning($"Failed to delete command {commandName} as it doesn't exist.");
-                await ReplyAsync($"Command {commandName} does not exist.");
+                await ReplyAsync($"Command ``{commandName}`` does not exist.");
             }
         }
 
@@ -71,13 +71,13 @@ namespace CoreBot.Modules
             if (command != null)
             {
                 await _commandDao.UpdateCommandAsync(command, newAction);
-                await ReplyAsync($"Command {commandName} updated, new action: {newAction}");
-                Log.Information($"Command {commandName} updated, new action: {newAction}");
+                await ReplyAsync($"Command ``{commandName}`` updated, new action: ``{newAction}``");
+                Log.Information($"Command {commandName} updated, new action: ``{newAction}``");
             }
             else
             {
                 Log.Warning($"Failed to update command {commandName} as it doesn't exist.");
-                await ReplyAsync($"Command {commandName} does not exist.");
+                await ReplyAsync($"Command ``{commandName}`` does not exist.");
             }
         }
 
