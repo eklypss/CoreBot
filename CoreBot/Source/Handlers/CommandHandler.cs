@@ -80,9 +80,9 @@ namespace CoreBot.Handlers
 
                 if (userMessage.HasCharPrefix(BotSettings.Instance.BotPrefix, ref argPos))
                 {
+                    if (userMessage.Author.IsBot) await userMessage.DeleteAsync();
                     await userMessage.Channel.TriggerTypingAsync();
                     await ExecuteCommand(userMessage, context, argPos);
-                    if (userMessage.Author.IsBot) await userMessage.DeleteAsync();
                 }
             }
         }
