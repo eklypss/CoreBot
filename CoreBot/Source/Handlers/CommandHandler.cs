@@ -82,6 +82,7 @@ namespace CoreBot.Handlers
                 {
                     await userMessage.Channel.TriggerTypingAsync();
                     await ExecuteCommand(userMessage, context, argPos);
+                    if (userMessage.Author.IsBot) await userMessage.DeleteAsync();
                 }
             }
         }
