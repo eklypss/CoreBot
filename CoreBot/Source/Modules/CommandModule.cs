@@ -47,6 +47,20 @@ namespace CoreBot.Modules
             }
         }
 
+        [Command("info"), Summary("Displays info about the command.")]
+        public async Task DisplayCommandInfoAsync(string commandName)
+        {
+            var command = Commands.Instance.CommandsList.Find(x => x.Name.Equals(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), StringComparison.InvariantCultureIgnoreCase));
+            if (command != null)
+            {
+                await ReplyAsync($"Command: ``{commandName}`` ID: ``{command.Id}`` Action: ``{command.Action}``");
+            }
+            else
+            {
+                await ReplyAsync($"Command ``{commandName}`` does not exist.");
+            }
+        }
+
         [Command("delete"), Summary("Deletes a dynamic command.")]
         public async Task DeleteCommandAsync(string commandName)
         {
