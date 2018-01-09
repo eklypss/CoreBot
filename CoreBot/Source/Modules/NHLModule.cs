@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using CoreBot.Services;
 using Discord.Commands;
 
-namespace CoreBot.Source.Modules
+namespace CoreBot.Modules
 {
     public class NHLModule : ModuleBase
     {
