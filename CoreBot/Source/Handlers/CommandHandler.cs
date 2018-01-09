@@ -45,6 +45,7 @@ namespace CoreBot.Handlers
             _services.AddSingleton(new QuoteService());
             _services.AddSingleton(new WeatherService());
             _services.AddSingleton(new UrbanService());
+            _services.AddSingleton(new NHLService());
             _services.AddSingleton(new AromaService(new AromaDao()));
             _services.AddSingleton(new EPClient(BotSettings.Instance.EPAPIKey));
             _services.AddSingleton(messageService);
