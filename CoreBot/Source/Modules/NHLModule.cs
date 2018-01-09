@@ -15,7 +15,7 @@ namespace CoreBot.Modules
             _nhlService = nhlService;
         }
 
-        [Command("standings")]
+        [Command("standings"), Summary("Gets the current standings of the NHL.")]
         public async Task GetStandingsAsync()
         {
             var standings = await _nhlService.GetStandingsAsync();
