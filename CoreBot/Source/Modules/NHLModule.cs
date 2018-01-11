@@ -19,10 +19,9 @@ namespace CoreBot.Modules
         public async Task GetStandingsAsync()
         {
             var standings = await _nhlService.GetStandingsAsync();
-            var standingStringList = new List<string>();
-
             foreach (var conference in standings.Records)
             {
+                var standingStringList = new List<string>();
                 conference.TeamRecords.Sort((a, b) => b.Points.CompareTo(a.Points));
                 standingStringList.Add($"**{conference.Conference.Name} {conference.Division.Name}**");
 
