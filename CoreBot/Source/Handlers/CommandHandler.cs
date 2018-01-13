@@ -75,7 +75,6 @@ namespace CoreBot.Handlers
             {
                 var userMessage = (SocketUserMessage)message;
                 await _oldLinkService.CheckAsync(userMessage);
-                await _spammer.CheckSpamAsync(userMessage);
                 var context = new SocketCommandContext(_client, userMessage);
                 int argPos = 0;
 
@@ -84,6 +83,10 @@ namespace CoreBot.Handlers
                     if (userMessage.Author.IsBot) await userMessage.DeleteAsync();
                     await userMessage.Channel.TriggerTypingAsync();
                     await ExecuteCommand(userMessage, context, argPos);
+                }
+                else
+                {
+                    await _spammer.CheckSpamAsync(userMessage);
                 }
             }
         }
