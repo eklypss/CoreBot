@@ -41,6 +41,7 @@ namespace CoreBot.Handlers
             var eventService = new EventService(messageService, new EventDao());
 
             // Add services to the ServiceCollection
+            _services.AddSingleton(await CommentService.Create());
             _services.AddSingleton(new CommandDao());
             _services.AddSingleton(new QuoteService());
             _services.AddSingleton(new WeatherService());
