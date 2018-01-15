@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using epnetcore;
+using epnetcore.Helpers;
 
 namespace CoreBot.Modules
 {
@@ -40,6 +41,18 @@ namespace CoreBot.Modules
                 else await ReplyAsync($"**Contract:** {data.Player.Contract} **Cap hit:** {data.Player.Caphit} **Team:** {data.Team.Name}");
             }
             else await ReplyAsync("no contract found for current season");
+        }
+
+        [Command("scoring")]
+        public async Task GetPlayerStatsAsync()
+        {
+            var scoring = await _client.GetTopScorers(7);
+            var scoringList = new List<string>();
+            foreach (var scorer in scoring.Data)
+            {
+                scoringList.Add($"**{scorer.Player.FirstName} {scorer.Player.LastName}** ({scorer.Team.Name}) **GP:** {scorer.GP} **G:** {scorer.G} **A:** {scorer.A} **TP:** {scorer.TP} **PPG:** {scorer.PPG} **+/-:** {scorer.PM} **PIM:** {scorer.PIM}");
+            }
+            await ReplyAsync(string.Join(Environment.NewLine, scoringList));
         }
 
         [Command("stats"), Summary("Displays stats of the given player.")]
