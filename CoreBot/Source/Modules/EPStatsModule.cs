@@ -65,7 +65,7 @@ namespace CoreBot.Modules
             }
             catch (NullReferenceException)
             {
-                await ReplyAsync("No stats found for {playerName}.");
+                await ReplyAsync($"No stats found for {playerName}.");
                 return;
             }
 
@@ -74,7 +74,7 @@ namespace CoreBot.Modules
 
             if (data.Count < 1)
             {
-                await ReplyAsync("No stats for this season for {playerName}.");
+                await ReplyAsync($"No stats for this season for {playerName}.");
                 return;
             }
 
