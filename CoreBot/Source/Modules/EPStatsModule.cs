@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using epnetcore;
-using epnetcore.Helpers;
 
 namespace CoreBot.Modules
 {
@@ -28,22 +27,22 @@ namespace CoreBot.Modules
             }
             catch (NullReferenceException)
             {
-                await ReplyAsync("no contract found for " + playerName);
+                await ReplyAsync($"No contract found for {playerName}.");
                 return;
             }
 
             var stats = await _client.GetPlayerStatsAsync(id);
-            var data = stats.Data.Find(x => x.Season.EndYear == 2017 || x.Season.EndYear == 2018);
+            var data = stats.Data.Find(x => x.Season.EndYear == (DateTime.Now.Year - 1) || x.Season.EndYear == DateTime.Now.Year);
 
             if (data != null)
             {
                 if (data.Player.Caphit == null || string.IsNullOrEmpty(data.Player.Caphit)) await ReplyAsync($"**Contract:** {data.Player.Contract} **Team:** {data.Team.Name}");
                 else await ReplyAsync($"**Contract:** {data.Player.Contract} **Cap hit:** {data.Player.Caphit} **Team:** {data.Team.Name}");
             }
-            else await ReplyAsync("no contract found for current season");
+            else await ReplyAsync("No contract found for current season.");
         }
 
-        [Command("scoring")]
+        [Command("scoring"), Summary("Displays current top 5 scoring.")]
         public async Task GetPlayerStatsAsync()
         {
             var scoring = await _client.GetTopScorers(7);
@@ -66,16 +65,16 @@ namespace CoreBot.Modules
             }
             catch (NullReferenceException)
             {
-                await ReplyAsync("no stats found for " + playerName);
+                await ReplyAsync("No stats found for {playerName}.");
                 return;
             }
 
             var stats = await _client.GetPlayerStatsAsync(id);
-            var data = stats.Data.FindAll(x => x.Season.EndYear == 2018);
+            var data = stats.Data.FindAll(x => x.Season.EndYear == DateTime.Now.Year);
 
             if (data.Count < 1)
             {
-                await ReplyAsync("no stats for this season for " + playerName);
+                await ReplyAsync("No stats for this season for {playerName}.");
                 return;
             }
 
