@@ -48,6 +48,7 @@ namespace CoreBot.Settings
         public int HumanizerPrecision { get; set; } = DefaultValues.DEFAULT_HUMANIZER_PRECISION;
         public int GrapevineServerPort { get; set; } = DefaultValues.DEFAULT_GRAPEVINE_SERVER_PORT;
         public string DiscordnetLoglevel { get; set; } = DefaultValues.DEFAULT_LOGLEVEL;
+        public string SelfHotstring { get; set; } = DefaultValues.DEFAULT_SELF_HOTSTRING;
 
         private BotSettings()
         {

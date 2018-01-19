@@ -30,5 +30,7 @@
         public const double DEFAULT_SPAM_PROB = 0.2;
         public const int DEFAULT_HUMANIZER_PRECISION = 2;
         public const int DEFAULT_GRAPEVINE_SERVER_PORT = 5700;
+
+        public const string DEFAULT_SELF_HOTSTRING = "$me$";
     }
 }

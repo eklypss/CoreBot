@@ -110,7 +110,14 @@ namespace CoreBot.Handlers
 
             if (dynamicCommand != null)
             {
-                await userMessage.Channel.SendMessageAsync(dynamicCommand.Action);
+                if (dynamicCommand.Action.Contains(BotSettings.Instance.SelfHotstring))
+                {
+                    await userMessage.Channel.SendMessageAsync(dynamicCommand.Action.Replace(BotSettings.Instance.SelfHotstring, userMessage.Author.Username));
+                }
+                else
+                {
+                    await userMessage.Channel.SendMessageAsync(dynamicCommand.Action);
+                }
                 return;
             }
 
