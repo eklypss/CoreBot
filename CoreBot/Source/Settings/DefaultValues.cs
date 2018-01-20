@@ -1,4 +1,6 @@
-﻿namespace CoreBot.Settings
+﻿using System;
+
+namespace CoreBot.Settings
 {
     /// <summary>
     /// Default bot settings to be used if not defined in the configuration file and constant URL
@@ -21,6 +23,8 @@
         public const string VKS_PAGING = VKS_URL + "?p=searchresults";
         public const string TWITCH_URL = "https://www.twitch.tv/{0}";
         public const string TWITTER_URL = "https://twitter.com/{0}";
+
+        public const string F1_API_SCHEDULE_URL = "http://ergast.com/api/f1/{0}.json";
 
         public const string DEFAULT_DATETIME_FORMAT = "dd/MM/yyyy H:mm:ss";
         public const string DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
