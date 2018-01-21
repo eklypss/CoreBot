@@ -29,8 +29,8 @@ namespace CoreBot.Modules
                 foreach (var race in schedule.RaceData.RaceTable.Races)
                 {
                     var remainder = race.Date.Subtract(DateTime.Now);
-
-                    raceList.Add($"[{race.Round}] **{race.Circuit.CircuitName}** *({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})* in {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                    if (remainder.TotalSeconds >= 0) raceList.Add($"[{race.Round}] **{race.Circuit.CircuitName}** *({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})* in {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                    else raceList.Add($"[{race.Round}] **{race.Circuit.CircuitName}** *({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})* {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)} ago.");
                 }
                 await ReplyAsync(string.Join(Environment.NewLine, raceList));
             }
