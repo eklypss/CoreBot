@@ -17,7 +17,6 @@ namespace CoreBot.Services
             if (season == null) season = DateTime.Now.Year;
             Log.Information($"Getting schedule for the given season: {season}.");
             var result = await _http.GetStringAsync(string.Format(DefaultValues.F1_API_SCHEDULE_URL, season));
-            Console.WriteLine(result);
             var response = JsonConvert.DeserializeObject<RaceRoot>(result);
             return response;
         }
