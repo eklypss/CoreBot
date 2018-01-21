@@ -70,11 +70,11 @@ namespace CoreBot.Modules
             }
 
             var stats = await _client.GetPlayerStatsAsync(id);
-            var data = stats.Data.FindAll(x => x.Season.EndYear == DateTime.Now.Year);
-
+            stats.Data.Sort((a, b) => b.Season.EndYear.CompareTo(a.Season.EndYear));
+            var data = stats.Data.FindAll(x => x.Season.EndYear == stats.Data.FirstOrDefault().Season.EndYear);
             if (data.Count < 1)
             {
-                await ReplyAsync($"No stats for this season for {playerName}.");
+                await ReplyAsync($"No stats found for {playerName}.");
                 return;
             }
 
