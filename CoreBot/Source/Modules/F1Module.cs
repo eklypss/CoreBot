@@ -5,6 +5,7 @@ using CoreBot.Services;
 using CoreBot.Settings;
 using Discord.Commands;
 using Humanizer;
+using Serilog;
 
 namespace CoreBot.Modules
 {
@@ -21,24 +22,23 @@ namespace CoreBot.Modules
         [Command("schedule")]
         public async Task GetUrbanQuoteAsync(int season)
         {
-            try
+            if (season <= 1950 || season > DateTime.Now.Year)
             {
-                var schedule = await _f1Service.GetRaceSchedule(season);
-                var raceList = new List<string>();
+                Log.Error($"Schedule not found for the given season: {season}.");
+                await ReplyAsync("Invalid season.");
+                return;
+            }
+            var schedule = await _f1Service.GetRaceSchedule(season);
+            var raceList = new List<string>();
 
-                foreach (var race in schedule.RaceData.RaceTable.Races)
-                {
-                    var raceDate = race.Date.Date + race.Time.TimeOfDay;
-                    var remainder = raceDate.Subtract(DateTime.Now);
-                    if (remainder.TotalSeconds >= 0) raceList.Add($"[{race.Round}] **{race.Circuit.CircuitName}** *({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})* in {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
-                    else raceList.Add($"[{race.Round}] **{race.Circuit.CircuitName}** *({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})* {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)} ago.");
-                }
-                await ReplyAsync(string.Join(Environment.NewLine, raceList));
-            }
-            catch (Exception ex)
+            foreach (var race in schedule.RaceData.RaceTable.Races)
             {
-                await ReplyAsync($"Failed to get schedule: {ex.Message}");
+                var raceDate = race.Date.Date + race.Time.TimeOfDay;
+                var remainder = raceDate.Subtract(DateTime.Now);
+                if (remainder.TotalSeconds >= 0) raceList.Add($"[{race.Round}] **{race.Circuit.CircuitName}** *({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})* in {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                else raceList.Add($"[{race.Round}] **{race.Circuit.CircuitName}** *({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})* {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)} ago.");
             }
+            await ReplyAsync(string.Join(Environment.NewLine, raceList));
         }
     }
 }
