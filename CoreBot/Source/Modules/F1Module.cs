@@ -19,7 +19,7 @@ namespace CoreBot.Modules
             _f1Service = f1Service;
         }
 
-        [Command("schedule")]
+        [Command("schedule"), Summary("Returns the F1 schedule for the given season")]
         public async Task GetUrbanQuoteAsync(int season = -1)
         {
             if (season == -1) season = DateTime.Now.Year; // Use current year if no year is specified
