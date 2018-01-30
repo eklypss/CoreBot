@@ -20,8 +20,9 @@ namespace CoreBot.Modules
         }
 
         [Command("schedule")]
-        public async Task GetUrbanQuoteAsync(int season)
+        public async Task GetUrbanQuoteAsync(int season = -1)
         {
+            if (season == -1) season = DateTime.Now.Year; // Use current year if no year is specified
             if (season <= 1950 || season > DateTime.Now.Year)
             {
                 Log.Error($"Schedule not found for the given season: {season}.");
