@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Discord.Commands;
-using CoreBot.Settings;
-using Humanizer;
-using Humanizer.Localisation;
-using Discord;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using CoreBot.Settings;
+using Discord;
+using Discord.Commands;
+using Humanizer;
+using Humanizer.Localisation;
 
 namespace CoreBot.Modules
 {
@@ -62,17 +62,15 @@ namespace CoreBot.Modules
         [Command("multichoice"), Summary("Return multiple random choices from space-separated list.")]
         public async Task GetRandomMultiChoiceAsync(int choices, [Remainder] string message)
         {
-            var components = message.Split(" ");
-            if (components.Length < choices || choices <= 0)
+            var components = message.Split(" ").ToList();
+            if (components.Count < choices || choices <= 0)
             {
                 await ReplyAsync("Not enough choices.");
                 return;
             }
             List<string> selections = new List<string>();
-            foreach (var i in Enumerable.Range(0, choices))
-            {
-                selections.Add(components[_random.Next(components.Length)]);
-            }
+            var randomChoices = Enumerable.Range(0, components.Count).OrderBy(x => _random.Next()).Take(choices).ToList();
+            randomChoices.ForEach(x => selections.Add(components[x]));
             await ReplyAsync(string.Join(" ", selections));
         }
     }
