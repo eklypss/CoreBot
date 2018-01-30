@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CoreBot.Models.F1.Races;
 using CoreBot.Services;
 using CoreBot.Settings;
 using Discord.Commands;
@@ -20,7 +21,7 @@ namespace CoreBot.Modules
         }
 
         [Command("schedule"), Summary("Returns the F1 schedule for the given season")]
-        public async Task GetUrbanQuoteAsync(int season = -1)
+        public async Task GetScheduleAsync(int season = -1)
         {
             if (season == -1) season = DateTime.Now.Year; // Use current year if no year is specified
             if (season <= 1950 || season > DateTime.Now.Year)
