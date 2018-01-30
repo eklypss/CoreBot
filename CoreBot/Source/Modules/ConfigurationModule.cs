@@ -8,6 +8,7 @@ using CoreBot.Models;
 using CoreBot.Settings;
 using Discord.Commands;
 using Humanizer;
+using Humanizer.Localisation;
 
 namespace CoreBot.Modules
 {
@@ -49,6 +50,51 @@ namespace CoreBot.Modules
                 await ReplyAsync($"Humanizer precision was changed to: {precision}. Previous precision: {previousPrecision}.");
             }
             else await ReplyAsync("Invalid value.");
+        }
+
+        [Command("maxunit"), Summary("Sets the max unit used by Humanizer.")]
+        public async Task SetMaxUnitAsync(string unit)
+        {
+            string currentUnit = BotSettings.Instance.HumanizerMaxUnit.ToString();
+            switch (unit.ToLower())
+            {
+                case "hour":
+                {
+                    BotSettings.Instance.HumanizerMaxUnit = TimeUnit.Hour;
+                    await FileHelper.SaveFileAsync(FileType.SettingsFile);
+                    break;
+                }
+                case "day":
+                {
+                    BotSettings.Instance.HumanizerMaxUnit = TimeUnit.Day;
+                    await FileHelper.SaveFileAsync(FileType.SettingsFile);
+                    break;
+                }
+                case "week":
+                {
+                    BotSettings.Instance.HumanizerMaxUnit = TimeUnit.Week;
+                    await FileHelper.SaveFileAsync(FileType.SettingsFile);
+                    break;
+                }
+                case "month":
+                {
+                    BotSettings.Instance.HumanizerMaxUnit = TimeUnit.Month;
+                    await FileHelper.SaveFileAsync(FileType.SettingsFile);
+                    break;
+                }
+                case "year":
+                {
+                    BotSettings.Instance.HumanizerMaxUnit = TimeUnit.Year;
+                    await FileHelper.SaveFileAsync(FileType.SettingsFile);
+                    break;
+                }
+                default:
+                {
+                    await ReplyAsync("Invalid unit specified, available units: hour, day, week, month, year.");
+                    return;
+                }
+            }
+            await ReplyAsync($"Humanizer max unit was changed to: {BotSettings.Instance.HumanizerMaxUnit.ToString()}. Previous precision: {currentUnit}.");
         }
     }
 }
