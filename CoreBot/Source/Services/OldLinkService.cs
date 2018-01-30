@@ -71,7 +71,7 @@ namespace CoreBot.Services
         public async Task SendMessageAsync(SocketMessage message, Link originalLink)
         {
             if (message.Author.IsBot) return;
-            string ago = (DateTime.Now - originalLink.Timestamp).Humanize(BotSettings.Instance.HumanizerPrecision);
+            string ago = (DateTime.Now - originalLink.Timestamp).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision);
             var users = await message.Channel.GetUsersAsync(CacheMode.AllowDownload).Flatten();
             string msg = $"Old link <:ewPalm:256415457622360064> sent {ago} ago";
 

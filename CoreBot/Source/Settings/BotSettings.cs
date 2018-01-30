@@ -5,6 +5,7 @@ using CoreBot.Helpers;
 using CoreBot.Interfaces;
 using Discord.Commands;
 using Discord.WebSocket;
+using Humanizer.Localisation;
 
 namespace CoreBot.Settings
 {
@@ -46,6 +47,7 @@ namespace CoreBot.Settings
         public string DateFormat { get; set; }
         public string DateTimeCulture { get; set; }
         public int HumanizerPrecision { get; set; } = DefaultValues.DEFAULT_HUMANIZER_PRECISION;
+        public TimeUnit HumanizerMaxUnit { get; set; } = DefaultValues.DEFAULT_HUMANIZER_MAXUNIT;
         public int GrapevineServerPort { get; set; } = DefaultValues.DEFAULT_GRAPEVINE_SERVER_PORT;
         public string DiscordnetLoglevel { get; set; } = DefaultValues.DEFAULT_LOGLEVEL;
         public string SelfHotstring { get; set; } = DefaultValues.DEFAULT_SELF_HOTSTRING;

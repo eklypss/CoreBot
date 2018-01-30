@@ -42,8 +42,8 @@ namespace CoreBot.Modules
                     if (remainder.TotalSeconds > 0)
                     {
                         await _eventService.CreateEventAsync(message, eventDate);
-                        Log.Information($"Event added: {message}, **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
-                        await ReplyAsync($"Event added: {message}, **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                        Log.Information($"Event added: {message}, **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
+                        await ReplyAsync($"Event added: {message}, **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
                     }
                     else await ReplyAsync("Invalid date.");
                 }
@@ -61,7 +61,7 @@ namespace CoreBot.Modules
                 foreach (var eve in Events.Instance.EventsList.Where(x => !x.Completed))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
@@ -78,7 +78,7 @@ namespace CoreBot.Modules
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.Date))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} at **{eve.Date.TimeOfDay}** (id: {eve.Id}), **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                    list.Add($"{eve.Message} at **{eve.Date.TimeOfDay}** (id: {eve.Id}), **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
@@ -95,7 +95,7 @@ namespace CoreBot.Modules
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.AddDays(1).Date))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} at **{eve.Date.TimeOfDay}** (id: {eve.Id}), **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                    list.Add($"{eve.Message} at **{eve.Date.TimeOfDay}** (id: {eve.Id}), **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
@@ -110,7 +110,7 @@ namespace CoreBot.Modules
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
                 var nextEvent = Events.Instance.EventsList.FirstOrDefault(x => !x.Completed);
                 var remainder = nextEvent.Date.Subtract(DateTime.Now);
-                await ReplyAsync($"Next event: {nextEvent.Message} (id: {nextEvent.Id}), **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                await ReplyAsync($"Next event: {nextEvent.Message} (id: {nextEvent.Id}), **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
             }
             else await ReplyAsync("No events to list.");
         }
@@ -125,7 +125,7 @@ namespace CoreBot.Modules
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Message.ToLower().Contains(searchTerm.ToLower())))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
                 }
                 await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
             }
@@ -151,8 +151,8 @@ namespace CoreBot.Modules
             var eve = Events.Instance.EventsList.FirstOrDefault(x => x.Id == id);
             if (eve != null)
             {
-                if (eve.Completed) await ReplyAsync($"**Event ID:** {eve.Id} {Environment.NewLine}**Message:** {eve.Message} {Environment.NewLine}**Date:** {eve.Date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))} {Environment.NewLine}**Completed:** {eve.Completed} ({eve.Date.Subtract(DateTime.Now).Humanize(BotSettings.Instance.HumanizerPrecision)} ago)");
-                else await ReplyAsync($"**Event ID:** {eve.Id} {Environment.NewLine}**Message:** {eve.Message} {Environment.NewLine}**Date:** {eve.Date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))} {Environment.NewLine}**Completed:** {eve.Completed} {Environment.NewLine}**Time left:** {eve.Date.Subtract(DateTime.Now).Humanize(BotSettings.Instance.HumanizerPrecision)}.");
+                if (eve.Completed) await ReplyAsync($"**Event ID:** {eve.Id} {Environment.NewLine}**Message:** {eve.Message} {Environment.NewLine}**Date:** {eve.Date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))} {Environment.NewLine}**Completed:** {eve.Completed} ({eve.Date.Subtract(DateTime.Now).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)} ago)");
+                else await ReplyAsync($"**Event ID:** {eve.Id} {Environment.NewLine}**Message:** {eve.Message} {Environment.NewLine}**Date:** {eve.Date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))} {Environment.NewLine}**Completed:** {eve.Completed} {Environment.NewLine}**Time left:** {eve.Date.Subtract(DateTime.Now).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
             }
             else await ReplyAsync("Event not found.");
         }
