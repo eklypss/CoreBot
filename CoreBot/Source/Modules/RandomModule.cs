@@ -6,6 +6,7 @@ using Humanizer;
 using Humanizer.Localisation;
 using Discord;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CoreBot.Modules
 {
@@ -13,7 +14,8 @@ namespace CoreBot.Modules
     {
         private readonly Random _random;
 
-        public RandomModule() {
+        public RandomModule()
+        {
             _random = new Random();
         }
 
@@ -49,11 +51,29 @@ namespace CoreBot.Modules
 
         [Command("randomchoice"), Summary("Return random choice from space-separated list")]
         [Alias("choice", "rngchoice")]
-        public async Task RandomChoice([Remainder] string message){
+        public async Task RandomChoice([Remainder] string message)
+        {
             var components = message.Split(" ");
             var selection = components[_random.Next(components.Length)];
 
             await ReplyAsync(selection);
+        }
+
+        [Command("multichoice"), Summary("Return multiple random choices from space-separated list")]
+        public async Task RandomMultiChoice(int choices, [Remainder] string message)
+        {
+            var components = message.Split(" ");
+            if (components.Length < choices || choices <= 0)
+            {
+                await ReplyAsync("Not enough choices.");
+                return;
+            }
+            List<string> selections = new List<string>();
+            foreach (var i in Enumerable.Range(0, choices))
+            {
+                selections.Add(components[_random.Next(components.Length)]);
+            }
+            await ReplyAsync(string.Join(" ", selections));
         }
     }
 }
