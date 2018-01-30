@@ -35,8 +35,8 @@ namespace CoreBot.Modules
             {
                 var raceDate = race.Date.Date + race.Time.TimeOfDay;
                 var remainder = raceDate.Subtract(DateTime.Now);
-                if (remainder.TotalSeconds >= 0) raceList.Add($"[{race.Round}] **{race.Circuit.CircuitName}** *({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})* in {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)}.");
-                else raceList.Add($"[{race.Round}] **{race.Circuit.CircuitName}** *({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})* {remainder.Humanize(BotSettings.Instance.HumanizerPrecision)} ago.");
+                if (remainder.TotalSeconds >= 0) raceList.Add($"[{race.Round}] **{race.Circuit.CircuitName}** *({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})* in {remainder.Humanize(maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: BotSettings.Instance.HumanizerPrecision)}.");
+                else raceList.Add($"[{race.Round}] **{race.Circuit.CircuitName}** *({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})* {remainder.Humanize(maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: BotSettings.Instance.HumanizerPrecision)} ago.");
             }
             await ReplyAsync(string.Join(Environment.NewLine, raceList));
         }
