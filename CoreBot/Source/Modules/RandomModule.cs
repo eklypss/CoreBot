@@ -27,7 +27,7 @@ namespace CoreBot.Modules
         }
 
         [Command("randomdate"), Summary("Returns a random date.")]
-        public async Task GetRandomDate(int years = 10)
+        public async Task GetRandomDateAsync(int years = 10)
         {
             var currentDate = DateTime.Now;
             int hours = years * 365 * 24;
@@ -37,7 +37,7 @@ namespace CoreBot.Modules
         }
 
         [Command("randomuser"), Summary("Returns a random user from the guild.")]
-        public async Task GetRandomUser()
+        public async Task GetRandomUserAsync()
         {
             var users = await Context.Guild.GetUsersAsync();
             // Create new list of users because the method above doesn't do it(?)
@@ -51,7 +51,7 @@ namespace CoreBot.Modules
 
         [Command("randomchoice"), Summary("Return random choice from space-separated list")]
         [Alias("choice", "rngchoice")]
-        public async Task RandomChoice([Remainder] string message)
+        public async Task GetRandomChoiceAsync([Remainder] string message)
         {
             var components = message.Split(" ");
             var selection = components[_random.Next(components.Length)];
@@ -60,7 +60,7 @@ namespace CoreBot.Modules
         }
 
         [Command("multichoice"), Summary("Return multiple random choices from space-separated list")]
-        public async Task RandomMultiChoice(int choices, [Remainder] string message)
+        public async Task GetRandomMultiChoiceAsync(int choices, [Remainder] string message)
         {
             var components = message.Split(" ");
             if (components.Length < choices || choices <= 0)
