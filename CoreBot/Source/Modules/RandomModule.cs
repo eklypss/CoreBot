@@ -49,7 +49,7 @@ namespace CoreBot.Modules
             await ReplyAsync($"Random user: {list[_random.Next(list.Count)]}");
         }
 
-        [Command("randomchoice"), Summary("Return random choice from space-separated list")]
+        [Command("randomchoice"), Summary("Return random choice from space-separated list.")]
         [Alias("choice", "rngchoice")]
         public async Task GetRandomChoiceAsync([Remainder] string message)
         {
@@ -59,7 +59,7 @@ namespace CoreBot.Modules
             await ReplyAsync(selection);
         }
 
-        [Command("multichoice"), Summary("Return multiple random choices from space-separated list")]
+        [Command("multichoice"), Summary("Return multiple random choices from space-separated list.")]
         public async Task GetRandomMultiChoiceAsync(int choices, [Remainder] string message)
         {
             var components = message.Split(" ");

@@ -13,13 +13,12 @@ namespace CoreBot.Modules
             _commentService = commentService;
         }
 
-        [Command("kommentti"), Summary("Returns random Ilta-Sanomat comment")]
-        [Alias("comment", "iscomment", "iltasanomat")]
+        [Command("comment"), Summary("Returns random Ilta-Sanomat comment")]
+        [Alias("kommentti", "iscomment", "iltasanomat")]
         public async Task RandomIsCommentAsync()
         {
             var embed = await _commentService.RandomCommentEmbed();
             await Context.Channel.SendMessageAsync("", embed: embed);
-
         }
     }
 }
