@@ -96,5 +96,19 @@ namespace CoreBot.Modules
             }
             await ReplyAsync($"Humanizer max unit was changed to: {BotSettings.Instance.HumanizerMaxUnit.ToString()}. Previous precision: {currentUnit}.");
         }
+
+        [Command("cmdlimit"), Summary("Sets the max dynamic commands displayed per line in command listing.")]
+        public async Task SetMaxLimitAsync(int limit)
+        {
+            // Only values between 1 and 5 seem to work.
+            if (Enumerable.Range(1, 30).Contains(limit))
+            {
+                var previousLimit = BotSettings.Instance.DynamicCommandsPerLine;
+                BotSettings.Instance.DynamicCommandsPerLine = limit;
+                await FileHelper.SaveFileAsync(FileType.SettingsFile);
+                await ReplyAsync($"Dynamic commands per line was changed to: {limit}. Previous limit: {previousLimit}.");
+            }
+            else await ReplyAsync("Invalid value, valid values: 1-30.");
+        }
     }
 }
