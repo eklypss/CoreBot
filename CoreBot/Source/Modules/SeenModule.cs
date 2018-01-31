@@ -10,6 +10,7 @@ namespace CoreBot.Modules
     public class SeenModule : ModuleBase
     {
         [Command("seen"), Summary("Shows latest activity of the specified user.")]
+        [Alias("s")]
         public async Task GetUserLastSeenInfoAsync(string userName)
         {
             var found = await Context.Channel.GetMessagesAsync(2000)

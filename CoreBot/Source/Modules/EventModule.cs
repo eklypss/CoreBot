@@ -13,7 +13,7 @@ using Serilog;
 namespace CoreBot.Modules
 {
     [Group("event"), Summary("Module for adding, viewing and editing events.")]
-    [Alias("events")]
+    [Alias("events", "e")]
     public class EventModule : ModuleBase
     {
         private readonly EventService _eventService;

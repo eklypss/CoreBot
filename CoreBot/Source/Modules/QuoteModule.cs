@@ -13,8 +13,8 @@ namespace CoreBot.Modules
             _quoteService = quoteService;
         }
 
-        [Command("viisaus"), Summary("Displays a quote linked to the search term.")]
-        [Alias("wiisaus")]
+        [Command("quote"), Summary("Displays a quote linked to the search term.")]
+        [Alias("wiisaus", "viisaus")]
         public async Task GetWisdomAsync([Remainder] string searchTerm = "a")
         {
             // Use "a" as default value because its much faster than "*", and still matches 16/26k rows

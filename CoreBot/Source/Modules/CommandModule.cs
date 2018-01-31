@@ -25,6 +25,7 @@ namespace CoreBot.Modules
         }
 
         [Command("add"), Summary("Adds a new dynamic command.")]
+        [Alias("new")]
         public async Task AddCommandAsync(string commandName, [Remainder] string commandAction)
         {
             if (commandAction.Length > 0 || !string.IsNullOrEmpty(commandAction))
@@ -49,6 +50,7 @@ namespace CoreBot.Modules
         }
 
         [Command("info"), Summary("Displays info about the command.")]
+        [Alias("i", "details")]
         public async Task DisplayCommandInfoAsync(string commandName)
         {
             var command = Commands.Instance.CommandsList.Find(x => x.Name.Equals(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), StringComparison.InvariantCultureIgnoreCase));
@@ -63,6 +65,7 @@ namespace CoreBot.Modules
         }
 
         [Command("delete"), Summary("Deletes a dynamic command.")]
+        [Alias("del", "remove")]
         public async Task DeleteCommandAsync(string commandName)
         {
             var command = Commands.Instance.CommandsList.Find(x => x.Name.Equals(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), StringComparison.InvariantCultureIgnoreCase));
@@ -80,6 +83,7 @@ namespace CoreBot.Modules
         }
 
         [Command("update"), Summary("Updates the action of a dynamic command.")]
+        [Alias("upd")]
         public async Task UpdateCommandAsync(string commandName, [Remainder] string newAction)
         {
             var command = Commands.Instance.CommandsList.Find(x => x.Name.Equals(commandName.Replace(BotSettings.Instance.BotPrefix.ToString(), string.Empty), StringComparison.InvariantCultureIgnoreCase));
@@ -97,6 +101,7 @@ namespace CoreBot.Modules
         }
 
         [Command("list"), Summary("Lists all available commands, both dynamic and module based.")]
+        [Alias("l", "all")]
         public async Task ListCommandsAsync()
         {
             var staticCommandNames = _commandService.Modules.Select(module =>

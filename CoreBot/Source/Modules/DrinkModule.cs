@@ -13,8 +13,8 @@ namespace CoreBot.Modules
             _drinkDao = drinkDao;
         }
 
-        [Command("juoma"), Summary("Returns a random drink from Alko website.")]
-        [Alias("drink")]
+        [Command("drink"), Summary("Returns a random drink from Alko website.")]
+        [Alias("juoma")]
         public async Task GetRandomDrinkAsync()
         {
             string link = _drinkDao.RandomLink();

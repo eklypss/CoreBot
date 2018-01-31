@@ -10,6 +10,7 @@ namespace CoreBot.Modules
         private static readonly HttpClient _http = new HttpClient();
 
         [Command("followage"), Summary("Displays how long the specified user has followed the specified Twitch channel.")]
+        [Alias("fa")]
         public async Task GetFollowAgeAsync(string user, string channel)
         {
             var result = await _http.GetAsync(string.Format(DefaultValues.FOLLOWAGE_URL, user, channel));

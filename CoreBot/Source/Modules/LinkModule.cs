@@ -11,6 +11,7 @@ namespace CoreBot.Modules
     public class LinkModule : ModuleBase
     {
         [Command("twitch"), Summary("Allows users to quickly link Twitch channels.")]
+        [Alias("stream")]
         public async Task GetTwitchLinkAsync(string channel)
         {
             await ReplyAsync(string.Format(DefaultValues.TWITCH_URL, channel));
