@@ -2,14 +2,13 @@
 using System.IO;
 using System.Reflection;
 using CoreBot.Helpers;
-using CoreBot.Interfaces;
 using Discord.Commands;
 using Discord.WebSocket;
 using Humanizer.Localisation;
 
 namespace CoreBot.Settings
 {
-    public class BotSettings : IBotSettings
+    public class BotSettings
     {
         private static BotSettings _instance;
 
