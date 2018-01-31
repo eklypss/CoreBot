@@ -36,7 +36,7 @@ namespace CoreBot.Settings
         public const int DEFAULT_HUMANIZER_PRECISION = 2;
         public const TimeUnit DEFAULT_HUMANIZER_MAXUNIT = TimeUnit.Year;
         public const int DEFAULT_GRAPEVINE_SERVER_PORT = 5700;
-
+        public const int DEFAULT_MAX_DYNAMIC_COMMANDS_PER_LINE = 5;
         public const string DEFAULT_SELF_HOTSTRING = "$me$";
     }
 }

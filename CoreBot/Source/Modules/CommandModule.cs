@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Collections;
@@ -104,12 +105,20 @@ namespace CoreBot.Modules
                 return $"{module.Name} *({string.Join(", ", moduleCommandNames)})*";
             });
 
-            var dynamicCommandNames = Commands.Instance.CommandsList
-                .Select(x => x.Name)
-                .Select(name => $"{BotSettings.Instance.BotPrefix}{name}");
-
+            var dynamicCommandNames = new List<string>();
+            var i = 0;
+            foreach (var command in Commands.Instance.CommandsList.Select(x => x.Name).Select(name => $"{BotSettings.Instance.BotPrefix}{name}"))
+            {
+                if (i == BotSettings.Instance.DynamicCommandsPerLine)
+                {
+                    i = 0;
+                    dynamicCommandNames.Add(Environment.NewLine);
+                }
+                dynamicCommandNames.Add(command);
+                i++;
+            }
             await ReplyAsync($"**Available static commands:**{Environment.NewLine}{string.Join(Environment.NewLine, staticCommandNames)}");
-            await ReplyAsync($"**Available dynamic commands:**{Environment.NewLine}{string.Join(Environment.NewLine, dynamicCommandNames)}");
+            await ReplyAsync($"**Available dynamic commands:**{Environment.NewLine}{string.Join(" ", dynamicCommandNames)}");
         }
     }
 }

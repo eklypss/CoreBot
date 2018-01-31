@@ -51,6 +51,7 @@ namespace CoreBot.Settings
         public int GrapevineServerPort { get; set; } = DefaultValues.DEFAULT_GRAPEVINE_SERVER_PORT;
         public string DiscordnetLoglevel { get; set; } = DefaultValues.DEFAULT_LOGLEVEL;
         public string SelfHotstring { get; set; } = DefaultValues.DEFAULT_SELF_HOTSTRING;
+        public int DynamicCommandsPerLine { get; set; } = DefaultValues.DEFAULT_MAX_DYNAMIC_COMMANDS_PER_LINE;
 
         private BotSettings()
         {
