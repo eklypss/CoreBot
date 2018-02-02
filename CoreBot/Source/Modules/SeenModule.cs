@@ -22,9 +22,10 @@ namespace CoreBot.Modules
                 var msg = found.First(m => m.Author.Username.Equals(userName, StringComparison.InvariantCultureIgnoreCase));
 
                 var embed = new EmbedBuilder()
-               .AddField(msg.Author.Username, msg.Content)
-               .WithFooter($"{DateTime.Now.Subtract(msg.Timestamp.DateTime.AddHours(2)).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)} ago")
+                    .WithDescription(msg.Content)
+               .WithTimestamp(msg.Timestamp)
                .WithColor(BotSettings.Instance.EmbeddedColor)
+               .WithAuthor(msg.Author)
                .Build();
                 await ReplyAsync(string.Empty, embed: embed);
             }
