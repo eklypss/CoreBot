@@ -3,13 +3,13 @@ using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using CoreBot.Database.Dao;
 using CoreBot.Models;
+using CoreBot.Settings;
 using Discord;
 
 namespace CoreBot.Services
 {
     public class CommentService
     {
-
         private readonly int MAX_FIELD_LEN = 1024;
 
         private readonly CommentDao _commentDao;
@@ -21,7 +21,7 @@ namespace CoreBot.Services
             _htmlParser = new HtmlParser();
         }
 
-        public static async Task <CommentService> Create()
+        public static async Task<CommentService> Create()
         {
             var commentDao = await CommentDao.Create();
             return new CommentService(commentDao);
@@ -34,7 +34,7 @@ namespace CoreBot.Services
             var embed = new EmbedBuilder()
                 .AddField(comment.Author, FormatHtmlMessage(comment))
                 .WithFooter($"+{comment.Upvotes} 👍")
-                .WithColor(Color.Purple)
+                .WithColor(BotSettings.Instance.EmbeddedColor)
                 .Build();
 
             return embed;

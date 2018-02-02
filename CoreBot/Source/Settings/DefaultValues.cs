@@ -1,4 +1,5 @@
 ﻿using System;
+using Discord;
 using Humanizer.Localisation;
 
 namespace CoreBot.Settings
@@ -38,5 +39,7 @@ namespace CoreBot.Settings
         public const int DEFAULT_GRAPEVINE_SERVER_PORT = 5700;
         public const int DEFAULT_MAX_DYNAMIC_COMMANDS_PER_LINE = 5;
         public const string DEFAULT_SELF_HOTSTRING = "$me$";
+
+        public static Color DEFAULT_EMBEDDED_COLOR = Color.Green;
     }
 }

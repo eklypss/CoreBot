@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using CoreBot.Helpers;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Humanizer.Localisation;
@@ -51,6 +52,7 @@ namespace CoreBot.Settings
         public string DiscordnetLoglevel { get; set; } = DefaultValues.DEFAULT_LOGLEVEL;
         public string SelfHotstring { get; set; } = DefaultValues.DEFAULT_SELF_HOTSTRING;
         public int DynamicCommandsPerLine { get; set; } = DefaultValues.DEFAULT_MAX_DYNAMIC_COMMANDS_PER_LINE;
+        public Color EmbeddedColor { get; set; } = DefaultValues.DEFAULT_EMBEDDED_COLOR;
 
         private BotSettings()
         {

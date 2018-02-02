@@ -24,7 +24,7 @@ namespace CoreBot.Modules
                 var embed = new EmbedBuilder()
                .AddField(msg.Author.Username, msg.Content)
                .WithFooter($"{DateTime.Now.Subtract(msg.Timestamp.DateTime).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)} ago")
-               .WithColor(Color.Purple)
+               .WithColor(BotSettings.Instance.EmbeddedColor)
                .Build();
                 //await ReplyAsync($"{msg.Author.Username} was last seen { ago saying: `{msg.Content}`");
                 await ReplyAsync(string.Empty, embed: embed);
