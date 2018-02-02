@@ -26,12 +26,11 @@ namespace CoreBot.Modules
                .WithFooter($"{DateTime.Now.Subtract(msg.Timestamp.DateTime).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)} ago")
                .WithColor(BotSettings.Instance.EmbeddedColor)
                .Build();
-                //await ReplyAsync($"{msg.Author.Username} was last seen { ago saying: `{msg.Content}`");
                 await ReplyAsync(string.Empty, embed: embed);
             }
             else
             {
-                await ReplyAsync($"No messages from \"{userName}\"");
+                await ReplyAsync($"No messages from \"{userName}\."");
             }
         }
     }
