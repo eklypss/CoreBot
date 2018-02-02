@@ -22,7 +22,7 @@ namespace CoreBot.Modules
                 var msg = found.First(m => m.Author.Username.Equals(userName, StringComparison.InvariantCultureIgnoreCase));
 
                 var embed = new EmbedBuilder()
-                    .WithDescription(msg.Content)
+               .WithDescription(msg.Content)
                .WithTimestamp(msg.Timestamp)
                .WithColor(BotSettings.Instance.EmbeddedColor)
                .WithAuthor(msg.Author)
