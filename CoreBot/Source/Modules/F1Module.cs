@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CoreBot.Models.F1.Races;
 using CoreBot.Services;
 using CoreBot.Settings;
 using Discord.Commands;
