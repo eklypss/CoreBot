@@ -7,7 +7,7 @@ namespace CoreBot.Interfaces
     {
         Task<string> GetWeatherDataAsync(string location);
 
-        Task<string> FmiAsync(string location);
+        Task<string> GetDataFmiAsync(string location);
 
         string CreateWeatherMessage(string location, object temp, string country, string status, object wind, DateTime timestamp);
     }

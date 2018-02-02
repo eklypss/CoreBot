@@ -31,7 +31,7 @@ namespace CoreBot.Services
             string openWeatherUrl = string.Format(DefaultValues.OPEN_WEATHER_URL, location, BotSettings.Instance.WeatherAPIKey);
             // Don't use await for parallel page loading
             var openWeatherQuery = _http.GetAsync(openWeatherUrl);
-            var fmiQuery = FmiAsync(location);
+            var fmiQuery = GetDataFmiAsync(location);
 
             await Task.WhenAll(openWeatherQuery, fmiQuery);
             if (fmiQuery.Result != null)
@@ -48,7 +48,7 @@ namespace CoreBot.Services
             return CreateWeatherMessage(result.Name, Math.Round(result.Main.Temp - 273, 1), result.Sys.Country, result.Weather.FirstOrDefault().Description, result.Wind.Speed, date);
         }
 
-        public async Task<string> FmiAsync(string location)
+        public async Task<string> GetDataFmiAsync(string location)
         {
             try
             {
