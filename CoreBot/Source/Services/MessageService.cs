@@ -35,7 +35,7 @@ namespace CoreBot.Services
             }
             catch (Exception)
             {
-                Log.Error($"Couldn't send message because channel '{BotSettings.Instance.DefaultChannel}' at '{BotSettings.Instance.DefaultGuild}' not found");
+                Log.Error($"Couldn't send message because channel '{BotSettings.Instance.DefaultChannel}' at '{BotSettings.Instance.DefaultGuild}' not found.");
             }
         }
     }
