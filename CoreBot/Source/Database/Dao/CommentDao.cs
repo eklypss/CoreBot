@@ -9,7 +9,6 @@ namespace CoreBot.Database.Dao
 {
     public class CommentDao
     {
-
         private readonly int _totalCount;
         private readonly Random _random;
 
@@ -21,11 +20,10 @@ namespace CoreBot.Database.Dao
 
         public static async Task<CommentDao> Create()
         {
-
             using (var conn = DbConnection.Open())
             {
                 var count = await conn.CountAsync<IltasanomatComment>();
-                Log.Information($"loaded {count} Ilta-Sanomat comments");
+                Log.Information($"Loaded {count} Ilta-Sanomat comments.");
 
                 var maxQuery = conn.From<IltasanomatComment>()
                     .Select(c => c.Id)
@@ -35,9 +33,8 @@ namespace CoreBot.Database.Dao
 
                 if (maxId != count - 1)
                 {
-                    Log.Error($"comment consistency error, maxId: {maxId}, count: {count}");
+                    Log.Error($"Comment consistency error, maxId: {maxId}, count: {count}.");
                 }
-
 
                 return new CommentDao((int)count);
             }
@@ -52,7 +49,7 @@ namespace CoreBot.Database.Dao
 
                 var randomComment = await conn.SingleAsync<IltasanomatComment>(x => x.Id == index);
 
-                Log.Debug($"comment fetch took {bench.ElapsedMilliseconds} ms");
+                Log.Debug($"Comment fetch took {bench.ElapsedMilliseconds} milliseconds.");
                 return randomComment;
             }
         }
