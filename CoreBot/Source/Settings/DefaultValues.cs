@@ -21,6 +21,8 @@ namespace CoreBot.Settings
         public const string OPEN_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q={0}&APPID={1}";
         public const string FOLLOWAGE_URL = "https://2g.be/twitch/following.php?user={0}&channel={1}&format=mwdhms";
         public const string URBAN_API_URL = "https://mashape-community-urban-dictionary.p.mashape.com/define?term={0}";
+        public const string EP_PLAYERSTATS_URL = "http://www.eliteprospects.com/player.php?player={0}";
+        public const string EP_PLAYERIMAGE_URL = "http://files.eliteprospects.com/layout/players/{0}";
         public const string VKS_URL = "http://kaino.kotus.fi/vks/";
         public const string VKS_PAGING = VKS_URL + "?p=searchresults";
         public const string TWITCH_URL = "https://www.twitch.tv/{0}";

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreBot.Settings;
+using Discord;
 using Discord.Commands;
 using epnetcore;
 
@@ -78,10 +80,11 @@ namespace CoreBot.Modules
                 return;
             }
 
-            var statsList = new List<string>();
+            var embed = new EmbedBuilder();
             var season = data.FirstOrDefault();
             var player = season.Player;
-            statsList.Add($"**Player:** {player.FirstName} {player.LastName}  **Season:** {season.Season.StartYear}-{season.Season.EndYear} **DoB:** {player.DateOfBirth} **Country:** {player.Country.Name} **Height:** {player.Height} cm **Weight:** {player.Weight} kg");
+            embed.WithTitle($"{player.FirstName} {player.LastName}");
+            embed.WithDescription($"**Season:** {season.Season.StartYear}-{season.Season.EndYear} **DoB:** {player.DateOfBirth} **Country:** {player.Country.Name} **Height:** {player.Height} cm **Weight:** {player.Weight} kg");
             foreach (var team in data)
             {
                 string gameType = string.Empty;
@@ -93,14 +96,17 @@ namespace CoreBot.Modules
                 }
                 if (player.PlayerPosition == "GOALIE")
                 {
-                    statsList.Add($"**Team:** {team.Team.Name} ({gameType}) **GP:** {team.GP} **SVP:** {team.SVP} **GAA:** {team.GAA}");
+                    embed.AddField($"{team.Team.Name} ({gameType})", $"**GP:** {team.GP} **SVP:** {team.SVP} **GAA:** {team.GAA}");
                 }
                 else
                 {
-                    statsList.Add($"**Team:** {team.Team.Name} ({gameType}) **GP:** {team.GP} **G:** {team.G} **A:** {team.A} **TP:** {team.TP} **PPG:** {team.PPG} **+/-:** {team.PM} **PIM:** {team.PIM}");
+                    embed.AddField($"{team.Team.Name} ({gameType})", $"**GP:** {team.GP} **G:** {team.G} **A:** {team.A} **TP:** {team.TP} **PPG:** {team.PPG} **+/-:** {team.PM} **PIM:** {team.PIM}");
                 }
+                embed.WithTimestamp(DateTime.Parse(player.Updated));
+                embed.WithUrl(string.Format(DefaultValues.EP_PLAYERSTATS_URL, player.Id));
+                if (!string.IsNullOrEmpty(player.ImageUrl)) embed.WithThumbnailUrl(string.Format(DefaultValues.EP_PLAYERIMAGE_URL, player.ImageUrl));
             }
-            await ReplyAsync($"{string.Join(Environment.NewLine, statsList)}");
+            await ReplyAsync(string.Empty, embed: embed);
         }
     }
 }
