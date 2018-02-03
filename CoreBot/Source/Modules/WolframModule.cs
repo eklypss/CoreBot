@@ -24,7 +24,7 @@ namespace CoreBot.Modules
                 await ReplyAsync("No answer found.");
                 return;
             }
-            var resultPod = answer.Pods.FirstOrDefault(x => x.Title.ToLower().Contains("response") || x.Title.ToLower().Contains("result"));
+            var resultPod = answer.Pods.FirstOrDefault(x => x.Title.ToLower().Contains("response") || x.Title.ToLower().Contains("result") || x.Title.ToLower().Contains("summary"));
             var inputPod = answer.Pods.FirstOrDefault(x => x.Title.ToLower().Contains("input"));
             var embed = new EmbedBuilder()
                 .AddField(inputPod.Subpods.FirstOrDefault().PlainText, resultPod.Subpods.FirstOrDefault().PlainText);
