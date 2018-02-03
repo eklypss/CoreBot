@@ -24,8 +24,9 @@ namespace CoreBot.Modules
                 await ReplyAsync("No answer found.");
                 return;
             }
-            var resultPod = answer.Pods.FirstOrDefault(x => x.Title.ToLower().Contains("response") || x.Title.ToLower().Contains("result") || x.Title.ToLower().Contains("summary"));
-            var inputPod = answer.Pods.FirstOrDefault(x => x.Title.ToLower().Contains("input"));
+
+            var inputPod = answer.Pods[0];
+            var resultPod = answer.Pods[1];
             var embed = new EmbedBuilder()
                 .AddField(inputPod.Subpods.FirstOrDefault().PlainText, resultPod.Subpods.FirstOrDefault().PlainText);
             await ReplyAsync(string.Empty, embed: embed);
