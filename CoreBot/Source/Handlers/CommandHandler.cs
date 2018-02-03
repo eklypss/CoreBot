@@ -51,6 +51,7 @@ namespace CoreBot.Handlers
             _services.AddSingleton(new EPClient(BotSettings.Instance.EPAPIKey));
             _services.AddSingleton(messageService);
             _services.AddSingleton(eventService);
+            _services.AddSingleton(new WolframService());
             _services.AddSingleton(new StartupTime());
             _services.AddSingleton(new F1Service());
             if (drinkDao != null) _services.AddSingleton(drinkDao);
