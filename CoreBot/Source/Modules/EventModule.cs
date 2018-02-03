@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CoreBot.Collections;
 using CoreBot.Services;
 using CoreBot.Settings;
+using Discord;
 using Discord.Commands;
 using Humanizer;
 using Serilog;
@@ -41,9 +42,12 @@ namespace CoreBot.Modules
                     var remainder = eventDate.Subtract(DateTime.Now);
                     if (remainder.TotalSeconds > 0)
                     {
+                        var embed = new EmbedBuilder().WithTitle("Event added");
                         await _eventService.CreateEventAsync(message, eventDate);
                         Log.Information($"Event added: {message}, **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
-                        await ReplyAsync($"Event added: {message}, **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
+                        embed.AddField("Event name", message);
+                        embed.AddField("Time remaining", $"{remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}");
+                        await ReplyAsync(string.Empty, embed: embed);
                     }
                     else await ReplyAsync("Invalid date.");
                 }
@@ -56,14 +60,14 @@ namespace CoreBot.Modules
         {
             if (Events.Instance.EventsList.Any(x => !x.Completed))
             {
-                var list = new List<string>();
+                var embed = new EmbedBuilder().WithTitle("List of upcoming events");
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
                 foreach (var eve in Events.Instance.EventsList.Where(x => !x.Completed))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
+                    embed.AddField(eve.Message, $"{remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}");
                 }
-                await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
+                await ReplyAsync(string.Empty, embed: embed);
             }
             else await ReplyAsync("No events to list.");
         }
@@ -73,14 +77,14 @@ namespace CoreBot.Modules
         {
             if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.Date).Count > 0)
             {
-                var list = new List<string>();
+                var embed = new EmbedBuilder().WithTitle("Events happening today");
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.Date))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} at **{eve.Date.TimeOfDay}** (id: {eve.Id}), **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
+                    embed.AddField(eve.Message, $"{remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}");
                 }
-                await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
+                await ReplyAsync(string.Empty, embed: embed);
             }
             else await ReplyAsync("No events today.");
         }
@@ -90,14 +94,14 @@ namespace CoreBot.Modules
         {
             if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.AddDays(1).Date).Count > 0)
             {
-                var list = new List<string>();
+                var embed = new EmbedBuilder().WithTitle("Events happening tomorrow");
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.AddDays(1).Date))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} at **{eve.Date.TimeOfDay}** (id: {eve.Id}), **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
+                    embed.AddField(eve.Message, $"{remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}");
                 }
-                await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
+                await ReplyAsync(string.Empty, embed: embed);
             }
             else await ReplyAsync("No events tomorrow.");
         }
@@ -107,10 +111,12 @@ namespace CoreBot.Modules
         {
             if (Events.Instance.EventsList.FindAll(x => !x.Completed).Count > 0)
             {
+                var embed = new EmbedBuilder().WithTitle("Next event");
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
                 var nextEvent = Events.Instance.EventsList.FirstOrDefault(x => !x.Completed);
                 var remainder = nextEvent.Date.Subtract(DateTime.Now);
-                await ReplyAsync($"Next event: {nextEvent.Message} (id: {nextEvent.Id}), **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
+                embed.AddField(nextEvent.Message, $"{remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}");
+                await ReplyAsync(string.Empty, embed: embed);
             }
             else await ReplyAsync("No events to list.");
         }
@@ -120,14 +126,14 @@ namespace CoreBot.Modules
         {
             if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Message.ToLower().Contains(searchTerm.ToLower())).Count > 0)
             {
-                var list = new List<string>();
+                var embed = new EmbedBuilder().WithTitle($"Events containing '{searchTerm}'");
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Message.ToLower().Contains(searchTerm.ToLower())))
                 {
                     var remainder = eve.Date.Subtract(DateTime.Now);
-                    list.Add($"{eve.Message} (id: {eve.Id}), **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
+                    embed.AddField(eve.Message, $"**ID**: {eve.Id}, **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
                 }
-                await ReplyAsync($"{string.Join(Environment.NewLine, list)}");
+                await ReplyAsync(string.Empty, embed: embed);
             }
             else await ReplyAsync("No events found.");
         }
@@ -151,8 +157,12 @@ namespace CoreBot.Modules
             var eve = Events.Instance.EventsList.FirstOrDefault(x => x.Id == id);
             if (eve != null)
             {
-                if (eve.Completed) await ReplyAsync($"**Event ID:** {eve.Id} {Environment.NewLine}**Message:** {eve.Message} {Environment.NewLine}**Date:** {eve.Date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))} {Environment.NewLine}**Completed:** {eve.Completed} ({eve.Date.Subtract(DateTime.Now).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)} ago)");
-                else await ReplyAsync($"**Event ID:** {eve.Id} {Environment.NewLine}**Message:** {eve.Message} {Environment.NewLine}**Date:** {eve.Date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture))} {Environment.NewLine}**Completed:** {eve.Completed} {Environment.NewLine}**Time left:** {eve.Date.Subtract(DateTime.Now).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
+                var embed = new EmbedBuilder().WithTitle(eve.Message);
+                embed.AddField("ID", eve.Id);
+                embed.AddField("Date", eve.Date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture)));
+                if (eve.Completed) embed.AddField("Status", $"Completed {eve.Date.Subtract(DateTime.Now).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)} ago");
+                else embed.AddField("Status", $"**Time left:** {eve.Date.Subtract(DateTime.Now).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
+                await ReplyAsync(string.Empty, embed: embed);
             }
             else await ReplyAsync("Event not found.");
         }
