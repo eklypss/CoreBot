@@ -61,31 +61,26 @@ namespace CoreBot.Modules
                 case "hour":
                 {
                     BotSettings.Instance.HumanizerMaxUnit = TimeUnit.Hour;
-                    await FileHelper.SaveFileAsync(FileType.SettingsFile);
                     break;
                 }
                 case "day":
                 {
                     BotSettings.Instance.HumanizerMaxUnit = TimeUnit.Day;
-                    await FileHelper.SaveFileAsync(FileType.SettingsFile);
                     break;
                 }
                 case "week":
                 {
                     BotSettings.Instance.HumanizerMaxUnit = TimeUnit.Week;
-                    await FileHelper.SaveFileAsync(FileType.SettingsFile);
                     break;
                 }
                 case "month":
                 {
                     BotSettings.Instance.HumanizerMaxUnit = TimeUnit.Month;
-                    await FileHelper.SaveFileAsync(FileType.SettingsFile);
                     break;
                 }
                 case "year":
                 {
                     BotSettings.Instance.HumanizerMaxUnit = TimeUnit.Year;
-                    await FileHelper.SaveFileAsync(FileType.SettingsFile);
                     break;
                 }
                 default:
@@ -94,6 +89,8 @@ namespace CoreBot.Modules
                     return;
                 }
             }
+
+            await FileHelper.SaveFileAsync(FileType.SettingsFile);
             await ReplyAsync($"Humanizer max unit was changed to: {BotSettings.Instance.HumanizerMaxUnit.ToString()}. Previous precision: {currentUnit}.");
         }
 
@@ -109,6 +106,41 @@ namespace CoreBot.Modules
                 await ReplyAsync($"Dynamic commands per line was changed to: {limit}. Previous limit: {previousLimit}.");
             }
             else await ReplyAsync("Invalid value, valid values: 1-30.");
+        }
+
+        [Command("setapikey"), Summary("Sets/updates the selected API key in bot settings.")]
+        public async Task SetAPIKeyAsync(string api, string key)
+        {
+            switch (api.ToLower())
+            {
+                case "weather":
+                {
+                    BotSettings.Instance.WeatherAPIKey = key;
+                    break;
+                }
+                case "ep":
+                {
+                    BotSettings.Instance.EPAPIKey = key;
+                    break;
+                }
+                case "urban":
+                {
+                    BotSettings.Instance.UrbanMashapeKey = key;
+                    break;
+                }
+                case "wolfram":
+                {
+                    BotSettings.Instance.WolframAppID = key;
+                    break;
+                }
+                default:
+                {
+                    await ReplyAsync("Invalid value, valid values: ``weather`` ``ep`` ``urban`` ``wolfram``");
+                    return;
+                }
+            }
+            await FileHelper.SaveFileAsync(FileType.SettingsFile);
+            await ReplyAsync("API key set.");
         }
     }
 }

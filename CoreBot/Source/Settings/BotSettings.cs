@@ -42,13 +42,14 @@ namespace CoreBot.Settings
 
         public string WeatherAPIKey { get; set; } = string.Empty;
         public string EPAPIKey { get; set; } = string.Empty;
-        public List<string> OldLinkBlacklist { get; set; }
         public string UrbanMashapeKey { get; set; } = string.Empty;
         public string WolframAppID { get; set; } = string.Empty;
 
         public string DateTimeFormat { get; set; }
         public string DateFormat { get; set; }
         public string DateTimeCulture { get; set; }
+
+        public List<string> OldLinkBlacklist { get; set; }
 
         public int HumanizerPrecision { get; set; } = DefaultValues.DEFAULT_HUMANIZER_PRECISION;
         public TimeUnit HumanizerMaxUnit { get; set; } = DefaultValues.DEFAULT_HUMANIZER_MAXUNIT;
