@@ -84,7 +84,8 @@ namespace CoreBot.Modules
             var season = data.FirstOrDefault();
             var player = season.Player;
             embed.WithTitle($"{player.FirstName} {player.LastName}");
-            embed.WithDescription($"**Season:** {season.Season.StartYear}-{season.Season.EndYear} **DoB:** {player.DateOfBirth} **Country:** {player.Country.Name} **Height:** {player.Height} cm **Weight:** {player.Weight} kg");
+            embed.WithDescription($"**DoB:** {player.DateOfBirth} **Country:** {player.Country.Name} **Height:** {player.Height} cm **Weight:** {player.Weight} kg");
+            embed.AddField("Latest season", $"{season.Season.StartYear}-{season.Season.EndYear}");
             foreach (var team in data)
             {
                 string gameType = string.Empty;
@@ -102,7 +103,7 @@ namespace CoreBot.Modules
                 {
                     embed.AddField($"{team.Team.Name} ({gameType})", $"**GP:** {team.GP} **G:** {team.G} **A:** {team.A} **TP:** {team.TP} **PPG:** {team.PPG} **+/-:** {team.PM} **PIM:** {team.PIM}");
                 }
-                embed.WithTimestamp(DateTime.Parse(player.Updated));
+                embed.WithTimestamp(DateTime.Parse(season.Updated));
                 embed.WithUrl(string.Format(DefaultValues.EP_PLAYERSTATS_URL, player.Id));
                 if (!string.IsNullOrEmpty(player.ImageUrl)) embed.WithThumbnailUrl(string.Format(DefaultValues.EP_PLAYERIMAGE_URL, player.ImageUrl));
             }
