@@ -105,6 +105,7 @@ namespace CoreBot.Modules
                 }
                 embed.WithTimestamp(DateTime.Parse(season.Updated));
                 embed.WithUrl(string.Format(DefaultValues.EP_PLAYERSTATS_URL, player.Id));
+                embed.WithColor(BotSettings.Instance.EmbeddedColor);
                 if (!string.IsNullOrEmpty(player.ImageUrl)) embed.WithThumbnailUrl(string.Format(DefaultValues.EP_PLAYERIMAGE_URL, player.ImageUrl));
             }
             await ReplyAsync(string.Empty, embed: embed);

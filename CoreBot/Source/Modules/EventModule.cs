@@ -42,7 +42,7 @@ namespace CoreBot.Modules
                     var remainder = eventDate.Subtract(DateTime.Now);
                     if (remainder.TotalSeconds > 0)
                     {
-                        var embed = new EmbedBuilder().WithTitle("Event added");
+                        var embed = new EmbedBuilder().WithTitle("Event added").WithColor(BotSettings.Instance.EmbeddedColor);
                         await _eventService.CreateEventAsync(message, eventDate);
                         Log.Information($"Event added: {message}, **time left:** {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
                         embed.AddField("Event name", message);
@@ -60,7 +60,7 @@ namespace CoreBot.Modules
         {
             if (Events.Instance.EventsList.Any(x => !x.Completed))
             {
-                var embed = new EmbedBuilder().WithTitle("List of upcoming events");
+                var embed = new EmbedBuilder().WithTitle("List of upcoming events").WithColor(BotSettings.Instance.EmbeddedColor);
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
                 foreach (var eve in Events.Instance.EventsList.Where(x => !x.Completed))
                 {
@@ -77,7 +77,7 @@ namespace CoreBot.Modules
         {
             if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.Date).Count > 0)
             {
-                var embed = new EmbedBuilder().WithTitle("Events happening today");
+                var embed = new EmbedBuilder().WithTitle("Events happening today").WithColor(BotSettings.Instance.EmbeddedColor);
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.Date))
                 {
@@ -94,7 +94,7 @@ namespace CoreBot.Modules
         {
             if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.AddDays(1).Date).Count > 0)
             {
-                var embed = new EmbedBuilder().WithTitle("Events happening tomorrow");
+                var embed = new EmbedBuilder().WithTitle("Events happening tomorrow").WithColor(BotSettings.Instance.EmbeddedColor);
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Date.Date == DateTime.Now.AddDays(1).Date))
                 {
@@ -111,7 +111,7 @@ namespace CoreBot.Modules
         {
             if (Events.Instance.EventsList.FindAll(x => !x.Completed).Count > 0)
             {
-                var embed = new EmbedBuilder().WithTitle("Next event");
+                var embed = new EmbedBuilder().WithTitle("Next event").WithColor(BotSettings.Instance.EmbeddedColor);
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
                 var nextEvent = Events.Instance.EventsList.FirstOrDefault(x => !x.Completed);
                 var remainder = nextEvent.Date.Subtract(DateTime.Now);
@@ -126,7 +126,7 @@ namespace CoreBot.Modules
         {
             if (Events.Instance.EventsList.FindAll(x => !x.Completed && x.Message.ToLower().Contains(searchTerm.ToLower())).Count > 0)
             {
-                var embed = new EmbedBuilder().WithTitle($"Events containing '{searchTerm}'");
+                var embed = new EmbedBuilder().WithTitle($"Events containing '{searchTerm}'").WithColor(BotSettings.Instance.EmbeddedColor);
                 Events.Instance.EventsList.Sort((a, b) => a.Date.CompareTo(b.Date));
                 foreach (var eve in Events.Instance.EventsList.FindAll(x => !x.Completed && x.Message.ToLower().Contains(searchTerm.ToLower())))
                 {
@@ -157,7 +157,7 @@ namespace CoreBot.Modules
             var eve = Events.Instance.EventsList.FirstOrDefault(x => x.Id == id);
             if (eve != null)
             {
-                var embed = new EmbedBuilder().WithTitle(eve.Message);
+                var embed = new EmbedBuilder().WithTitle(eve.Message).WithColor(BotSettings.Instance.EmbeddedColor);
                 embed.AddField("ID", eve.Id);
                 embed.AddField("Date", eve.Date.ToString(BotSettings.Instance.DateTimeFormat, new CultureInfo(BotSettings.Instance.DateTimeCulture)));
                 if (eve.Completed) embed.AddField("Status", $"Completed {eve.Date.Subtract(DateTime.Now).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)} ago");

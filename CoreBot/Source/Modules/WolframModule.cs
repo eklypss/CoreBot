@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Services;
+using CoreBot.Settings;
 using Discord;
 using Discord.Commands;
 
@@ -28,7 +29,7 @@ namespace CoreBot.Modules
             var inputPod = answer.Pods[0];
             var resultPod = answer.Pods[1];
             var embed = new EmbedBuilder()
-                .AddField(inputPod.Subpods.FirstOrDefault().PlainText, resultPod.Subpods.FirstOrDefault().PlainText);
+                .AddField(inputPod.Subpods.FirstOrDefault().PlainText, resultPod.Subpods.FirstOrDefault().PlainText).WithColor(BotSettings.Instance.EmbeddedColor);
             await ReplyAsync(string.Empty, embed: embed);
         }
     }
