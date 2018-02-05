@@ -88,9 +88,9 @@ namespace CoreBot.Services
         public Embed CreateEmbedWeatherMessage(string location, object temp, string country, string status, object wind, DateTime timestamp)
         {
             return new EmbedBuilder()
-                 .AddField("Temperature", $"{temp}°C")
-                 .AddField("Wind", $"{wind} m/s")
-                 .AddField("Status", status)
+                 .AddInlineField("Temperature", $"{temp}°C")
+                 .AddInlineField("Wind", $"{wind} m/s")
+                 .AddInlineField("Status", status)
                  .WithTitle($"{location}, {country}")
                  .WithColor(BotSettings.Instance.EmbeddedColor)
                  .WithTimestamp(timestamp).Build();
