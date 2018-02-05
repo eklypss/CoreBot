@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using CoreBot.Enum;
 using CoreBot.Helpers;
 using CoreBot.Models;
 using CoreBot.Settings;
+using Discord;
 using Discord.Commands;
 using Humanizer;
 using Humanizer.Localisation;
@@ -141,6 +143,15 @@ namespace CoreBot.Modules
             }
             await FileHelper.SaveFileAsync(FileType.SettingsFile);
             await ReplyAsync("API key set.");
+        }
+
+        [Command("embedcolor"), Summary("Sets the color used in embedded messeages.")]
+        public async Task SetEmbeddedColorAsync([Remainder] string color)
+        {
+            var systemColor = System.Drawing.Color.FromName(color);
+            BotSettings.Instance.EmbeddedColor = new Discord.Color(systemColor.R, systemColor.G, systemColor.B);
+            await FileHelper.SaveFileAsync(FileType.SettingsFile);
+            await ReplyAsync($"Embedded color changed to ``{systemColor.Name}``.");
         }
     }
 }
