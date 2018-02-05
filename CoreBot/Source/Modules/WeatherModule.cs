@@ -20,7 +20,7 @@ namespace CoreBot.Modules
         {
             Log.Information($"Getting weather data for the given location: {location}.");
             var weather = await _weatherService.GetWeatherDataAsync(location);
-            await ReplyAsync(weather);
+            await ReplyAsync(string.Empty, embed: weather);
         }
     }
 }

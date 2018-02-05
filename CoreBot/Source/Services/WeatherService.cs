@@ -4,9 +4,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AngleSharp.Parser.Html;
 using CoreBot.Helpers;
-using CoreBot.Interfaces;
 using CoreBot.Models.Weather;
 using CoreBot.Settings;
+using Discord;
 using Humanizer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,7 +16,7 @@ using static CoreBot.Helpers.HelperMethods;
 
 namespace CoreBot.Services
 {
-    public class WeatherService : IWeatherService
+    public class WeatherService
     {
         private readonly HtmlParser _parser;
         private static readonly HttpClient _http = new HttpClient();
@@ -26,7 +26,7 @@ namespace CoreBot.Services
             _parser = new HtmlParser();
         }
 
-        public async Task<string> GetWeatherDataAsync(string location)
+        public async Task<Embed> GetWeatherDataAsync(string location)
         {
             string openWeatherUrl = string.Format(DefaultValues.OPEN_WEATHER_URL, location, BotSettings.Instance.WeatherAPIKey);
             // Don't use await for parallel page loading
@@ -42,13 +42,13 @@ namespace CoreBot.Services
             if (result.Code == 404)
             {
                 Log.Warning($"Weather data not found for {location}.");
-                return "Weather data not found.";
+                return new EmbedBuilder().WithTitle("Weather data not found.").WithColor(BotSettings.Instance.EmbeddedColor).Build();
             }
             var date = result.Dt.ToDateTime().ToLocalTime();
-            return CreateWeatherMessage(result.Name, Math.Round(result.Main.Temp - 273, 1), result.Sys.Country, result.Weather.FirstOrDefault().Description, result.Wind.Speed, date);
+            return CreateEmbedWeatherMessage(result.Name, Math.Round(result.Main.Temp - 273, 1), result.Sys.Country, result.Weather.FirstOrDefault().Description, result.Wind.Speed, date);
         }
 
-        public async Task<string> GetDataFmiAsync(string location)
+        public async Task<Embed> GetDataFmiAsync(string location)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace CoreBot.Services
                 long timeStamp = weatherInfo.latestObservationTime / 1000;
                 var date = timeStamp.ToDateTime();
 
-                return CreateWeatherMessage(location.ToTitleCase(), temperature, "FI", weatherStatus, wind, date);
+                return CreateEmbedWeatherMessage(location.ToTitleCase(), temperature, "FI", weatherStatus, wind, date);
             }
             catch (Exception)
             {
@@ -83,6 +83,17 @@ namespace CoreBot.Services
         {
             string ago = (DateTime.Now - timestamp).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision);
             return $"[**{location}, {country}**], **temp:** {temp}°C, {status}, **wind:** {wind} m/s, **updated:** {ago} ago";
+        }
+
+        public Embed CreateEmbedWeatherMessage(string location, object temp, string country, string status, object wind, DateTime timestamp)
+        {
+            return new EmbedBuilder()
+                 .AddField("Temperature", $"{temp}°C")
+                 .AddField("Wind", $"{wind} m/s")
+                 .AddField("Status", status)
+                 .WithTitle($"{location}, {country}")
+                 .WithColor(BotSettings.Instance.EmbeddedColor)
+                 .WithTimestamp(timestamp).Build();
         }
     }
 }
