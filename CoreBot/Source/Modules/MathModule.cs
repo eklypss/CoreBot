@@ -1,6 +1,8 @@
 ﻿using System.Data;
 using System.Globalization;
 using System.Threading.Tasks;
+using CoreBot.Settings;
+using Discord;
 using Discord.Commands;
 
 namespace CoreBot.Modules
@@ -14,7 +16,9 @@ namespace CoreBot.Modules
             using (var dataTable = new DataTable { CaseSensitive = false, Locale = CultureInfo.CurrentCulture })
             {
                 var result = dataTable.Compute(input, string.Empty);
-                await ReplyAsync($"`{input} = {result}`");
+                var embed = new EmbedBuilder().WithColor(BotSettings.Instance.EmbeddedColor).WithTitle(input);
+                embed.WithDescription(result.ToString());
+                await ReplyAsync(string.Empty, embed: embed);
             }
         }
     }
