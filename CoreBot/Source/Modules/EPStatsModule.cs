@@ -48,36 +48,42 @@ namespace CoreBot.Modules
         public async Task GetTopScoringAsync()
         {
             var scoring = await _client.GetTopScorersAsync(7);
-            var scoringList = new List<string>();
+            var embed = new EmbedBuilder().WithColor(BotSettings.Instance.EmbeddedColor);
+            int rank = 1;
             foreach (var scorer in scoring.Data)
             {
-                scoringList.Add($"**{scorer.Player.FirstName} {scorer.Player.LastName}** ({scorer.Team.Name}) **GP:** {scorer.GP} **G:** {scorer.G} **A:** {scorer.A} **TP:** {scorer.TP} **PPG:** {scorer.PPG} **+/-:** {scorer.PM} **PIM:** {scorer.PIM}");
+                embed.AddField($"#{rank} {scorer.Player.FirstName} {scorer.Player.LastName} ({scorer.Team.Name})", $"**GP:** {scorer.GP} **G:** {scorer.G} **A:** {scorer.A} **TP:** {scorer.TP} **PPG:** {scorer.PPG} **+/-:** {scorer.PM} **PIM:** {scorer.PIM}");
+                rank++;
             }
-            await ReplyAsync(string.Join(Environment.NewLine, scoringList));
+            await ReplyAsync(string.Empty, embed: embed);
         }
 
         [Command("goals"), Summary("Displays current top 10 scoring in goals.")]
         public async Task Get()
         {
             var scoring = await _client.GetTopGoalsAsync(7);
-            var scoringList = new List<string>();
+            var embed = new EmbedBuilder().WithColor(BotSettings.Instance.EmbeddedColor);
+            int rank = 1;
             foreach (var scorer in scoring.Data)
             {
-                scoringList.Add($"**{scorer.Player.FirstName} {scorer.Player.LastName}** ({scorer.Team.Name}) **GP:** {scorer.GP} **G:** {scorer.G} **A:** {scorer.A} **TP:** {scorer.TP} **PPG:** {scorer.PPG} **+/-:** {scorer.PM} **PIM:** {scorer.PIM}");
+                embed.AddField($"#{rank} {scorer.Player.FirstName} {scorer.Player.LastName} ({scorer.Team.Name})", $"**GP:** {scorer.GP} **G:** {scorer.G} **A:** {scorer.A} **TP:** {scorer.TP} **PPG:** {scorer.PPG} **+/-:** {scorer.PM} **PIM:** {scorer.PIM}");
+                rank++;
             }
-            await ReplyAsync(string.Join(Environment.NewLine, scoringList));
+            await ReplyAsync(string.Empty, embed: embed);
         }
 
         [Command("svp"), Summary("Displays current top 10 scoring in SVP.")]
         public async Task GetPlayerStatsAsync()
         {
             var scoring = await _client.GetTopSVPAsync(7);
-            var scoringList = new List<string>();
+            var embed = new EmbedBuilder().WithColor(BotSettings.Instance.EmbeddedColor);
+            int rank = 1;
             foreach (var scorer in scoring.Data)
             {
-                scoringList.Add($"**{scorer.Player.FirstName} {scorer.Player.LastName}** ({scorer.Team.Name}) **GP:** {scorer.GP} **SVP:** {scorer.SVP} **GAA:** {scorer.GAA}");
+                embed.AddField($"#{rank} {scorer.Player.FirstName} {scorer.Player.LastName} ({scorer.Team.Name})", $"**GP:** {scorer.GP} **SVP:** {scorer.SVP} **GAA:** {scorer.GAA}");
+                rank++;
             }
-            await ReplyAsync(string.Join(Environment.NewLine, scoringList));
+            await ReplyAsync(string.Empty, embed: embed);
         }
 
         [Command("stats"), Summary("Displays stats of the given player.")]
