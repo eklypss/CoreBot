@@ -44,14 +44,38 @@ namespace CoreBot.Modules
             else await ReplyAsync("No contract found for current season.");
         }
 
-        [Command("scoring"), Summary("Displays current top 5 scoring.")]
-        public async Task GetPlayerStatsAsync()
+        [Command("scoring"), Summary("Displays current top 10 scoring in total points.")]
+        public async Task GetTopScoringAsync()
         {
-            var scoring = await _client.GetTopScorers(7);
+            var scoring = await _client.GetTopScorersAsync(7);
             var scoringList = new List<string>();
             foreach (var scorer in scoring.Data)
             {
                 scoringList.Add($"**{scorer.Player.FirstName} {scorer.Player.LastName}** ({scorer.Team.Name}) **GP:** {scorer.GP} **G:** {scorer.G} **A:** {scorer.A} **TP:** {scorer.TP} **PPG:** {scorer.PPG} **+/-:** {scorer.PM} **PIM:** {scorer.PIM}");
+            }
+            await ReplyAsync(string.Join(Environment.NewLine, scoringList));
+        }
+
+        [Command("goals"), Summary("Displays current top 10 scoring in goals.")]
+        public async Task Get()
+        {
+            var scoring = await _client.GetTopGoalsAsync(7);
+            var scoringList = new List<string>();
+            foreach (var scorer in scoring.Data)
+            {
+                scoringList.Add($"**{scorer.Player.FirstName} {scorer.Player.LastName}** ({scorer.Team.Name}) **GP:** {scorer.GP} **G:** {scorer.G} **A:** {scorer.A} **TP:** {scorer.TP} **PPG:** {scorer.PPG} **+/-:** {scorer.PM} **PIM:** {scorer.PIM}");
+            }
+            await ReplyAsync(string.Join(Environment.NewLine, scoringList));
+        }
+
+        [Command("svp"), Summary("Displays current top 10 scoring in SVP.")]
+        public async Task GetPlayerStatsAsync()
+        {
+            var scoring = await _client.GetTopSVPAsync(7);
+            var scoringList = new List<string>();
+            foreach (var scorer in scoring.Data)
+            {
+                scoringList.Add($"**{scorer.Player.FirstName} {scorer.Player.LastName}** ({scorer.Team.Name}) **GP:** {scorer.GP} **SVP:** {scorer.SVP} **GAA:** {scorer.GAA}");
             }
             await ReplyAsync(string.Join(Environment.NewLine, scoringList));
         }
