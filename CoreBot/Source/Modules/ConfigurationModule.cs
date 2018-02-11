@@ -145,7 +145,7 @@ namespace CoreBot.Modules
             await ReplyAsync("API key set.");
         }
 
-        [Command("embedcolor"), Summary("Sets the color used in embedded messeages.")]
+        [Command("embedcolor"), Summary("Sets the color used in embedded messages.")]
         public async Task SetEmbeddedColorAsync([Remainder] string color)
         {
             var systemColor = System.Drawing.Color.FromName(color);
