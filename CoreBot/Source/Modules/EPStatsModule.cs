@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CoreBot.Settings;
@@ -59,6 +58,7 @@ namespace CoreBot.Modules
         }
 
         [Command("goals"), Summary("Displays current top 10 scoring in goals.")]
+        [Alias("goal")]
         public async Task Get()
         {
             var scoring = await _client.GetTopGoalsAsync(7);
@@ -73,6 +73,7 @@ namespace CoreBot.Modules
         }
 
         [Command("svp"), Summary("Displays current top 10 scoring in SVP.")]
+        [Alias("svs", "save", "saves")]
         public async Task GetPlayerStatsAsync()
         {
             var scoring = await _client.GetTopSVPAsync(7);
@@ -87,6 +88,7 @@ namespace CoreBot.Modules
         }
 
         [Command("stats"), Summary("Displays stats of the given player.")]
+        [Alias("sts")]
         public async Task GetPlayerStatsAsync([Remainder] string playerName)
         {
             int id;
