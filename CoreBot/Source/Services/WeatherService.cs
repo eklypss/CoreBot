@@ -44,7 +44,8 @@ namespace CoreBot.Services
                 Log.Warning($"Weather data not found for {location}.");
                 return new EmbedBuilder().WithTitle("Weather data not found.").WithColor(BotSettings.Instance.EmbeddedColor).Build();
             }
-            var date = result.Dt.ToDateTime().ToLocalTime();
+
+            var date = result.Dt.ToDateTime();
             return CreateEmbedWeatherMessage(result.Name, Math.Round(result.Main.Temp - 273, 1), result.Sys.Country, result.Weather.FirstOrDefault().Description, result.Wind.Speed, date);
         }
 
@@ -68,7 +69,7 @@ namespace CoreBot.Services
                 var temperature = weatherInfo.t2m.Last[1];
                 var wind = weatherInfo.WindSpeedMS != null ? weatherInfo.WindSpeedMS.Last[1] : "??";
                 long timeStamp = weatherInfo.latestObservationTime / 1000;
-                var date = timeStamp.ToDateTime();
+                var date = timeStamp.ToDateTime(TimeZoneInfo.Local);
 
                 return CreateEmbedWeatherMessage(location.ToTitleCase(), temperature, "FI", weatherStatus, wind, date);
             }
