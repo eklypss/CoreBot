@@ -160,10 +160,10 @@ namespace CoreBot.Services
 
         public IElement RemoveBookLink(IElement e)
         {
-            var bookLink = e.QuerySelector("span");
-            if (bookLink != null)
+            IElement spanElement;
+            while ((spanElement = e.QuerySelector("span")) != null)
             {
-                e.RemoveChild(bookLink);
+                e.RemoveChild(spanElement);
             }
 
             return e;
