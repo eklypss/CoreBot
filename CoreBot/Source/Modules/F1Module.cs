@@ -20,6 +20,7 @@ namespace CoreBot.Modules
         }
 
         [Command("schedule"), Summary("Returns the F1 schedule for the given season")]
+        [Alias("s")]
         public async Task GetScheduleAsync(int season = -1)
         {
             var embed = new EmbedBuilder().WithColor(BotSettings.Instance.EmbeddedColor);
