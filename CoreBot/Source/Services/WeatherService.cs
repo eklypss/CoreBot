@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Parser.Html;
 using CoreBot.Helpers;
@@ -59,8 +60,10 @@ namespace CoreBot.Services
                 // Parse initial response
                 var document = await _parser.ParseAsync(await idResponse.Content.ReadAsStringAsync());
                 var id = document.QuerySelector("#observation-station-menu option").GetAttribute("value");
-                var statusCss = ".first-mobile-forecast-time-step-content div.weather-symbol";
-                var weatherStatus = document.QuerySelector(statusCss).GetAttribute("title");
+                var statusCss = ".first-mobile-forecast-time-step-content div.smartsymbol";
+                var statusElement = document.QuerySelector(statusCss);
+                var weatherStatus = statusElement.GetAttribute("title");
+                var iconId = Regex.Match(statusElement.OuterHtml, @"code-(\d+)").Groups[1].Value;
 
                 var weatherResponse = await _http.GetAsync(DefaultValues.FMI_TEMP_URL + id);
 
@@ -70,12 +73,11 @@ namespace CoreBot.Services
                 var wind = weatherInfo.WindSpeedMS != null ? weatherInfo.WindSpeedMS.Last[1] : "??";
                 long timeStamp = weatherInfo.latestObservationTime / 1000;
                 var date = timeStamp.ToDateTime(TimeZoneInfo.Local);
-
-                return CreateEmbedWeatherMessage(location.ToTitleCase(), temperature, "FI", weatherStatus, wind, date);
+                return CreateEmbedWeatherMessage(location.ToTitleCase(), temperature, "FI", weatherStatus, wind, date, string.Format(DefaultValues.FMI_WEATHER_ICON_URL, iconId));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Log.Warning("Could not parse using FMI.");
+                Log.Warning("Could not parse using FMI." + e);
                 return null;
             }
         }
@@ -86,15 +88,17 @@ namespace CoreBot.Services
             return $"[**{location}, {country}**], **temp:** {temp}°C, {status}, **wind:** {wind} m/s, **updated:** {ago} ago";
         }
 
-        public Embed CreateEmbedWeatherMessage(string location, object temp, string country, string status, object wind, DateTime timestamp)
+        public Embed CreateEmbedWeatherMessage(string location, object temp, string country, string status, object wind, DateTime timestamp, string iconUrl = null)
         {
+            Console.WriteLine("iconurl " + iconUrl);
             return new EmbedBuilder()
-                 .AddInlineField("Temperature", $"{temp}°C")
-                 .AddInlineField("Wind", $"{wind} m/s")
-                 .AddInlineField("Status", status)
-                 .WithTitle($"{location}, {country}")
-                 .WithColor(BotSettings.Instance.EmbeddedColor)
-                 .WithTimestamp(timestamp).Build();
+                .AddInlineField("Temperature", $"{temp}°C")
+                .AddInlineField("Wind", $"{wind} m/s")
+                .AddInlineField("Status", status)
+                .WithTitle($"{location}, {country}")
+                .WithColor(BotSettings.Instance.EmbeddedColor)
+                .WithTimestamp(timestamp)
+                .WithThumbnailUrl(iconUrl).Build();
         }
     }
 }
