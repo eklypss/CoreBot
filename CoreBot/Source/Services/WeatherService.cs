@@ -90,7 +90,6 @@ namespace CoreBot.Services
 
         public Embed CreateEmbedWeatherMessage(string location, object temp, string country, string status, object wind, DateTime timestamp, string iconUrl = null)
         {
-            Console.WriteLine("iconurl " + iconUrl);
             return new EmbedBuilder()
                 .AddInlineField("Temperature", $"{temp}°C")
                 .AddInlineField("Wind", $"{wind} m/s")
