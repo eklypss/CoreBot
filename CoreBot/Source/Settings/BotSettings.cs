@@ -58,6 +58,7 @@ namespace CoreBot.Settings
         public string SelfHotstring { get; set; } = DefaultValues.DEFAULT_SELF_HOTSTRING;
         public int DynamicCommandsPerLine { get; set; } = DefaultValues.DEFAULT_MAX_DYNAMIC_COMMANDS_PER_LINE;
         public Color EmbeddedColor { get; set; } = DefaultValues.DEFAULT_EMBEDDED_COLOR;
+        public char SeparatorChar { get; set; } = DefaultValues.DEFAULT_SEPARATOR_CHAR;
 
         private BotSettings()
         {

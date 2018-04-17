@@ -55,9 +55,14 @@ namespace CoreBot.Modules
         [Alias("choice", "rngchoice", "c")]
         public async Task GetRandomChoiceAsync([Remainder] string message)
         {
-            var components = message.Split(" ");
-            var selection = components[_random.Next(components.Length)];
+            List<string> components = new List<string>();
+            if (message.Contains(BotSettings.Instance.SeparatorChar))
+            {
+                components.AddRange(message.Split(BotSettings.Instance.SeparatorChar));
+            }
+            else components.AddRange(message.Split(" "));
 
+            var selection = components[_random.Next(components.Count)];
             await ReplyAsync(selection);
         }
 
@@ -65,7 +70,12 @@ namespace CoreBot.Modules
         [Alias("mc")]
         public async Task GetRandomMultiChoiceAsync(int choices, [Remainder] string message)
         {
-            var components = message.Split(" ").ToList();
+            List<string> components = new List<string>();
+            if (message.Contains(BotSettings.Instance.SeparatorChar))
+            {
+                components.AddRange(message.Split(BotSettings.Instance.SeparatorChar));
+            }
+            else components.AddRange(message.Split(" "));
             if (components.Count < choices || choices <= 0)
             {
                 await ReplyAsync("Not enough choices.");
