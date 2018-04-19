@@ -16,8 +16,12 @@ namespace CoreBot.Modules
             using (var dataTable = new DataTable { CaseSensitive = false, Locale = CultureInfo.CurrentCulture })
             {
                 var result = dataTable.Compute(input, string.Empty);
-                var embed = new EmbedBuilder().WithColor(BotSettings.Instance.EmbeddedColor).WithTitle(input);
-                embed.WithDescription(result.ToString());
+                var embed = new EmbedBuilder()
+                    .WithColor(BotSettings.Instance.EmbeddedColor)
+                    .WithTitle(input)
+                    .WithDescription(result.ToString())
+                    .Build();
+
                 await ReplyAsync(string.Empty, embed: embed);
             }
         }

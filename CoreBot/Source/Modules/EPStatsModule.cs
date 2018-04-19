@@ -54,7 +54,7 @@ namespace CoreBot.Modules
                 embed.AddField($"#{rank} {scorer.Player.FirstName} {scorer.Player.LastName} ({scorer.Team.Name})", $"**GP:** {scorer.GP} **G:** {scorer.G} **A:** {scorer.A} **TP:** {scorer.TP} **PPG:** {scorer.PPG} **+/-:** {scorer.PM} **PIM:** {scorer.PIM}");
                 rank++;
             }
-            await ReplyAsync(string.Empty, embed: embed);
+            await ReplyAsync(string.Empty, embed: embed.Build());
         }
 
         [Command("goals"), Summary("Displays current top 10 scoring in goals.")]
@@ -69,7 +69,7 @@ namespace CoreBot.Modules
                 embed.AddField($"#{rank} {scorer.Player.FirstName} {scorer.Player.LastName} ({scorer.Team.Name})", $"**GP:** {scorer.GP} **G:** {scorer.G} **A:** {scorer.A} **TP:** {scorer.TP} **PPG:** {scorer.PPG} **+/-:** {scorer.PM} **PIM:** {scorer.PIM}");
                 rank++;
             }
-            await ReplyAsync(string.Empty, embed: embed);
+            await ReplyAsync(string.Empty, embed: embed.Build());
         }
 
         [Command("svp"), Summary("Displays current top 10 scoring in SVP.")]
@@ -84,7 +84,7 @@ namespace CoreBot.Modules
                 embed.AddField($"#{rank} {scorer.Player.FirstName} {scorer.Player.LastName} ({scorer.Team.Name})", $"**GP:** {scorer.GP} **SVP:** {scorer.SVP} **GAA:** {scorer.GAA}");
                 rank++;
             }
-            await ReplyAsync(string.Empty, embed: embed);
+            await ReplyAsync(string.Empty, embed: embed.Build());
         }
 
         [Command("stats"), Summary("Displays stats of the given player.")]
@@ -140,7 +140,7 @@ namespace CoreBot.Modules
                 embed.WithColor(BotSettings.Instance.EmbeddedColor);
                 if (!string.IsNullOrEmpty(player.ImageUrl)) embed.WithThumbnailUrl(string.Format(DefaultValues.EP_PLAYERIMAGE_URL, player.ImageUrl));
             }
-            await ReplyAsync(string.Empty, embed: embed);
+            await ReplyAsync(string.Empty, embed: embed.Build());
         }
     }
 }

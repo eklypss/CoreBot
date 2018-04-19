@@ -72,7 +72,7 @@ namespace CoreBot.Services
         {
             if (message.Author.IsBot) return;
             string ago = (DateTime.Now - originalLink.Timestamp).Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision);
-            var users = await message.Channel.GetUsersAsync(CacheMode.AllowDownload).Flatten();
+            var users = await message.Channel.GetUsersAsync().FlattenAsync();
             string msg = $"Old link <:ewPalm:256415457622360064> sent {ago} ago";
 
             var originalSender = (SocketGuildUser)users

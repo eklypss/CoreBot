@@ -29,7 +29,10 @@ namespace CoreBot.Modules
             var inputPod = answer.Pods[0];
             var resultPod = answer.Pods[1];
             var embed = new EmbedBuilder()
-                .AddField(inputPod.Subpods.FirstOrDefault().PlainText, resultPod.Subpods.FirstOrDefault().PlainText).WithColor(BotSettings.Instance.EmbeddedColor);
+                .AddField(inputPod.Subpods.FirstOrDefault().PlainText, resultPod.Subpods.FirstOrDefault().PlainText)
+                .WithColor(BotSettings.Instance.EmbeddedColor)
+                .Build();
+
             await ReplyAsync(string.Empty, embed: embed);
         }
     }

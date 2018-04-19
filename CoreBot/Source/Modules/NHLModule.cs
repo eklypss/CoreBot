@@ -31,7 +31,7 @@ namespace CoreBot.Modules
                     standingStringList.Add($"{team.Team.Name} **GP**: {team.GamesPlayed} **W:** {team.LeagueRecord.Wins} **L:** {team.LeagueRecord.Losses} **OT:** {team.LeagueRecord.Ot} **GF:** {team.GoalsScored} **GA:** {team.GoalsAgainst} **DIFF:** {team.GoalsScored - team.GoalsAgainst} **TP:** {team.Points}");
                 }
                 embed.AddField($"**{conference.Conference.Name} {conference.Division.Name}**", string.Join(Environment.NewLine, standingStringList));
-                await ReplyAsync(string.Empty, embed: embed);
+                await ReplyAsync(string.Empty, embed: embed.Build());
             }
         }
     }

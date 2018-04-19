@@ -29,7 +29,7 @@ namespace CoreBot.Modules
             {
                 Log.Error($"Schedule not found for the given season: {season}.");
                 embed.WithDescription($"Schedule not found for the given season: {season}.");
-                await ReplyAsync(string.Empty, embed: embed);
+                await ReplyAsync(string.Empty, embed: embed.Build());
                 return;
             }
             var schedule = await _f1Service.GetRaceSchedule(season);
@@ -40,7 +40,7 @@ namespace CoreBot.Modules
                 if (remainder.TotalSeconds >= 0) embed.AddField($"[{race.Round}] {race.Circuit.CircuitName} ({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})", $"in {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
                 else embed.AddField($"[{race.Round}] {race.Circuit.CircuitName} ({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})", $"{remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)} ago.");
             }
-            await ReplyAsync(string.Empty, embed: embed);
+            await ReplyAsync(string.Empty, embed: embed.Build());
         }
     }
 }
