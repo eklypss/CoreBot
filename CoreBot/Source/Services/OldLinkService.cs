@@ -80,7 +80,8 @@ namespace CoreBot.Services
 
             if (originalSender != null)
             {
-                // ???
+                if (originalSender.Id == message.Author.Id) return;
+
                 string sender = string.IsNullOrWhiteSpace(originalSender.Nickname) ?
                     originalSender.Username : originalSender.Nickname;
 
