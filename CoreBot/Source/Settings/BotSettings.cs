@@ -44,6 +44,7 @@ namespace CoreBot.Settings
         public string EPAPIKey { get; set; } = string.Empty;
         public string UrbanMashapeKey { get; set; } = string.Empty;
         public string WolframAppID { get; set; } = string.Empty;
+        public string AzureVisionKey { get; set; } = string.Empty;
 
         public string DateTimeFormat { get; set; }
         public string DateFormat { get; set; }

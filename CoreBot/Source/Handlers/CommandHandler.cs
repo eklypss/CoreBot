@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using CoreBot.Api;
@@ -24,6 +25,7 @@ namespace CoreBot.Handlers
         private IServiceCollection _services;
         private IServiceProvider _serviceProvider;
         private OldLinkService _oldLinkService;
+        private ForbiddenMsgService _forbiddenMsgService;
         private Spammer _spammer;
 
         public async Task InstallAsync(DiscordSocketClient discordClient,
@@ -56,6 +58,7 @@ namespace CoreBot.Handlers
             _services.AddSingleton(new F1Service());
             if (drinkDao != null) _services.AddSingleton(drinkDao);
             _oldLinkService = new OldLinkService();
+            _forbiddenMsgService = new ForbiddenMsgService();
             _spammer = new Spammer();
 
             JobManager.Initialize(eventService);
@@ -78,6 +81,7 @@ namespace CoreBot.Handlers
             {
                 var userMessage = (SocketUserMessage)message;
                 await _oldLinkService.CheckAsync(userMessage);
+                await _forbiddenMsgService.CheckMsgAsync(userMessage);
                 var context = new SocketCommandContext(_client, userMessage);
                 int argPos = 0;
 

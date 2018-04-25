@@ -25,6 +25,7 @@ namespace CoreBot.Settings
         public const string EP_PLAYERSTATS_URL = "http://www.eliteprospects.com/player.php?player={0}";
         public const string EP_PLAYERIMAGE_URL = "http://files.eliteprospects.com/layout/players/{0}";
         public static string WOLFRAM_API_URL = "http://api.wolframalpha.com/v2/query?appid={0}&input={1}&output=json";
+        public const string AZURE_VISION_URL = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/analyze?visualFeatures=Description";
         public const string VKS_URL = "http://kaino.kotus.fi/vks/";
         public const string VKS_PAGING = VKS_URL + "?p=searchresults";
         public const string TWITCH_URL = "https://www.twitch.tv/{0}";
