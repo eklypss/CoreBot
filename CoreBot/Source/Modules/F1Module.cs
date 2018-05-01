@@ -42,5 +42,21 @@ namespace CoreBot.Modules
             }
             await ReplyAsync(string.Empty, embed: embed.Build());
         }
+
+        [Command("upcoming"), Summary("Returns the upcoming F1 schedule")]
+        [Alias("u")]
+        public async Task GetUpcomingScheduleAsync()
+        {
+            var embed = new EmbedBuilder().WithColor(BotSettings.Instance.EmbeddedColor);
+            var season = DateTime.Now.Year;
+            var schedule = await _f1Service.GetRaceSchedule(season);
+            foreach (var race in schedule.RaceData.RaceTable.Races)
+            {
+                var raceDate = race.Date.Date + race.Time.TimeOfDay;
+                var remainder = raceDate.Subtract(DateTime.Now);
+                if (remainder.TotalSeconds >= 0) embed.AddField($"[{race.Round}] {race.Circuit.CircuitName} ({race.Circuit.Location.Locality}, {race.Circuit.Location.Country})", $"in {remainder.Humanize(maxUnit: BotSettings.Instance.HumanizerMaxUnit, precision: BotSettings.Instance.HumanizerPrecision)}.");
+            }
+            await ReplyAsync(string.Empty, embed: embed.Build());
+        }
     }
 }
