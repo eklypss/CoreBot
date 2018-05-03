@@ -1,11 +1,8 @@
 language: csharp
 solution: CoreBot.sln
 mono: none
-dotnet: 2.0.0
+dotnet: 2.1.105
 dist: trusty
-before_install:
-- chmod +x CoreBot.Scripts/*.sh
 script:
 - dotnet restore
 - dotnet test CoreBot.Test
-- CoreBot.Scripts/travis-deploy.sh
