@@ -1,0 +1,10 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - build
+    - -f
+    - Dockerfile.prod
+    - -t
+    - gcr.io/eminent-wording-203018/corebot
+    - .
+images: ['gcr.io/eminent-wording-203018/corebot']

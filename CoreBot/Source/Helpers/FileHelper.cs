@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading.Tasks;
 using CoreBot.Database;
-using CoreBot.Enum;
 using CoreBot.Settings;
 using Newtonsoft.Json;
 using Serilog;
@@ -11,102 +10,65 @@ namespace CoreBot.Helpers
 {
     public static class FileHelper
     {
-        public async static Task CheckFilesAsync()
+
+        public static string settingsPath;
+
+        public async static Task CheckFilesAsync(string settingsPath)
         {
             Log.Information("Checking bot files.");
-            if (!Directory.Exists(BotSettings.Instance.SettingsFolder)) await CreateFileAsync(FileType.SettingsFolder);
-            if (!File.Exists(BotSettings.Instance.SettingsFile)) await CreateFileAsync(FileType.SettingsFile);
-            else await LoadFileAsync(FileType.SettingsFile);
+
+            if (!File.Exists(settingsPath))
+            {
+                Log.Fatal("settings file not found at " + settingsPath);
+                Environment.Exit(1);
+            }
+
+            FileHelper.settingsPath = settingsPath;
+
+            await LoadSettingsAsync(settingsPath);
             await DbConnection.InitAsync();
         }
 
-        public async static Task CreateFileAsync(FileType fileType)
+        public async static Task SaveSettingsAsync()
         {
-            switch (fileType)
+            try
             {
-                case FileType.SettingsFile:
+                using (StreamWriter writer = File.CreateText(settingsPath))
                 {
-                    try
-                    {
-                        Log.Warning("Settings file does not exist. Trying to create it.");
-                        using (StreamWriter writer = File.CreateText(BotSettings.Instance.SettingsFile))
-                        {
-                            await writer.WriteAsync(JsonConvert.SerializeObject(BotSettings.Instance, Formatting.Indented));
-                            Log.Information($"Settings file created at: {BotSettings.Instance.SettingsFile}.");
-                        }
-                        Log.Error($"Change your bot token in the configuration file at {BotSettings.Instance.SettingsFile} and restart the program.");
-                        break;
-                    }
-                    catch (Exception)
-                    {
-                        Log.Error("Failed to create the configuration file.");
-                        throw;
-                    }
+                    await writer.WriteAsync(JsonConvert.SerializeObject(BotSettings.Instance, Formatting.Indented));
+                    Log.Information($"Successfully saved settings to {settingsPath}.");
                 }
-                case FileType.SettingsFolder:
-                {
-                    Log.Warning("Settings folder does not exist. Trying to create it.");
-                    Directory.CreateDirectory(BotSettings.Instance.SettingsFolder);
-                    BotSettings.Instance.SettingsFile = Path.Combine(BotSettings.Instance.SettingsFolder, "BotSettings.json");
-                    Log.Information($"Settings folder created at: {BotSettings.Instance.SettingsFolder}.");
-                    break;
-                }
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error occurred while trying to save settings. " + e);
+                throw;
             }
         }
 
-        public async static Task SaveFileAsync(FileType fileType)
+        public async static Task LoadSettingsAsync(string path)
         {
-            switch (fileType)
+            try
             {
-                case FileType.SettingsFile:
-                {
-                    try
-                    {
-                        using (StreamWriter writer = File.CreateText(BotSettings.Instance.SettingsFile))
-                        {
-                            await writer.WriteAsync(JsonConvert.SerializeObject(BotSettings.Instance, Formatting.Indented));
-                            Log.Information($"Successfully saved settings to {BotSettings.Instance.SettingsFile}.");
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        Log.Error("Error occurred while trying to save settings.");
-                        throw;
-                    }
-                    break;
-                }
+                Log.Information("Trying to load configuration files.");
+                BotSettings.Instance = JsonConvert.DeserializeObject<BotSettings>(File.ReadAllText(path));
+
+                Log.Information("Successfully loaded the configuration file.");
+
+                // If values have not been set, use default values instead.
+                if (BotSettings.Instance.BotPrefix == '\0') BotSettings.Instance.BotPrefix = DefaultValues.DEFAULT_PREFIX;
+                if (string.IsNullOrEmpty(BotSettings.Instance.DatabaseString)) BotSettings.Instance.DatabaseString = DefaultValues.DEFAULT_DATABASE_STRING;
+                if (string.IsNullOrEmpty(BotSettings.Instance.DateTimeFormat)) BotSettings.Instance.DateTimeFormat = DefaultValues.DEFAULT_DATETIME_FORMAT;
+                if (string.IsNullOrEmpty(BotSettings.Instance.DateFormat)) BotSettings.Instance.DateFormat = DefaultValues.DEFAULT_DATE_FORMAT;
+                if (string.IsNullOrEmpty(BotSettings.Instance.DateTimeCulture)) BotSettings.Instance.DateTimeCulture = DefaultValues.DEFAULT_CULTURE;
+
+                // Used to sync new settings to old settings file without having to re-create it.
+                await SaveSettingsAsync();
             }
-        }
-
-        public async static Task LoadFileAsync(FileType fileType)
-        {
-            switch (fileType)
+            catch (Exception e)
             {
-                case FileType.SettingsFile:
-                {
-                    try
-                    {
-                        Log.Information("Trying to load configuration files.");
-                        BotSettings.Instance = JsonConvert.DeserializeObject<BotSettings>(File.ReadAllText(BotSettings.Instance.SettingsFile));
-                        Log.Information("Successfully loaded the configuration file.");
-
-                        // If values have not been set, use default values instead.
-                        if (BotSettings.Instance.BotPrefix == '\0') BotSettings.Instance.BotPrefix = DefaultValues.DEFAULT_PREFIX;
-                        if (string.IsNullOrEmpty(BotSettings.Instance.DatabaseString)) BotSettings.Instance.DatabaseString = DefaultValues.DEFAULT_DATABASE_STRING;
-                        if (string.IsNullOrEmpty(BotSettings.Instance.DateTimeFormat)) BotSettings.Instance.DateTimeFormat = DefaultValues.DEFAULT_DATETIME_FORMAT;
-                        if (string.IsNullOrEmpty(BotSettings.Instance.DateFormat)) BotSettings.Instance.DateFormat = DefaultValues.DEFAULT_DATE_FORMAT;
-                        if (string.IsNullOrEmpty(BotSettings.Instance.DateTimeCulture)) BotSettings.Instance.DateTimeCulture = DefaultValues.DEFAULT_CULTURE;
-
-                        // Used to sync new settings to old settings file without having to re-create it.
-                        await SaveFileAsync(FileType.SettingsFile);
-                    }
-                    catch (Exception)
-                    {
-                        Log.Error("Failed to load the configuration file.");
-                        throw;
-                    }
-                    break;
-                }
+                Log.Error("Failed to load the configuration file. " + e);
+                throw;
             }
         }
     }

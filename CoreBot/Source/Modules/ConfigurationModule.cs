@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using CoreBot.Enum;
 using CoreBot.Helpers;
 using CoreBot.Models;
 using CoreBot.Settings;
-using Discord;
 using Discord.Commands;
 using Humanizer;
 using Humanizer.Localisation;
@@ -30,7 +27,7 @@ namespace CoreBot.Modules
         public async Task SetPrefixAsync(char prefix)
         {
             BotSettings.Instance.BotPrefix = prefix;
-            await FileHelper.SaveFileAsync(FileType.SettingsFile);
+            await FileHelper.SaveSettingsAsync();
             await ReplyAsync($"Prefix was changed to: **{prefix}**");
         }
 
@@ -48,7 +45,7 @@ namespace CoreBot.Modules
             {
                 var previousPrecision = BotSettings.Instance.HumanizerPrecision;
                 BotSettings.Instance.HumanizerPrecision = precision;
-                await FileHelper.SaveFileAsync(FileType.SettingsFile);
+                await FileHelper.SaveSettingsAsync();
                 await ReplyAsync($"Humanizer precision was changed to: {precision}. Previous precision: {previousPrecision}.");
             }
             else await ReplyAsync("Invalid value.");
@@ -92,7 +89,7 @@ namespace CoreBot.Modules
                 }
             }
 
-            await FileHelper.SaveFileAsync(FileType.SettingsFile);
+            await FileHelper.SaveSettingsAsync();
             await ReplyAsync($"Humanizer max unit was changed to: {BotSettings.Instance.HumanizerMaxUnit.ToString()}. Previous precision: {currentUnit}.");
         }
 
@@ -104,7 +101,7 @@ namespace CoreBot.Modules
             {
                 var previousLimit = BotSettings.Instance.DynamicCommandsPerLine;
                 BotSettings.Instance.DynamicCommandsPerLine = limit;
-                await FileHelper.SaveFileAsync(FileType.SettingsFile);
+                await FileHelper.SaveSettingsAsync();
                 await ReplyAsync($"Dynamic commands per line was changed to: {limit}. Previous limit: {previousLimit}.");
             }
             else await ReplyAsync("Invalid value, valid values: 1-30.");
@@ -141,7 +138,7 @@ namespace CoreBot.Modules
                     return;
                 }
             }
-            await FileHelper.SaveFileAsync(FileType.SettingsFile);
+            await FileHelper.SaveSettingsAsync();
             await ReplyAsync("API key set.");
         }
 
@@ -150,7 +147,7 @@ namespace CoreBot.Modules
         {
             var systemColor = System.Drawing.Color.FromName(color);
             BotSettings.Instance.EmbeddedColor = new Discord.Color(systemColor.R, systemColor.G, systemColor.B);
-            await FileHelper.SaveFileAsync(FileType.SettingsFile);
+            await FileHelper.SaveSettingsAsync();
             await ReplyAsync($"Embedded color changed to ``{systemColor.Name}``.");
         }
     }

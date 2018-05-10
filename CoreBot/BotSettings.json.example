@@ -1,0 +1,30 @@
+{
+  "BotToken": "",
+  "BotPrefix": "!",
+  "DefaultChannel": 0,
+  "DefaultGuild": 0,
+  "DatabaseString": "Database.db",
+  "LogToFile": true,
+  "WeatherAPIKey": "",
+  "EPAPIKey": "",
+  "UrbanMashapeKey": "",
+  "WolframAppID": "",
+  "AzureVisionKey": "",
+  "DateTimeFormat": "dd/MM/yyyy H:mm:ss",
+  "DateFormat": "dd/MM/yyyy",
+  "DateTimeCulture": "",
+  "OldLinkBlacklist": null,
+  "HumanizerPrecision": 2,
+  "HumanizerMaxUnit": 7,
+  "GrapevineServerPort": 5700,
+  "DiscordnetLoglevel": "Warning",
+  "SelfHotstring": "$me$",
+  "DynamicCommandsPerLine": 5,
+  "EmbeddedColor": {
+    "RawValue": 0,
+    "R": 0,
+    "G": 0,
+    "B": 0
+  },
+  "SeparatorChar": "|"
+}

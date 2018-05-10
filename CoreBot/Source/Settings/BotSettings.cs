@@ -37,8 +37,6 @@ namespace CoreBot.Settings
 
         public string DatabaseString { get; set; } = string.Empty;
         public bool LogToFile { get; set; } = true;
-        public string SettingsFolder { get; set; }
-        public string SettingsFile { get; set; }
 
         public string WeatherAPIKey { get; set; } = string.Empty;
         public string EPAPIKey { get; set; } = string.Empty;
@@ -60,12 +58,6 @@ namespace CoreBot.Settings
         public int DynamicCommandsPerLine { get; set; } = DefaultValues.DEFAULT_MAX_DYNAMIC_COMMANDS_PER_LINE;
         public Color EmbeddedColor { get; set; } = DefaultValues.DEFAULT_EMBEDDED_COLOR;
         public char SeparatorChar { get; set; } = DefaultValues.DEFAULT_SEPARATOR_CHAR;
-
-        private BotSettings()
-        {
-            SettingsFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Settings");
-            SettingsFile = Path.Combine(SettingsFolder, "BotSettings.json");
-        }
 
         public static DiscordSocketConfig CreateDiscordConfig(string loglevel)
         {

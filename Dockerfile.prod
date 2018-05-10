@@ -1,0 +1,11 @@
+FROM microsoft/dotnet:2.0.7-sdk-2.1.200-stretch
+
+COPY CoreBot /CoreBot
+WORKDIR /CoreBot
+
+RUN dotnet restore
+RUN dotnet publish -c Release -o out
+
+CMD curl -s 'http://metadata.google.internal/computeMetadata/v1/project/attributes/botsettings' \
+  -H 'Metadata-Flavor: Google' > BotSettings.json \
+  && dotnet out/CoreBot.dll --config BotSettings.json \
