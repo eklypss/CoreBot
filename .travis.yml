@@ -1,8 +1,0 @@
-language: csharp
-solution: CoreBot.sln
-mono: none
-dotnet: 2.1.105
-dist: trusty
-script:
-- dotnet restore
-- dotnet test CoreBot.Test

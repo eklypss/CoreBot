@@ -1,5 +1,12 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
+  args: [build, -t, corebot.dev, .]
+
+# unit tests
+- name: 'gcr.io/cloud-builders/docker'
+  args: [run, corebot.dev, dotnet, test, /CoreBot.Test]
+
+- name: 'gcr.io/cloud-builders/docker'
   args:
     - build
     - -f
@@ -7,4 +14,14 @@ steps:
     - -t
     - gcr.io/eminent-wording-203018/corebot
     - .
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+    - compute
+    - instances
+    - reset
+    - --zone
+    - us-central1-a
+    - corebot
+
 images: ['gcr.io/eminent-wording-203018/corebot']
