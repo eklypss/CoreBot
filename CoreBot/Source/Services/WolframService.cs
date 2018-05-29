@@ -19,6 +19,7 @@ namespace CoreBot.Services
             Log.Information($"Getting answer for the given question: {question}.");
 
             var json = await _http.GetStringAsync(string.Format(DefaultValues.WOLFRAM_API_URL, BotSettings.Instance.WolframAppID, question));
+            Log.Debug("wolfram result json: " + json);
             var result = json.Replace(@"\\:", @"\u");
             WolframData response;
 
