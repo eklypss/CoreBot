@@ -20,10 +20,18 @@ namespace CoreBot.Services
 
             var json = await _http.GetStringAsync(string.Format(DefaultValues.WOLFRAM_API_URL, BotSettings.Instance.WolframAppID, question));
             var result = json.Replace(@"\\:", @"\u");
-            var response = JsonConvert.DeserializeObject<WolframData>(result, new JsonSerializerSettings
+            WolframData response;
+
+            try
             {
-                Error = HandleDeserializationError
-            });
+                response = JsonConvert.DeserializeObject<WolframData>(result);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"failed to decode json '{result}': {e.ToString()}");
+                return null;
+            }
+
             if (response.QueryResult.Success && response.QueryResult.Pods.Count > 0)
             {
                 Log.Information($"{response.QueryResult.Pods.Count} pods(s) found for the question: {question}.");
@@ -34,12 +42,6 @@ namespace CoreBot.Services
                 Log.Error($"Failed to get answer to the question: {question}.");
                 return null;
             }
-        }
-
-        private void HandleDeserializationError(object sender, ErrorEventArgs e)
-        {
-            var currentError = e.ErrorContext.Error.Message;
-            e.ErrorContext.Handled = true;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace CoreBot.Modules
             var answer = await _wolframService.GetWolframAnswerAsync(question);
             if (answer == null)
             {
-                await ReplyAsync("No answer found.");
+                await ReplyAsync("Cannot fetch answer");
                 return;
             }
 
