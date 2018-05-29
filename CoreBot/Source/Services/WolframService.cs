@@ -18,7 +18,8 @@ namespace CoreBot.Services
             if (string.IsNullOrEmpty(question)) throw new ArgumentException("Question cannot be null or empty.");
             Log.Information($"Getting answer for the given question: {question}.");
 
-            var result = await _http.GetStringAsync(string.Format(DefaultValues.WOLFRAM_API_URL, BotSettings.Instance.WolframAppID, question));
+            var json = await _http.GetStringAsync(string.Format(DefaultValues.WOLFRAM_API_URL, BotSettings.Instance.WolframAppID, question));
+            var result = json.Replace(@"\\:", @"\u");
             var response = JsonConvert.DeserializeObject<WolframData>(result, new JsonSerializerSettings
             {
                 Error = HandleDeserializationError
