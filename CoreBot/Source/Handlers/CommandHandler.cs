@@ -83,13 +83,12 @@ namespace CoreBot.Handlers
                 await _oldLinkService.CheckAsync(userMessage);
                 await _forbiddenMsgService.CheckMsgAsync(userMessage);
                 var context = new SocketCommandContext(_client, userMessage);
-                int argPos = 0;
 
-                if (userMessage.HasCharPrefix(BotSettings.Instance.BotPrefix, ref argPos))
+                if (userMessage.Content.Length > 0 && userMessage.Content[0] == BotSettings.Instance.BotPrefix)
                 {
                     if (userMessage.Author.IsBot) await userMessage.DeleteAsync();
                     await userMessage.Channel.TriggerTypingAsync();
-                    await ExecuteCommand(userMessage, context, argPos);
+                    await ExecuteCommand(userMessage, context, userMessage.Content);
                 }
                 else
                 {
@@ -98,38 +97,36 @@ namespace CoreBot.Handlers
             }
         }
 
-        private async Task ExecuteCommand(SocketMessage userMessage, ICommandContext context, int argPos)
+        private async Task ExecuteCommand(SocketMessage userMessage, ICommandContext context, string contents)
         {
-            var result = await _commandService.ExecuteAsync(context, argPos, _serviceProvider);
+            var result = await _commandService.ExecuteAsync(context, contents.Substring(1), _serviceProvider);
 
             // if command throws exception, result is still successfull
-            if (result.IsSuccess)
-            {
-                return;
-            }
+            if (result.IsSuccess) return;
 
             Log.Information(result.ToString());
 
             var dynamicCommand = Commands.Instance.CommandsList
-                .Find(command => userMessage.Content.Equals($"{BotSettings.Instance.BotPrefix}{command.Name}",
+                .Find(command => contents.Equals($"{BotSettings.Instance.BotPrefix}{command.Name}",
                     StringComparison.InvariantCultureIgnoreCase));
 
             if (dynamicCommand != null)
             {
-                if (dynamicCommand.Action.Contains(BotSettings.Instance.SelfHotstring))
+                string formattedAction = dynamicCommand.Action.Replace(BotSettings.Instance.SelfHotstring,
+                    string.Format("<@!{0}>", userMessage.Author.Id));
+
+                if (formattedAction.StartsWith(BotSettings.Instance.BotPrefix))
                 {
-                    await userMessage.Channel.SendMessageAsync(dynamicCommand.Action.Replace(BotSettings.Instance.SelfHotstring, string.Format("<@!{0}>", userMessage.Author.Id)));
-                    return;
+                    await ExecuteCommand(userMessage, context, formattedAction);
                 }
-                await userMessage.Channel.SendMessageAsync(dynamicCommand.Action);
-                return;
+                else
+                {
+                    await userMessage.Channel.SendMessageAsync(formattedAction);
+                }
             }
-
-            // commandService failed, no dynamic command matches
-
-            if (result.Error == CommandError.UnknownCommand)
+            else if (result.Error == CommandError.UnknownCommand)
             {
-                await userMessage.Channel.SendMessageAsync("no command " + userMessage.Content);
+                await userMessage.Channel.SendMessageAsync("no command " + contents);
             }
             else
             {
