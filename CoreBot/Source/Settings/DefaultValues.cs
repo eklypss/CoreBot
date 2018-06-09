@@ -16,9 +16,13 @@ namespace CoreBot.Settings
 
         public const string NHL_STANDINGS_URL = "https://statsapi.web.nhl.com/api/v1/standings";
         public const string ALKO_URL = "https://www.alko.fi/tuotteet/{0:D6}/";
+
         public const string FMI_URL = "http://ilmatieteenlaitos.fi/saa/{0}?forecast=short";
         public const string FMI_TEMP_URL = "http://ilmatieteenlaitos.fi/observation-data?station=";
         public const string FMI_WEATHER_ICON_URL = "https://cdn.fmi.fi/symbol-images/smartsymbol/v2/p/{0}-100px.png";
+        public const string FMI_SEARCH_API =
+            "http://ilmatieteenlaitos.fi/etusivu?p_p_id=locationmenuportlet_WAR_fmiwwwweatherportlets&p_p_lifecycle=2&term=";
+
         public const string OPEN_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q={0}&APPID={1}";
         public const string FOLLOWAGE_URL = "https://2g.be/twitch/following.php?user={0}&channel={1}&format=mwdhms";
         public const string URBAN_API_URL = "https://mashape-community-urban-dictionary.p.mashape.com/define?term={0}";
