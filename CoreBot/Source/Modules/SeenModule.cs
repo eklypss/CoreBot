@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using CoreBot.Settings;
 using Discord;
 using Discord.Commands;
-using Humanizer;
+using Discord.WebSocket;
 
 namespace CoreBot.Modules
 {
@@ -12,21 +12,27 @@ namespace CoreBot.Modules
     {
         [Command("seen"), Summary("Shows latest activity of the specified user.")]
         [Alias("s")]
-        public async Task GetUserLastSeenInfoAsync(string userName)
+        public async Task GetUserLastSeenInfoAsync([Remainder] string userName)
         {
-            var found = await Context.Channel.GetMessagesAsync(2000)
-                .FirstOrDefault(batch => batch
-                .Any(message => message.Author.Username.Equals(userName, StringComparison.InvariantCultureIgnoreCase)));
-            if (found != null)
+            var msg = await Context.Channel.GetMessagesAsync(10000)
+                .Flatten()
+                .FirstOrDefault(message =>
+                {
+                    var author = (SocketGuildUser) message.Author;
+                    return author.Username.Equals(userName, StringComparison.InvariantCultureIgnoreCase)
+                           || author.Nickname != null
+                           && author.Nickname.Equals(userName, StringComparison.InvariantCultureIgnoreCase);
+                });
+            if (msg != null)
             {
-                var msg = found.First(m => m.Author.Username.Equals(userName, StringComparison.InvariantCultureIgnoreCase));
+                var sender = (SocketGuildUser) msg.Author;
 
                 var embed = new EmbedBuilder()
-               .WithDescription(msg.Content)
-               .WithTimestamp(msg.Timestamp)
-               .WithColor(BotSettings.Instance.EmbeddedColor)
-               .WithAuthor(msg.Author)
-               .Build();
+                   .WithDescription(msg.Content)
+                   .WithTimestamp(msg.Timestamp)
+                   .WithColor(BotSettings.Instance.EmbeddedColor)
+                   .WithAuthor($"{sender.Nickname} ({sender})")
+                   .Build();
                 await ReplyAsync(string.Empty, embed: embed);
             }
             else
