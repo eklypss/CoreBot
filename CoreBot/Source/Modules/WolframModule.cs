@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CoreBot.Services;
 using CoreBot.Settings;
 using Discord;
@@ -20,16 +19,28 @@ namespace CoreBot.Modules
         public async Task GetAnswerAsync([Remainder] string question)
         {
             var answer = await _wolframService.GetWolframAnswerAsync(question);
-            if (answer == null)
+            if (!(bool) answer.success || answer.pods.Count < 1)
             {
-                await ReplyAsync("Cannot fetch answer");
+                var message = "No results.";
+
+                if (answer.tips != null)
+                {
+                    message += $" {(string) answer.tips.text}";
+                }
+
+                if (answer.didyoumeans != null)
+                {
+                    message += $" Did you mean \"{(string) answer.didyoumeans.val}\"?";
+                }
+                await ReplyAsync(message);
                 return;
             }
 
-            var inputPod = answer.Pods[0];
-            var resultPod = answer.Pods[1];
+            var query = (string)answer.pods[0].subpods[0].plaintext;
+            var explanation = (string)answer.pods[1].subpods[0].plaintext;
+
             var embed = new EmbedBuilder()
-                .AddField(inputPod.Subpods.FirstOrDefault().PlainText, resultPod.Subpods.FirstOrDefault().PlainText)
+                .AddField(query, explanation)
                 .WithColor(BotSettings.Instance.EmbeddedColor)
                 .Build();
 
