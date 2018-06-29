@@ -25,12 +25,14 @@ namespace CoreBot.Modules
 
                 if (answer.tips != null)
                 {
-                    message += $" {(string) answer.tips.text}";
+                    var node = answer.tips.Count == null ? answer.tips : answer.tips[0];
+                    message += $" {(string) node.text}";
                 }
 
                 if (answer.didyoumeans != null)
                 {
-                    message += $" Did you mean \"{(string) answer.didyoumeans.val}\"?";
+                    var node = answer.didyoumeans.Count == null ? answer.didyoumeans : answer.didyoumeans[0];
+                    message += $" Did you mean \"{(string) node.val}\"?";
                 }
                 await ReplyAsync(message);
                 return;
