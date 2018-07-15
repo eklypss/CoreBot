@@ -81,29 +81,38 @@ namespace CoreBot.Services
             var statusElement = document.QuerySelector(statusCss);
             var weatherStatus = statusElement.GetAttribute("title");
             var iconId = Regex.Match(statusElement.OuterHtml, @"code-(\d+)").Groups[1].Value;
+            var feelsLikeCss = ".first-mobile-forecast-time-step-content .apparent-temperature-value";
+            var feelsLikeTemp = document.QuerySelector(feelsLikeCss)?.TextContent;
 
             var weatherResponse = await _http.GetAsync(DefaultValues.FMI_TEMP_URL + id);
 
             // Parse weather response
             dynamic weatherInfo = JObject.Parse(await weatherResponse.Content.ReadAsStringAsync());
             var temperature = weatherInfo.t2m.Last[1];
-            var wind = weatherInfo.WindSpeedMS != null ? weatherInfo.WindSpeedMS.Last[1] : "??";
+            var wind = weatherInfo.WindSpeedMS?.Last[1];
             long timeStamp = weatherInfo.latestObservationTime / 1000;
             var date = timeStamp.ToDateTime(TimeZoneInfo.Local);
             return CreateEmbedWeatherMessage(searchLocation, temperature, "FI", weatherStatus, wind, date,
-                string.Format(DefaultValues.FMI_WEATHER_ICON_URL, iconId));
+                string.Format(DefaultValues.FMI_WEATHER_ICON_URL, iconId), feelsLikeTemp);
         }
 
-        public Embed CreateEmbedWeatherMessage(string location, object temp, string country, string status, object wind, DateTime timestamp, string iconUrl = null)
+        public Embed CreateEmbedWeatherMessage(string location, object temp, string country, string status,
+            object wind, DateTime timestamp, string iconUrl = null, string feelsLikeTemp = null)
         {
-            return new EmbedBuilder()
-                .AddField("Temperature", $"{temp}°C", inline: true)
-                .AddField("Wind", $"{wind} m/s", inline: true)
-                .AddField("Status", status, inline: true)
-                .WithTitle($"{location}, {country}")
-                .WithColor(BotSettings.Instance.EmbeddedColor)
-                .WithTimestamp(timestamp)
-                .WithThumbnailUrl(iconUrl).Build();
+            var embed = new EmbedBuilder();
+
+            embed.AddField("Temperature", $"{temp}°C", inline: true);
+            if (feelsLikeTemp != null) embed.AddField("Feels like", $"{feelsLikeTemp}C", inline: true);
+
+            embed.AddField("Status", status, inline: true);
+            if (wind != null) embed.AddField("Wind", $"{wind} m/s", inline: true);
+
+            embed.WithTitle($"{location}, {country}");
+            embed.WithColor(BotSettings.Instance.EmbeddedColor);
+            embed.WithTimestamp(timestamp);
+            embed.WithThumbnailUrl(iconUrl);
+
+            return embed.Build();
         }
     }
 }
