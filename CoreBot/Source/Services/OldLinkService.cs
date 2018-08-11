@@ -34,7 +34,6 @@ namespace CoreBot.Services
             if (blacklist == null)
                 return true;
 
-            // try to filter out "www.example.com" and "example.com"
             return !blacklist.Any(blacklistUrl => uriHost.Equals(blacklistUrl, StringComparison.InvariantCultureIgnoreCase));
         }
 
