@@ -76,43 +76,54 @@ namespace CoreBot.Services
 
             // Parse initial response
             var document = await _parser.ParseAsync(await idResponse.Content.ReadAsStringAsync());
-            var id = document.QuerySelector("#observation-station-menu option").GetAttribute("value");
+
+            var daytimeCss = ".first-mobile-forecast-time-step-content .celestial-status-text";
+            var daytime = document.QuerySelector(daytimeCss)?.TextContent.Trim();
+
             var statusCss = ".first-mobile-forecast-time-step-content div.smartsymbol";
             var statusElement = document.QuerySelector(statusCss);
-            var weatherStatus = statusElement.GetAttribute("title");
             var iconId = Regex.Match(statusElement.OuterHtml, @"code-(\d+)").Groups[1].Value;
-            var feelsLikeCss = ".first-mobile-forecast-time-step-content .apparent-temperature-value";
-            var feelsLikeTemp = document.QuerySelector(feelsLikeCss)?.TextContent;
+            var weatherStatus = statusElement.GetAttribute("title");
 
+            var id = document.QuerySelector("#observation-station-menu option").GetAttribute("value");
             var weatherResponse = await _http.GetAsync(DefaultValues.FMI_TEMP_URL + id);
 
             // Parse weather response
             dynamic weatherInfo = JObject.Parse(await weatherResponse.Content.ReadAsStringAsync());
             var temperature = weatherInfo.t2m.Last[1];
             var wind = weatherInfo.WindSpeedMS?.Last[1];
+            int? humidity = weatherInfo.Humidity?.Last[1];
             long timeStamp = weatherInfo.latestObservationTime / 1000;
+            float? minTemp = weatherInfo.MinimumTemperature?.Last[1];
+            float? maxTemp = weatherInfo.MaximumTemperature?.Last[1];
+            int? snowDepth = weatherInfo.SnowDepth?.Last[1];
             var date = timeStamp.ToDateTime(TimeZoneInfo.Local);
+
             return CreateEmbedWeatherMessage(searchLocation, temperature, "FI", weatherStatus, wind, date,
-                string.Format(DefaultValues.FMI_WEATHER_ICON_URL, iconId), feelsLikeTemp);
+                string.Format(DefaultValues.FMI_WEATHER_ICON_URL, iconId), daytime, humidity, minTemp, maxTemp,
+                snowDepth);
         }
 
         public Embed CreateEmbedWeatherMessage(string location, object temp, string country, string status,
-            object wind, DateTime timestamp, string iconUrl = null, string feelsLikeTemp = null)
+            object wind, DateTime timestamp, string iconUrl = null, string daytime = null, int? humidity = null,
+            float? minTemp = null, float? maxTemp = null, int? snowDepth = null)
         {
             var embed = new EmbedBuilder();
 
-            embed.AddField("Temperature", $"{temp}°C", inline: true);
-            if (feelsLikeTemp != null) embed.AddField("Feels like", $"{feelsLikeTemp}C", inline: true);
+            embed.AddField("🌡️ Temperature", $"{temp}°C", inline: true);
+            embed.AddField("🌤️ Status", status, inline: true);
 
-            embed.AddField("Status", status, inline: true);
-            if (wind != null) embed.AddField("Wind", $"{wind} m/s", inline: true);
+            if (wind != null) embed.AddField("💨 Wind", $"{wind} m/s", inline: true);
+            if (humidity != null) embed.AddField("💦 Humidity", $"{humidity} %", inline: true);
+            if (minTemp != null && maxTemp != null) embed.AddField("🌡️ Min/Max", $"{minTemp}°C - {maxTemp} °C", inline: true);
+            if (snowDepth != null && snowDepth != -1) embed.AddField("⛄ Snow depth", $"{snowDepth} cm", inline: true);
+            if (daytime != null) embed.AddField("🌅 Daytime", daytime, inline: true);
 
-            embed.WithTitle($"{location}, {country}");
-            embed.WithColor(BotSettings.Instance.EmbeddedColor);
-            embed.WithTimestamp(timestamp);
-            embed.WithThumbnailUrl(iconUrl);
-
-            return embed.Build();
+            return embed.WithTitle($"{location}, {country}")
+                .WithColor(BotSettings.Instance.EmbeddedColor)
+                .WithTimestamp(timestamp)
+                .WithThumbnailUrl(iconUrl)
+                .Build();
         }
     }
 }
