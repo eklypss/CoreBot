@@ -65,7 +65,7 @@ namespace CoreBot.Handlers
 
             // Build ServiceProvider and add modules
             _serviceProvider = _services.BuildServiceProvider();
-            await _commandService.AddModulesAsync(Assembly.GetEntryAssembly());
+            await _commandService.AddModulesAsync(Assembly.GetEntryAssembly(), _serviceProvider);
             _client.MessageReceived += HandleCommandAsync;
             Log.Debug("CommandHandler installed.");
         }
