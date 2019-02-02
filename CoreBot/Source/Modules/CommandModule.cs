@@ -122,6 +122,7 @@ namespace CoreBot.Modules
                 dynamicCommandNames.Add(command);
                 i++;
             }
+            dynamicCommandNames.Sort(StringComparer.Ordinal);
             await ReplyAsync($"**Available static commands:**{Environment.NewLine}{string.Join(Environment.NewLine, staticCommandNames)}");
             await ReplyAsync($"**Available dynamic commands:**{Environment.NewLine}{string.Join(" ", dynamicCommandNames)}");
         }
