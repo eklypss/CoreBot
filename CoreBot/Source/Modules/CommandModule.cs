@@ -111,8 +111,12 @@ namespace CoreBot.Modules
             });
 
             var dynamicCommandNames = new List<string>();
+            var sortedNames = Commands.Instance.CommandsList
+                .Select(command => $"{BotSettings.Instance.BotPrefix}{command.Name}")
+                .OrderBy(a => a, StringComparer.Ordinal);
+
             var i = 0;
-            foreach (var command in Commands.Instance.CommandsList.Select(x => x.Name).Select(name => $"{BotSettings.Instance.BotPrefix}{name}"))
+            foreach (var command in sortedNames)
             {
                 if (i == BotSettings.Instance.DynamicCommandsPerLine)
                 {
@@ -122,7 +126,6 @@ namespace CoreBot.Modules
                 dynamicCommandNames.Add(command);
                 i++;
             }
-            dynamicCommandNames.Sort(StringComparer.Ordinal);
             await ReplyAsync($"**Available static commands:**{Environment.NewLine}{string.Join(Environment.NewLine, staticCommandNames)}");
             await ReplyAsync($"**Available dynamic commands:**{Environment.NewLine}{string.Join(" ", dynamicCommandNames)}");
         }
