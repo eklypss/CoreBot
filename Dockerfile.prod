@@ -6,14 +6,14 @@ WORKDIR /CoreBot
 RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
-FROM microsoft/dotnet:2.0.7-runtime-stretch
+FROM microsoft/dotnet:2.0.7-runtime-stretch AS builder
 
 ENV TZ=Europe/Helsinki
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && echo $TZ > /etc/timezone
 
 WORKDIR /CoreBot
-COPY --from=0 /CoreBot/out .
+COPY --from=builder /CoreBot/out .
 
 CMD curl -sS 'http://metadata.google.internal/computeMetadata/v1/project/attributes/botsettings' \
   -H 'Metadata-Flavor: Google' > BotSettings.json \

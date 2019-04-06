@@ -17,9 +17,9 @@ namespace CoreBot.Services
     {
 
         private readonly HttpClient _httpClient;
-        private readonly ICollection<string> _drivingTags = new List<string>
+        private readonly ICollection<string> _drivingTags = new HashSet<string>
         {
-            "driving", "track", "road", "traffic", "street", "highway", "bridge"
+            "driving", "track", "road", "traffic", "street", "highway", "bridge", "meter", "truck", "bus"
         };
 
         public ForbiddenMsgService()
