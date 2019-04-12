@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.0.7-sdk-2.1.200-stretch
+FROM microsoft/dotnet:2.0.7-sdk-2.1.200-stretch AS builder
 
 COPY CoreBot /CoreBot
 WORKDIR /CoreBot
@@ -6,7 +6,7 @@ WORKDIR /CoreBot
 RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
-FROM microsoft/dotnet:2.0.7-runtime-stretch AS builder
+FROM microsoft/dotnet:2.0.7-runtime-stretch
 
 ENV TZ=Europe/Helsinki
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
