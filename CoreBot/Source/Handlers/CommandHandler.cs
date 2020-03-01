@@ -56,7 +56,7 @@ namespace CoreBot.Handlers
             _services.AddSingleton(new WolframService());
             _services.AddSingleton(new StartupTime());
             _services.AddSingleton(new F1Service());
-            if (drinkDao != null) _services.AddSingleton(drinkDao);
+            _services.AddSingleton(drinkDao);
             _oldLinkService = new OldLinkService();
             _forbiddenMsgService = new ForbiddenMsgService();
             _spammer = new Spammer();

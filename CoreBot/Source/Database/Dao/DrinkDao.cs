@@ -31,8 +31,8 @@ namespace CoreBot.Database.Dao
                     else
                     {
                         connection.CreateTable<Drink>();
-                        Log.Warning("Created drinks table because it didn't exist.");
-                        return null;
+                        Log.Warning("Created new empty drinks table because it didn't exist.");
+                        return new DrinkDao(new List<int>());
                     }
                 }
             }

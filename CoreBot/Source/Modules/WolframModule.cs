@@ -31,8 +31,19 @@ namespace CoreBot.Modules
 
                 if (answer.didyoumeans != null)
                 {
-                    var node = answer.didyoumeans.Count == null ? answer.didyoumeans : answer.didyoumeans[0];
-                    message += $" Did you mean \"{(string) node.val}\"?";
+                    var node = answer.didyoumeans.Count == null ? answer.didyoumeans.val : answer.didyoumeans[0].val;
+                    var nextAns = await _wolframService.GetWolframAnswerAsync((string)node);
+
+                    var suggestedQuery = (string)nextAns.pods[0].subpods[0].plaintext;
+                    var suggestedExplanation = (string)nextAns.pods[1].subpods[0].plaintext;
+
+                    var em = new EmbedBuilder()
+                        .AddField($"Did you mean \"{node}\"?\n{suggestedQuery}", suggestedExplanation)
+                        .WithColor(BotSettings.Instance.EmbeddedColor)
+                        .Build();
+
+                    await ReplyAsync(string.Empty, embed: em);
+                    return;
                 }
                 await ReplyAsync(message);
                 return;
