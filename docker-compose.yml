@@ -5,6 +5,9 @@ services:
     container_name: corebot
     build: .
     volumes:
-     - ./CoreBot:/CoreBot
-     - /CoreBot/bin
-     - /CoreBot/obj
+     - ./CoreBot:/app/CoreBot
+     - ./CoreBot.Test:/app/CoreBot.Test
+     - /app/CoreBot/bin
+     - /app/CoreBot.Test/bin
+     - /app/CoreBot/obj
+     - /app/CoreBot.Test/obj
