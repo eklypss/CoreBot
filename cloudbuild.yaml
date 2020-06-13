@@ -9,6 +9,7 @@ steps:
 - name: gcr.io/cloud-builders/docker
   args:
     - build
+    - --pull
     - -f
     - Dockerfile.prod
     - -t
