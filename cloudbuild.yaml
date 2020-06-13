@@ -1,10 +1,10 @@
 steps:
 - name: gcr.io/cloud-builders/docker
-  args: [build, -t, corebot.dev, .]
+  args: [build, --pull, -t, corebot.dev, .]
 
 # unit tests
 - name: gcr.io/cloud-builders/docker
-  args: [run, corebot.dev, dotnet, test, /CoreBot.Test]
+  args: [run, corebot.dev, dotnet, test]
 
 - name: gcr.io/cloud-builders/docker
   args:
