@@ -75,13 +75,14 @@ namespace CoreBot.Services
         /// 2. Fetch json response where we can find the exact temperature, humidity etc.
         public async Task<Embed> FetchWeather(string searchLocation)
         {
-            var idResponse = await _http.GetAsync(string.Format(DefaultValues.FMI_URL, searchLocation));
+            string idPageUrl = string.Format(DefaultValues.FMI_URL, searchLocation);
+            var idResponse = await _http.GetAsync(idPageUrl);
 
             var document = await _parser.ParseAsync(await idResponse.Content.ReadAsStringAsync());
 
             var statusCss = "#hour-row-0 > .text-center > img";
             var statusElement = document.QuerySelector(statusCss);
-            var feelsLike = document.QuerySelector("div.next-days-table td.feelslike-same > span").InnerHtml;
+            var feelsLike = document.QuerySelector("#hour-row-0 > td.text-center.fmi-bg-light.hourly-table-feelslike span").InnerHtml;
             var iconId = Regex.Match(statusElement.OuterHtml, @"(\d+).svg").Groups[1].Value;
             var id = document.QuerySelector("select.station-selector > option").GetAttribute("value");
             var weatherResponse = await _http.GetAsync(DefaultValues.FMI_TEMP_URL + id);
