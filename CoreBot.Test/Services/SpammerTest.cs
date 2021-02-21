@@ -9,7 +9,7 @@ namespace CoreBot.Test.Services
     [TestFixture]
     internal class SpammerTest
     {
-        private static Mock<IMessage> CreateMessage(IMessageChannel channel,
+        /*private static Mock<IMessage> CreateMessage(IMessageChannel channel,
             string message, bool isBot = false)
         {
             var msg = new Mock<IMessage>();
@@ -59,6 +59,6 @@ namespace CoreBot.Test.Services
 
             channel.Verify(c => c.SendMessageAsync("123", false, null, null),
                 Times.Never());
-        }
+        }*/
     }
 }

@@ -16,16 +16,16 @@ namespace CoreBot.Modules
         {
             var msg = await Context.Channel.GetMessagesAsync(10000)
                 .Flatten()
-                .FirstOrDefault(message =>
+                .FirstOrDefaultAsync(message =>
                 {
-                    var author = (SocketGuildUser) message.Author;
+                    var author = (SocketGuildUser)message.Author;
                     return author.Username.Equals(userName, StringComparison.InvariantCultureIgnoreCase)
                            || author.Nickname != null
                            && author.Nickname.Equals(userName, StringComparison.InvariantCultureIgnoreCase);
                 });
             if (msg != null)
             {
-                var sender = (SocketGuildUser) msg.Author;
+                var sender = (SocketGuildUser)msg.Author;
 
                 var embed = new EmbedBuilder()
                    .WithDescription(msg.Content)
